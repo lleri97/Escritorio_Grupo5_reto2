@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" fx:id="tabDEpartmentContent">
+    
+    <children>
+        <Button layoutX="37.0" layoutY="25.0" mnemonicParsing="false" text="Nuevo departamento" />
+        <TreeTableView layoutX="37.0" layoutY="109.0" prefHeight="324.0" prefWidth="924.0">
+            <columns>
+                <TreeTableColumn prefWidth="129.0" text="ID" />
+                <TreeTableColumn prefWidth="378.0" text="Nombre" />
+                <TreeTableColumn prefWidth="416.0" text="Acciones" />
+            </columns>
+        </TreeTableView>
+        <Button layoutX="37.0" layoutY="65.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="84.0" text="Buscar:" />
+    </children>
+                               
+</AnchorPane>
