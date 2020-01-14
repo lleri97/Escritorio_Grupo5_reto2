@@ -30,22 +30,20 @@ public class Area implements Serializable {
     
     private final SimpleStringProperty name;
     
-    private final SimpleListProperty<Department> departments;
+    private Collection<Department> departments;
     
-    private final SimpleListProperty<Document> documents;
+    private Collection<Document> documents;
 
     public Area() {
         this.id = new SimpleIntegerProperty();
         this.name = new SimpleStringProperty();
-        this.departments = new SimpleListProperty();
-        this.documents = new SimpleListProperty();
     }
 
-    public Area(int id, String name, ObservableList<Department> departments, ObservableList<Document> documents) {
+    public Area(int id, String name, Collection<Department> departments, Collection<Document> documents) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
-        this.departments = new SimpleListProperty(departments);
-        this.documents = new SimpleListProperty(documents);
+        this.departments = departments;
+        this.documents = documents;
     }
 
     public Integer getId() {
@@ -65,19 +63,21 @@ public class Area implements Serializable {
     }
 
     public Collection<Department> getDepartments() {
-        return this.departments.get();
+        return departments;
     }
-    
-    public void setDepartments(Collection<Department> departments){
-        this.departments.setAll(departments);
+
+    public void setDepartments(Collection<Department> departments) {
+        this.departments = departments;
     }
 
     public Collection<Document> getDocuments() {
-        return this.documents.get();
+        return documents;
     }
 
     public void setDocuments(Collection<Document> documents) {
-        this.documents.setAll(documents);
+        this.documents = documents;
     }
+
+    
     
 }

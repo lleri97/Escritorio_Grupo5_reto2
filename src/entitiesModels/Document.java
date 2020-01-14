@@ -14,20 +14,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.validation.constraints.Past;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -38,54 +25,47 @@ public class Document implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final SimpleIntegerProperty id;
+    private int id;
 
     private final SimpleStringProperty name;
 
     private final SimpleStringProperty description;
 
-    private final SimpleObjectProperty<User> user;
+    private User user;
 
-    private final SimpleListProperty<Area> areas;
+    private Collection<Area> areas;
 
-    private final SimpleBooleanProperty visibility;
+    private Boolean visibility;
 
-    private final SimpleObjectProperty<DocumentStatus> status;
+    private DocumentStatus status;
 
-    private final SimpleObjectProperty<Byte[]> documentContent;
+    private byte[] documentContent;
 
     private final SimpleObjectProperty<Date> uploadDate;
 
     public Document() {
-        this.id = new SimpleIntegerProperty();
         this.name = new SimpleStringProperty();
         this.description = new SimpleStringProperty();
-        this.user = new SimpleObjectProperty();
-        this.areas = new SimpleListProperty();
-        this.visibility = new SimpleBooleanProperty();
-        this.status = new SimpleObjectProperty();
-        this.documentContent = new SimpleObjectProperty();
         this.uploadDate = new SimpleObjectProperty();
     }
     
-    public Document(int id, String name, String description, User user, ObservableList<Area> areas, Boolean visibility, DocumentStatus status, Byte[] documentContent, Date uploadDate) {
-        this.id = new SimpleIntegerProperty(id);
+    public Document(int id, String name, String description, User user, Collection<Area> areas, Boolean visibility, DocumentStatus status, byte[] documentContent, Date uploadDate) {
         this.name = new SimpleStringProperty(name);
         this.description = new SimpleStringProperty(description);
-        this.user = new SimpleObjectProperty(user);
-        this.areas = new SimpleListProperty(areas);
-        this.visibility = new SimpleBooleanProperty(visibility);
-        this.status = new SimpleObjectProperty(status);
-        this.documentContent = new SimpleObjectProperty(documentContent);
+        this.user = user;
+        this.areas = areas;
+        this.visibility = visibility;
+        this.status = status;
+        this.documentContent = documentContent;
         this.uploadDate = new SimpleObjectProperty(uploadDate);
     }
 
     public int getId() {
-        return this.id.get();
+        return id;
     }
-    
-    public void setId(int id){
-        this.id.set(id);
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -103,47 +83,47 @@ public class Document implements Serializable {
     public void setDescription(String description) {
         this.description.set(description);
     }
-    
+
     public User getUser() {
-        return this.user.get();
+        return user;
     }
-    
+
     public void setUser(User user) {
-        this.user.set(user);
+        this.user = user;
     }
 
     public Collection<Area> getAreas() {
-        return this.areas.get();
-    }
-    
-    public void setAreas(Collection<Area> areas) {
-        this.areas.setAll(areas);
+        return areas;
     }
 
-    public boolean getVisibility() {
-        return this.visibility.get();
+    public void setAreas(Collection<Area> areas) {
+        this.areas = areas;
     }
-    
-    public void setVisibility(boolean visibility) {
-        this.visibility.set(visibility);
+
+    public Boolean getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Boolean visibility) {
+        this.visibility = visibility;
     }
 
     public DocumentStatus getStatus() {
-        return this.status.get();
+        return status;
     }
-    
+
     public void setStatus(DocumentStatus status) {
-        this.status.set(status);
+        this.status = status;
     }
 
-    public Byte[] getDocumentContent() {
-        return this.documentContent.get();
+    public byte[] getDocumentContent() {
+        return documentContent;
+    }
+
+    public void setDocumentContent(byte[] documentContent) {
+        this.documentContent = documentContent;
     }
     
-    public void setDocumentContent(Byte[] documentContent) {
-        this.documentContent.set(documentContent);
-    }
-
     public Date getUploadDate() {
         return this.uploadDate.get();
     }

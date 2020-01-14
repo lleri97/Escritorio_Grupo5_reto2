@@ -5,6 +5,7 @@
  */
 package servicesRestfull;
 
+import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -19,13 +20,15 @@ import javax.ws.rs.client.WebTarget;
  *        client.close();
  * </pre>
  *
- * @author Peiko
+ * @author 2dam
  */
 public class AreaClientService {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:46616/grupo5_reto2_server/webresources";
+    private static final String BASE_URI = "http://"+
+            ResourceBundle.getBundle("files.connectionHTTP").getString("http")+
+            "/grupo5_reto2_server/webresources";
 
     public AreaClientService() {
         client = javax.ws.rs.client.ClientBuilder.newClient();

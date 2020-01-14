@@ -5,6 +5,7 @@
  */
 package controllersDesktop;
 
+import entitiesModels.User;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,7 +43,7 @@ public class LogOutController {
     @FXML
     private Button btnExit;
     @FXML
-    private Label nombreUsu;
+    private Label txtNombreUsu;
     @FXML
     private Label textLogin;
     @FXML
@@ -67,7 +68,8 @@ public class LogOutController {
     private Button btnDepartments;
     @FXML
     private Button btnAreas;
-    
+    @FXML
+    private Button btnNewUser;
 
     private static final Logger LOGGER = Logger.getLogger(LogOutController.class.getPackage() + "." + LogOutController.class.getName());
 
@@ -99,7 +101,7 @@ public class LogOutController {
      * @param client Client will be used
      * @param user User that contains the profile data
      */
-    public void initStage(Parent root) {
+    public void initStage(Parent root, User usu) {
         Scene scene = new Scene(root);
 
         //The window starts
@@ -120,6 +122,7 @@ public class LogOutController {
 
         btnAreas.setOnAction(this::handleButtonAction);
         btnUsers.setOnAction(this::handleButtonAction);
+
         stage.show();
 
         LOGGER.info("Profile loaded successfully.");
@@ -134,30 +137,28 @@ public class LogOutController {
             LOGGER.info("Closing application");
             Platform.exit();
         });
-        
+
     }
 
-  
-public void handleButtonAction(ActionEvent event) {
-    
-    if((Button) event.getSource()==btnAreas){
-        try {
-            AnchorPane pane= FXMLLoader.load(getClass().getResource("/fxmlWindows/tabAreas.fxml"));
-            contentPane.getChildren().setAll(pane);
-        } catch (IOException ex) {
-            Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
+    public void handleButtonAction(ActionEvent event) {
+
+        if ((Button) event.getSource() == btnAreas) {
+            try {
+                AnchorPane pane = FXMLLoader.load(getClass().getResource("/fxmlWindows/tabAreas.fxml"));
+                contentPane.getChildren().setAll(pane);
+            } catch (IOException ex) {
+                Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if ((Button) event.getSource() == btnUsers) {
+            
+                tabUsersController tabUsers = new tabUsersController();
+                tabUsers.inicializar(contentPane);
+                 
+              
+              
+
+           
         }
-    }else if((Button)event.getSource()==btnUsers){
-        try {
-            AnchorPane pane= FXMLLoader.load(getClass().getResource("/fxmlWindows/tabUsers.fxml"));
-            contentPane.getChildren().setAll(pane);
-        } catch (IOException ex) {
-            Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
     }
-    
-}
-
-
-
 }

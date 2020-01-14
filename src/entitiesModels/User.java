@@ -8,11 +8,8 @@ package entitiesModels;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -24,82 +21,125 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final SimpleIntegerProperty id;
+    private int id;
 
-    private final SimpleStringProperty login;
+    private String login;
 
     private final SimpleStringProperty email;
 
-    private final SimpleStringProperty fullname;
+    private  final SimpleStringProperty fullname;
 
-    private final SimpleObjectProperty<UserStatus> status;
+    private UserStatus status;
 
-    private final SimpleObjectProperty<UserPrivilege> privilege;
+    private UserPrivilege privilege;
 
-    private final SimpleStringProperty password;
+    private String password;
 
-    private final SimpleListProperty<Document> documents;
+    private Collection<Document> documents;
 
     private final SimpleObjectProperty<Date> lastAccess;
     
-    private final SimpleObjectProperty<Date> bDate;
+    private Date bDate;
 
-    private final SimpleObjectProperty<Date> lastPasswordChange;
+    private Date lastPasswordChange;
 
-    private final SimpleObjectProperty<Byte[]> photo;
+    private byte[] photo;
 
     private final SimpleObjectProperty<Company> company;
 
     public User() {
-        this.id = new SimpleIntegerProperty();
-        this.login = new SimpleStringProperty();
         this.email = new SimpleStringProperty();
         this.fullname = new SimpleStringProperty();
-        this.status = new SimpleObjectProperty();
-        this.privilege = new SimpleObjectProperty();
-        this.password = new SimpleStringProperty();
-        this.documents = new SimpleListProperty();
         this.lastAccess = new SimpleObjectProperty();
-        this.bDate = new SimpleObjectProperty<>();
-        this.lastPasswordChange = new SimpleObjectProperty();
-        this.photo = new SimpleObjectProperty();
         this.company = new SimpleObjectProperty();
     }
 
-    public User(int id, String login, String email, String fullname, UserStatus status, UserPrivilege privilege, String password, ObservableList<Document> documents, Date lastAccess, Date bDate, Date lastPasswordChange, Byte[] photo, Company company) {
-        this.id = new SimpleIntegerProperty(id);;
-        this.login = new SimpleStringProperty(login);;
+    public User(int id, String login, String email, String fullname, UserStatus status, UserPrivilege privilege, String password, Collection<Document> documents, Date lastAccess, Date bDate, Date lastPasswordChange, byte[] photo, Company company) {
+        this.id = id;
+        this.login = login;
         this.email = new SimpleStringProperty(email);
         this.fullname = new SimpleStringProperty(fullname);
-        this.status = new SimpleObjectProperty(status);
-        this.privilege = new SimpleObjectProperty(privilege);
-        this.password = new SimpleStringProperty(password);
-        this.documents = new SimpleListProperty(documents);
+        this.status = status;
+        this.privilege = privilege;
+        this.password = password;
+        this.documents = documents;
         this.lastAccess = new SimpleObjectProperty(lastAccess);
-        this.bDate = new SimpleObjectProperty(bDate);
-        this.lastPasswordChange = new SimpleObjectProperty(lastPasswordChange);
-        this.photo = new SimpleObjectProperty(photo);
+        this.bDate = bDate;
+        this.lastPasswordChange = lastPasswordChange;
+        this.photo = photo;
         this.company = new SimpleObjectProperty(company);
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
     public int getId() {
-        return this.id.get();
+        return id;
     }
 
     public void setId(int id) {
-        this.id.set(id);
+        this.id = id;
     }
 
     public String getLogin() {
-        return this.login.get();
+        return login;
     }
 
     public void setLogin(String login) {
-        this.login.set(login);
+        this.login = login;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
+
+    public UserPrivilege getPrivilege() {
+        return privilege;
+    }
+
+    public void setPrivilege(UserPrivilege privilege) {
+        this.privilege = privilege;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Collection<Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(Collection<Document> documents) {
+        this.documents = documents;
+    }
+
+    public Date getbDate() {
+        return bDate;
+    }
+
+    public void setbDate(Date bDate) {
+        this.bDate = bDate;
+    }
+
+    public Date getLastPasswordChange() {
+        return lastPasswordChange;
+    }
+
+    public void setLastPasswordChange(Date lastPasswordChange) {
+        this.lastPasswordChange = lastPasswordChange;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 
     public String getEmail() {
@@ -107,47 +147,15 @@ public class User implements Serializable {
     }
 
     public void setEmail(String email) {
-        this.login.set(email);
+        this.email.set(email);
     }
 
     public String getFullname() {
         return this.fullname.get();
     }
 
-    public void setFullName(String fullname) {
-        this.login.set(fullname);
-    }
-
-    public UserStatus getStatus() {
-        return this.status.get();
-    }
-
-    public void setStatus(UserStatus status) {
-        this.status.set(status);
-    }
-
-    public UserPrivilege getPrivilege() {
-        return this.privilege.get();
-    }
-
-    public void setPrivilege(UserPrivilege privilege) {
-        this.privilege.set(privilege);
-    }
-
-    public String getPassword() {
-        return this.password.get();
-    }
-
-    public void setPassword(String password) {
-        this.password.set(password);
-    }
-
-    public Collection<Document> getDocuments() {
-        return this.documents.get();
-    }
-
-    public void setDocuments(Collection<Document> documents) {
-        this.documents.setAll(documents);
+    public void setFullname(String fullname) {
+        this.fullname.set(fullname);
     }
 
     public Date getLastAccess() {
@@ -156,30 +164,6 @@ public class User implements Serializable {
     
     public void setLastAccess(Date lastAccess){
         this.lastAccess.set(lastAccess);
-    }
-    
-    public Date getBDate() {
-        return this.bDate.get();
-    }
-    
-    public void setBDate(Date bDate){
-        this.bDate.set(bDate);
-    }
-
-    public Date getLastPasswordChange() {
-        return this.lastPasswordChange.get();
-    }
-
-    public void setLastPasswordChange(Date lastPasswordChange){
-        this.lastPasswordChange.set(lastPasswordChange);
-    }
-    
-    public Byte[] getPhoto() {
-        return this.photo.get();
-    }
-    
-    public void setPhoto(Byte[] photo) {
-        this.photo.set(photo);
     }
 
     public Company getCompany() {

@@ -54,8 +54,6 @@ public class LoginController {
 
     private Stage stage;
 
-    private User usu;
-
     private static final Logger LOGGER = Logger.getLogger(LoginController.class.getPackage() + "." + LoginController.class.getName());
 
     private Stage getStage() {
@@ -167,10 +165,10 @@ public class LoginController {
                 okButton.setId("okbutton");
                 alert.showAndWait();
             } else {// The user is built
-                usu = new User();
+                User  usu = new User();
 
                 UserClientService client = new UserClientService();
-               // usu = client.login(User.class, textFieldUsername.getText(), textFieldPassword.getText());
+              //  usu = client.login(User.class, textFieldUsername.getText(), textFieldPassword.getText());
                 
                 //If the credentials are correct, if not go to exceptions
                 LOGGER.info("Login made successfully. Loading user profile.");
@@ -178,7 +176,8 @@ public class LoginController {
                 loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU03_LogOut.fxml"));
                 root = (Parent) loader.load();
                 controller = ((LogOutController) loader.getController());
-                controller.initStage(root);
+                controller.initStage(root, usu);
+                stage.close();
             }
 
         } catch (IOException ex) {
