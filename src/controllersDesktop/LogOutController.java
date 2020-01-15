@@ -39,10 +39,6 @@ import javafx.stage.Stage;
 public class LogOutController {
 
     @FXML
-    private Button btnCloseConnection;
-    @FXML
-    private Button btnExit;
-    @FXML
     private Label txtNombreUsu;
     @FXML
     private Label textLogin;
@@ -69,7 +65,9 @@ public class LogOutController {
     @FXML
     private Button btnAreas;
     @FXML
-    private Button btnNewUser;
+    private Button btnCloseConnection;
+    @FXML
+    private Button btnExit;
 
     private static final Logger LOGGER = Logger.getLogger(LogOutController.class.getPackage() + "." + LogOutController.class.getName());
 
@@ -122,13 +120,16 @@ public class LogOutController {
 
         btnAreas.setOnAction(this::handleButtonAction);
         btnUsers.setOnAction(this::handleButtonAction);
+        btnEntity.setOnAction(this::handleButtonAction);
+        btnDepartments.setOnAction(this::handleButtonAction);
+        btnDocuments.setOnAction(this::handleButtonAction);
         /*
         txtNombreUsu.setText(usu.getFullname());
         textLogin.setText(usu.getLogin());
         textEntity.setText(usu.getCompany().getName().toString());
         textPrivilege.setText(usu.getPrivilege().toString());
         textFullName.setText(usu.getFullname());
-*/
+         */
         stage.show();
 
         LOGGER.info("Profile loaded successfully.");
@@ -149,21 +150,22 @@ public class LogOutController {
     public void handleButtonAction(ActionEvent event) {
 
         if ((Button) event.getSource() == btnAreas) {
-            try {
-                AnchorPane pane = FXMLLoader.load(getClass().getResource("/fxmlWindows/tabAreas.fxml"));
-                contentPane.getChildren().setAll(pane);
-            } catch (IOException ex) {
-                Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            tabAreasController tabAreas = new tabAreasController();
+            tabAreas.inicializar(contentPane);
         } else if ((Button) event.getSource() == btnUsers) {
-            
-                tabUsersController tabUsers = new tabUsersController();
-                tabUsers.inicializar(contentPane);
-                 
-              
-              
 
-           
+            tabUsersController tabUsers = new tabUsersController();
+            tabUsers.inicializar(contentPane);
+
+        } else if ((Button) event.getSource() == btnDepartments) {
+            tabDepartmentController tabDepart = new tabDepartmentController();
+            tabDepart.inicializar(contentPane);
+        } else if ((Button) event.getSource() == btnDocuments) {
+            tabDocumentsController tabDocuments = new tabDocumentsController();
+            tabDocuments.inicializar(contentPane);
+        } else if ((Button) event.getSource() == btnEntity) {
+            tabEntityController tabEntity = new tabEntityController();
+            tabEntity.inicializar(contentPane);
         }
 
     }

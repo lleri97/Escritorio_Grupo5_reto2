@@ -13,10 +13,9 @@ import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 /**
@@ -24,26 +23,34 @@ import javafx.scene.layout.Pane;
  *
  * @author Yeray
  */
-public class tabEntityController {
+public class tabDepartmentController {
     
     @FXML
-    private Button btnNewArea;
+    private Button btnNewDEpartment;
     
-   public void inicializar(Pane contentPane){
+    
+
+       public void inicializar(Pane contentPane){
         try {
             FXMLLoader loader = new FXMLLoader();
-            AnchorPane pane = loader.load(getClass().getResource("/fxmlWindows/tabEntity.fxml"));
+            AnchorPane pane = loader.load(getClass().getResource("/fxmlWindows/tabDepartments.fxml"));
             contentPane.getChildren().setAll(pane);
            
         } catch (IOException ex) {
             Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-   
-   public void handleButtonAction(){
-       
-   }
-
-  
+            public void lanzarNewDepartmentWindow() {
+        
+            try {
+                NewDepartmentController controller = new NewDepartmentController();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewDepartment.fxml"));
+                Parent root = (Parent) loader.load();
+                controller = ((NewDepartmentController) loader.getController());
+                controller.initStage(root);
+            } catch (IOException ex) {
+                Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
 }
