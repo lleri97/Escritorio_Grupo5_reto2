@@ -122,7 +122,13 @@ public class LogOutController {
 
         btnAreas.setOnAction(this::handleButtonAction);
         btnUsers.setOnAction(this::handleButtonAction);
-
+        /*
+        txtNombreUsu.setText(usu.getFullname());
+        textLogin.setText(usu.getLogin());
+        textEntity.setText(usu.getCompany().getName().toString());
+        textPrivilege.setText(usu.getPrivilege().toString());
+        textFullName.setText(usu.getFullname());
+*/
         stage.show();
 
         LOGGER.info("Profile loaded successfully.");
