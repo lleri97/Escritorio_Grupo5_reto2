@@ -17,6 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
@@ -26,6 +27,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.Mnemonic;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -39,15 +42,17 @@ import javafx.stage.Stage;
 public class LogOutController {
 
     @FXML
+    private AnchorPane paneUser;
+    @FXML
     private Label txtNombreUsu;
     @FXML
-    private Label textLogin;
+    private Label txtLogin;
     @FXML
-    private Label textFullName;
+    private Label txtEmail;
     @FXML
-    private Label textPrivilege;
+    private Label txtPrivilege;
     @FXML
-    private Label textEntity;
+    private Label txtEntity;
     @FXML
     private MenuItem closeSessionItem;
     @FXML
@@ -65,9 +70,15 @@ public class LogOutController {
     @FXML
     private Button btnAreas;
     @FXML
+    private Button btnModify;
+    @FXML
     private Button btnCloseConnection;
     @FXML
     private Button btnExit;
+
+    ContextMenu cm;
+
+    User usuario;
 
     private static final Logger LOGGER = Logger.getLogger(LogOutController.class.getPackage() + "." + LogOutController.class.getName());
 
@@ -101,7 +112,8 @@ public class LogOutController {
      */
     public void initStage(Parent root, User usu) {
         Scene scene = new Scene(root);
-
+        usuario = new User();
+        usuario = usu;
         //The window starts
         stage = new Stage();
 
@@ -123,12 +135,41 @@ public class LogOutController {
         btnEntity.setOnAction(this::handleButtonAction);
         btnDepartments.setOnAction(this::handleButtonAction);
         btnDocuments.setOnAction(this::handleButtonAction);
+        btnModify.setOnAction(this::handleButtonAction);
+        cm = new ContextMenu();
+        MenuItem cmItemUser = new MenuItem("Usuario");
+        cmItemUser.setOnAction((event) -> {
+            createTabUsers();
+        });
+        MenuItem cmItemEntity = new MenuItem("Entidades");
+        cmItemEntity.setOnAction((event) -> {
+            createTabEntity();
+        });
+        MenuItem cmItemDocuments = new MenuItem("Documentos");
+        cmItemDocuments.setOnAction((event) -> {
+            createTabDocuments();
+        });
+        MenuItem cmItemDepart = new MenuItem("Departamentos");
+        cmItemDepart.setOnAction((event) -> {
+            createTabDepartments();
+        });
+        MenuItem cmItemAreas = new MenuItem("Areas");
+        cmItemAreas.setOnAction((event) -> {
+            createTabAreas();
+        });
+        cm.getItems().addAll(cmItemAreas,cmItemDepart,cmItemDocuments,cmItemEntity,cmItemUser);
+        paneUser.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent e)->{
+            if(e.getButton()== MouseButton.SECONDARY){
+                cm.show(paneUser, e.getScreenX(),e.getScreenY());
+            }
+        });
+        
         /*
-        txtNombreUsu.setText(usu.getFullname());
-        textLogin.setText(usu.getLogin());
-        textEntity.setText(usu.getCompany().getName().toString());
-        textPrivilege.setText(usu.getPrivilege().toString());
-        textFullName.setText(usu.getFullname());
+        txtNombreUsu.setText("Nombre completo: "+usu.getFullname());
+        txtLogin.setText("Usuario: "+usu.getLogin());
+        txtEntity.setText("Entidad/Empresa"+usu.getCompany().getName().toString());
+        txtPrivilege.setText("Tipo usuario: "+usu.getPrivilege().toString());
+        txtEmail.setText("Email: "+usu.getEmail()); 
          */
         stage.show();
 
@@ -150,23 +191,116 @@ public class LogOutController {
     public void handleButtonAction(ActionEvent event) {
 
         if ((Button) event.getSource() == btnAreas) {
-            tabAreasController tabAreas = new tabAreasController();
-            tabAreas.inicializar(contentPane);
+            createTabAreas();
         } else if ((Button) event.getSource() == btnUsers) {
-
-            tabUsersController tabUsers = new tabUsersController();
-            tabUsers.inicializar(contentPane);
-
+            createTabUsers();
         } else if ((Button) event.getSource() == btnDepartments) {
-            tabDepartmentController tabDepart = new tabDepartmentController();
-            tabDepart.inicializar(contentPane);
+            createTabDepartments();
         } else if ((Button) event.getSource() == btnDocuments) {
-            tabDocumentsController tabDocuments = new tabDocumentsController();
-            tabDocuments.inicializar(contentPane);
+            createTabDocuments();
         } else if ((Button) event.getSource() == btnEntity) {
-            tabEntityController tabEntity = new tabEntityController();
-            tabEntity.inicializar(contentPane);
+            createTabEntity();
+        } else if ((Button) event.getSource() == btnModify) {
+            openModifyUserWindow();
         }
 
+    }
+
+    /**
+     * Changes the anchor pane from the main frame and chages it for areas pane
+     */
+    public void createTabAreas() {
+        try {
+            tabAreasController tabAreas = new tabAreasController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/tabAreas.fxml"));
+            AnchorPane pane = loader.load();
+            contentPane.getChildren().setAll(pane);
+            tabAreas = (tabAreasController) loader.getController();
+            tabAreas.inicializar(usuario);
+        } catch (IOException ex) {
+            Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Changes the anchor pane from the main frame and chages it for departments
+     * pane
+     */
+    public void createTabDepartments() {
+        try {
+            tabDepartmentController tabDepartment = new tabDepartmentController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/tabDepartments.fxml"));
+            AnchorPane pane = loader.load();
+            contentPane.getChildren().setAll(pane);
+            tabDepartment = (tabDepartmentController) loader.getController();
+            tabDepartment.inicializar(usuario);
+        } catch (IOException ex) {
+            Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Changes the anchor pane from the main frame and chages it for users pane
+     */
+    private void createTabUsers() {
+        try {
+            tabUsersController tabUsers = new tabUsersController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/tabUsers.fxml"));
+            AnchorPane pane = loader.load();
+            contentPane.getChildren().setAll(pane);
+            tabUsers = (tabUsersController) loader.getController();
+            tabUsers.inicializar(usuario);
+        } catch (IOException ex) {
+            Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    /**
+     * Changes the anchor pane from the main frame and chages it for documents
+     * pane
+     */
+    private void createTabDocuments() {
+        try {
+            tabDocumentsController tabDocuments = new tabDocumentsController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/tabDocuments.fxml"));
+            AnchorPane pane = loader.load();
+            contentPane.getChildren().setAll(pane);
+            tabDocuments = (tabDocumentsController) loader.getController();
+            tabDocuments.inicializar(usuario);
+        } catch (IOException ex) {
+            Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Changes the anchor pane from the main frame and chages it for entity pane
+     */
+    private void createTabEntity() {
+        try {
+            tabEntityController tabEntity = new tabEntityController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/tabEntity.fxml"));
+            AnchorPane pane = loader.load();
+            contentPane.getChildren().setAll(pane);
+            tabEntity = (tabEntityController) loader.getController();
+            tabEntity.inicializar(usuario);
+        } catch (IOException ex) {
+            Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Open a new window to modify the user
+     */
+    private void openModifyUserWindow() {
+        try {
+            SignUpController controller = new SignUpController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU02_SignUp.fxml"));
+            Parent root = (Parent) loader.load();
+            controller = ((SignUpController) loader.getController());
+            controller.initStage(root, usuario);
+        } catch (IOException ex) {
+            Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

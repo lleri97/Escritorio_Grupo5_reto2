@@ -171,6 +171,7 @@ public class LoginController {
               //  usu = client.login(User.class, textFieldUsername.getText(), textFieldPassword.getText());
                 
                 //If the credentials are correct, if not go to exceptions
+                
                 LOGGER.info("Login made successfully. Loading user profile.");
                 LogOutController controller = new LogOutController();
                 loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU03_LogOut.fxml"));

@@ -5,14 +5,18 @@
  */
 package controllersDesktop;
 
+import entitiesModels.User;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
@@ -26,28 +30,30 @@ public class tabAreasController  {
     /**
      * Initializes the controller class.
      */
+    @FXML
+    private Button btnNewArea;
     
     
-    public void inicializar(Pane contentPane){
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            AnchorPane pane = loader.load(getClass().getResource("/fxmlWindows/tabAreas.fxml"));
-            contentPane.getChildren().setAll(pane);
-           
-        } catch (IOException ex) {
-            Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private User usuario;
+    
+    
+    public void inicializar(User usuario){
+        this.usuario=usuario;
+        
+        btnNewArea.setOnAction((event) -> {
+            lanzarNewAreaWindow();
+        });
+        
     }
-       public void lanzarNewUserWindow() {
+       public void lanzarNewAreaWindow() {
         
             try {
                 NewAreaController controller = new NewAreaController();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewArea.fxml"));
                 Parent root = (Parent) loader.load();
                 controller = ((NewAreaController) loader.getController());
-                controller.initStage(root);
+                controller.initStage(root, usuario);
             } catch (IOException ex) {
-                Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

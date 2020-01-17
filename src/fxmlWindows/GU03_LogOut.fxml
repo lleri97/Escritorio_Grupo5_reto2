@@ -64,9 +64,9 @@
             <children>
                 <VBox prefHeight="243.0" prefWidth="778.0">
                     <children>
-                        <AnchorPane prefHeight="228.0" prefWidth="992.0" style="-fx-background-color: white;">
+                        <AnchorPane fx:id="paneUser" prefHeight="228.0" prefWidth="992.0" style="-fx-background-color: white;">
                             <children>
-                                <Label fx:id="nombreUsu" contentDisplay="CENTER" layoutX="190.0" layoutY="34.0" prefHeight="30.0" prefWidth="122.0" text="Nombre:">
+                                <Label fx:id="txtNombreUsu" contentDisplay="CENTER" layoutX="190.0" layoutY="34.0" prefHeight="30.0" prefWidth="122.0" text="Nombre:">
                                     <font>
                                         <Font size="11.0" />
                                     </font>
@@ -74,12 +74,12 @@
                                 <Separator layoutX="1.0" layoutY="254.0" prefHeight="4.0" prefWidth="991.0" />
                                 <Separator layoutX="154.0" layoutY="5.0" orientation="VERTICAL" prefHeight="247.0" prefWidth="3.0" />
                                 <ImageView fx:id="photoProfileImg" fitHeight="111.0" fitWidth="107.0" layoutX="23.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true" />
-                                <Label fx:id="textoSaludo1" contentDisplay="CENTER" layoutX="190.0" layoutY="83.0" prefHeight="30.0" prefWidth="260.0" text="Email:">
+                                <Label fx:id="txtEmail" contentDisplay="CENTER" layoutX="190.0" layoutY="83.0" prefHeight="30.0" prefWidth="260.0" text="Email:">
                                     <font>
                                         <Font size="11.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="textLogin" contentDisplay="CENTER" layoutX="190.0" layoutY="131.0" prefHeight="30.0" prefWidth="260.0" text="Nombre Usuario">
+                                <Label fx:id="txtLogin" contentDisplay="CENTER" layoutX="190.0" layoutY="131.0" prefHeight="30.0" prefWidth="260.0" text="Nombre Usuario">
                                     <font>
                                         <Font size="11.0" />
                                     </font>
@@ -89,17 +89,12 @@
                                         <Font size="11.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="textFullName" contentDisplay="CENTER" layoutX="546.0" layoutY="34.0" prefHeight="30.0" prefWidth="260.0" text="Apellidos:">
+                                <Label fx:id="txtPrivilege" contentDisplay="CENTER" layoutX="546.0" layoutY="128.0" prefHeight="30.0" prefWidth="260.0" text="Tipo usuario:">
                                     <font>
                                         <Font size="11.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="textPrivilege" contentDisplay="CENTER" layoutX="546.0" layoutY="128.0" prefHeight="30.0" prefWidth="260.0" text="Tipo usuario:">
-                                    <font>
-                                        <Font size="11.0" />
-                                    </font>
-                                </Label>
-                                <Label fx:id="textEntity" contentDisplay="CENTER" layoutX="546.0" layoutY="83.0" prefHeight="30.0" prefWidth="260.0" text="Entidad/Empresa:">
+                                <Label fx:id="txtEntity" contentDisplay="CENTER" layoutX="546.0" layoutY="83.0" prefHeight="30.0" prefWidth="260.0" text="Entidad/Empresa:">
                                     <font>
                                         <Font size="11.0" />
                                     </font>

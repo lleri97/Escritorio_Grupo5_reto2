@@ -5,6 +5,7 @@
  */
 package controllersDesktop;
 
+import entitiesModels.User;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -42,14 +43,16 @@ public class SignUpController {
     @FXML
     private Button btnHelpSignUp;
     
+    private User usu;
+    
      private Stage stage;
      
       public void setStage(Stage stage) {
         this.stage = stage;
     }
     
-    public void initStage(Parent root){
-        
+    public void initStage(Parent root , User usu){
+   
         Scene sceneSignUp = new Scene(root);
         stage = new Stage();
         stage.setScene(sceneSignUp);

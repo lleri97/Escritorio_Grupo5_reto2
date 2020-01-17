@@ -5,6 +5,7 @@
  */
 package controllersDesktop;
 
+import entitiesModels.User;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -25,25 +27,32 @@ import javafx.scene.layout.Pane;
  * @author Yeray
  */
 public class tabEntityController {
-    
+
     @FXML
-    private Button btnNewArea;
+    private Button btnNewCompany;
     
-   public void inicializar(Pane contentPane){
+    private User usuario;
+    
+    public void inicializar(User usuario) {
+        this.usuario = usuario;
+
+        btnNewCompany.setOnAction((event) -> {
+            lanzarNewEntityWindow();
+        });
+
+    }
+
+    public void lanzarNewEntityWindow() {
+
         try {
-            FXMLLoader loader = new FXMLLoader();
-            AnchorPane pane = loader.load(getClass().getResource("/fxmlWindows/tabEntity.fxml"));
-            contentPane.getChildren().setAll(pane);
-           
+            NewCompanyController controller = new NewCompanyController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewCompany.fxml"));
+            Parent root = (Parent) loader.load();
+            controller = ((NewCompanyController) loader.getController());
+            controller.initStage(root);
         } catch (IOException ex) {
-            Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
+         Logger.getLogger("Esto peta aqui");
         }
     }
-   
-   public void handleButtonAction(){
-       
-   }
-
-  
 
 }

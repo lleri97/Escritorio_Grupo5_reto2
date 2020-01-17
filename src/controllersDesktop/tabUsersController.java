@@ -49,17 +49,26 @@ public class tabUsersController {
     private TableColumn companyColumn;
     @FXML
     private TableColumn lastAccessColumn;
+    
+    
     private ObservableList<User> usersData;
+    private User usuario;
 
-    public void inicializar(Pane contentPane){
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            AnchorPane pane = loader.load(getClass().getResource("/fxmlWindows/tabUsers.fxml"));
-            contentPane.getChildren().setAll(pane);
-           
-        } catch (IOException ex) {
-            Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public User getUsu() {
+        return usuario;
+    }
+
+    public void setUsu(User usu) {
+        this.usuario = usu;
+    }
+
+   public void inicializar(User usuario){
+        this.usuario=usuario;
+        
+        btnNewUser.setOnAction((event) -> {
+            lanzarNewUserWindow();
+        });
+        
     }
 
 
@@ -84,7 +93,7 @@ public class tabUsersController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU02_SignUp.fxml"));
                 Parent root = (Parent) loader.load();
                 controller = ((SignUpController) loader.getController());
-                controller.initStage(root);
+                controller.initStage(root, usuario);
             } catch (IOException ex) {
                 Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
             }

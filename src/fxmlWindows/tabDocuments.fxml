@@ -12,7 +12,7 @@
         <Label layoutX="30.0" layoutY="27.0" prefHeight="17.0" prefWidth="74.0" text="Busqueda:" />
         <CheckBox layoutX="118.0" layoutY="27.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="117.0" text="Habilitados" />
         <CheckBox layoutX="117.0" layoutY="57.0" mnemonicParsing="false" text="Deshabilitados" />
-        <Button layoutX="840.0" layoutY="23.0" mnemonicParsing="false" text="Nuevo documento" />
+        <Button fx:id="btnNewDocument" layoutX="840.0" layoutY="23.0" mnemonicParsing="false" text="Nuevo documento" />
         <TreeTableView layoutX="117.0" layoutY="109.0" prefHeight="324.0" prefWidth="746.0">
             <columns>
                 <TreeTableColumn prefWidth="129.0" text="Nombre" />
