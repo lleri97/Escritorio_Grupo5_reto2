@@ -31,10 +31,6 @@ public class Document implements Serializable {
 
     private final SimpleStringProperty description;
 
-    private User user;
-
-    private Collection<Area> areas;
-
     private Boolean visibility;
 
     private DocumentStatus status;
@@ -48,12 +44,11 @@ public class Document implements Serializable {
         this.description = new SimpleStringProperty();
         this.uploadDate = new SimpleObjectProperty();
     }
-    
-    public Document(int id, String name, String description, User user, Collection<Area> areas, Boolean visibility, DocumentStatus status, byte[] documentContent, Date uploadDate) {
+
+    public Document(int id, String name, String description, Boolean visibility, DocumentStatus status, byte[] documentContent, Date uploadDate) {
         this.name = new SimpleStringProperty(name);
         this.description = new SimpleStringProperty(description);
-        this.user = user;
-        this.areas = areas;
+
         this.visibility = visibility;
         this.status = status;
         this.documentContent = documentContent;
@@ -71,7 +66,7 @@ public class Document implements Serializable {
     public String getName() {
         return this.name.get();
     }
-    
+
     public void setName(String name) {
         this.name.set(name);
     }
@@ -82,22 +77,6 @@ public class Document implements Serializable {
 
     public void setDescription(String description) {
         this.description.set(description);
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Collection<Area> getAreas() {
-        return areas;
-    }
-
-    public void setAreas(Collection<Area> areas) {
-        this.areas = areas;
     }
 
     public Boolean getVisibility() {
@@ -123,15 +102,13 @@ public class Document implements Serializable {
     public void setDocumentContent(byte[] documentContent) {
         this.documentContent = documentContent;
     }
-    
+
     public Date getUploadDate() {
         return this.uploadDate.get();
     }
-    
+
     public void setUploadDate(Date uploadDate) {
         this.uploadDate.set(uploadDate);
     }
-
-    
 
 }

@@ -6,8 +6,8 @@
 package entitiesModels;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -35,7 +35,7 @@ public class User implements Serializable {
 
     private String password;
 
-    private Collection<Document> documents;
+    private Set <Document> documents;
 
     private final SimpleObjectProperty<Date> lastAccess;
     
@@ -54,7 +54,7 @@ public class User implements Serializable {
         this.company = new SimpleObjectProperty();
     }
 
-    public User(int id, String login, String email, String fullname, UserStatus status, UserPrivilege privilege, String password, Collection<Document> documents, Date lastAccess, Date bDate, Date lastPasswordChange, byte[] photo, Company company) {
+    public User(int id, String login, String email, String fullname, UserStatus status, UserPrivilege privilege, String password, Set<Document> documents, Date lastAccess, Date bDate, Date lastPasswordChange, byte[] photo, Company company) {
         this.id = id;
         this.login = login;
         this.email = new SimpleStringProperty(email);
@@ -110,11 +110,11 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Collection<Document> getDocuments() {
+    public Set<Document> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(Collection<Document> documents) {
+    public void setDocuments(Set<Document> documents) {
         this.documents = documents;
     }
 
@@ -173,5 +173,12 @@ public class User implements Serializable {
     public void setCompany(Company company) {
         this.company.set(company);
     }
+
+    @Override
+    public String toString() {
+        return "User{" + "fullname=" + fullname + '}';
+    }
+    
+    
 
 }

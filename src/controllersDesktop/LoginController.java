@@ -5,11 +5,11 @@
  */
 package controllersDesktop;
 
+import entitiesModels.Company;
 import entitiesModels.User;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.prefs.Preferences;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +29,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.Mnemonic;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import servicesRestfull.CompanyClientService;
 import servicesRestfull.UserClientService;
 
 /**
@@ -165,13 +166,15 @@ public class LoginController {
                 okButton.setId("okbutton");
                 alert.showAndWait();
             } else {// The user is built
-                User  usu = new User();
+                User usu = new User();
 
                 UserClientService client = new UserClientService();
-              //  usu = client.login(User.class, textFieldUsername.getText(), textFieldPassword.getText());
-                
+                usu = client.login(User.class, textFieldUsername.getText(), textFieldPassword.getText());
+                CompanyClientService cliente = new CompanyClientService();
+                Company PRUEBA = cliente.find(Company.class, "1");
+                Company xxxx = PRUEBA;
+
                 //If the credentials are correct, if not go to exceptions
-                
                 LOGGER.info("Login made successfully. Loading user profile.");
                 LogOutController controller = new LogOutController();
                 loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU03_LogOut.fxml"));

@@ -76,7 +76,7 @@ public class NewDepartmentController {
         
         btnAddDepartment.setOnAction((event)->{
             depart.setName(textFieldDepartment.getText());
-            depart.setCompanies(comboCompany.getItems());
+     
             
             departmentService = new DepartmentClientService();
         });

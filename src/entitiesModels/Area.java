@@ -8,6 +8,7 @@ package entitiesModels;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -30,19 +31,16 @@ public class Area implements Serializable {
     
     private final SimpleStringProperty name;
     
-    private Collection<Department> departments;
-    
-    private Collection<Document> documents;
+    private Set<Document> documents;
 
     public Area() {
         this.id = new SimpleIntegerProperty();
         this.name = new SimpleStringProperty();
     }
 
-    public Area(int id, String name, Collection<Department> departments, Collection<Document> documents) {
+    public Area(int id, String name, Set<Document> documents) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
-        this.departments = departments;
         this.documents = documents;
     }
 
@@ -62,19 +60,12 @@ public class Area implements Serializable {
         this.name.set(name);
     }
 
-    public Collection<Department> getDepartments() {
-        return departments;
-    }
 
-    public void setDepartments(Collection<Department> departments) {
-        this.departments = departments;
-    }
-
-    public Collection<Document> getDocuments() {
+    public Set<Document> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(Collection<Document> documents) {
+    public void setDocuments(Set<Document> documents) {
         this.documents = documents;
     }
 

@@ -7,6 +7,8 @@ package entitiesModels;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -28,24 +30,21 @@ public class Company implements Serializable {
 
     private final SimpleStringProperty cif;
 
-    private final SimpleListProperty<User> users;
 
-    private final SimpleListProperty<Department> departments;
+    private final Set <Department> departments;
 
-    public Company(int id, String name, String cif, ObservableList<User> users, ObservableList<Department> departments) {
+    public Company(int id, String name, String cif, Set<Department> departments) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
         this.cif = new SimpleStringProperty(cif);
-        this.users = new SimpleListProperty(users);
-        this.departments = new SimpleListProperty(departments);
+        this.departments = new HashSet<>(departments);
     }
 
     public Company() {
         this.id = new SimpleIntegerProperty();
         this.name = new SimpleStringProperty();
         this.cif = new SimpleStringProperty();
-        this.users = new SimpleListProperty();
-        this.departments = new SimpleListProperty();
+        this.departments = new HashSet<>();
     }
 
     public SimpleIntegerProperty getId() {
@@ -72,20 +71,12 @@ public class Company implements Serializable {
         this.cif.set(cif);
     }
 
-    public Collection<User> getUsers() {
-        return this.users.get();
+    public Set<Department> getDepartments() {
+        return this.departments;
     }
 
-    public void setUsers(Collection<User> users) {
-        this.users.setAll(users);
-    }
-
-    public Collection<Department> getDepartments() {
-        return this.departments.get();
-    }
-
-    public void setDepartments(Collection<Department> departments) {
-        this.departments.setAll(departments);
+    public void setDepartments(Set<Department> departments) {
+        this.departments.addAll(departments);
     }
 
 }
