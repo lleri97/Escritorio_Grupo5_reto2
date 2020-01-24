@@ -62,7 +62,7 @@
                </VBox.margin>
             </TextField>
             <Label />
-            <ComboBox fx:id="comboType" prefHeight="25.0" prefWidth="290.0" style="-fx-background-color: white;" />
+            <ComboBox fx:id="comboPrivilege" prefHeight="25.0" prefWidth="290.0" style="-fx-background-color: white;" />
          </children>
       </VBox>
       <Label fx:id="lblEmail1213" alignment="CENTER" layoutX="478.0" layoutY="194.0" prefHeight="32.0" prefWidth="102.0" text="Entidad:" textAlignment="RIGHT" textFill="WHITE" />

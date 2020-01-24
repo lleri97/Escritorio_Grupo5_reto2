@@ -66,7 +66,7 @@
                     <children>
                         <AnchorPane fx:id="paneUser" prefHeight="228.0" prefWidth="992.0" style="-fx-background-color: white;">
                             <children>
-                                <Label fx:id="txtNombreUsu" contentDisplay="CENTER" layoutX="190.0" layoutY="34.0" prefHeight="30.0" prefWidth="122.0" text="Nombre:">
+                                <Label fx:id="txtNombreUsu" contentDisplay="CENTER" layoutX="190.0" layoutY="34.0" prefHeight="30.0" prefWidth="376.0" text="Nombre:">
                                     <font>
                                         <Font size="11.0" />
                                     </font>

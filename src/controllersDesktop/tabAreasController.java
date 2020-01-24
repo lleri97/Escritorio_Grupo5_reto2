@@ -6,6 +6,7 @@
 package controllersDesktop;
 
 import entitiesModels.User;
+import entitiesModels.UserPrivilege;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -39,6 +40,10 @@ public class tabAreasController  {
     
     public void inicializar(User usuario){
         this.usuario=usuario;
+        if(usuario.getPrivilege()==UserPrivilege.USER){
+            btnNewArea.setDisable(true);
+            btnNewArea.setVisible(false);
+        }
         
         btnNewArea.setOnAction((event) -> {
             lanzarNewAreaWindow();

@@ -8,6 +8,7 @@ package controllersDesktop;
 import entitiesModels.Company;
 import entitiesModels.User;
 import entitiesModels.UserPrivilege;
+import entitiesModels.UserStatus;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +36,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.ws.rs.core.GenericType;
 import servicesRestfull.CompanyClientService;
+import servicesRestfull.UserClientService;
 
 /**
  *
@@ -63,6 +65,7 @@ public class SignUpController {
     @FXML
     private DatePicker dPickerNacimiento;// id.toEpochDay(); new Date(id.toEpochDay()); PARA LEER FECHA
     // de date a localdate --> instant= Instant.ofEpochMilli(date.getTime());    LocalDateTime.ofInstant(instant,);
+    private UserClientService userService;
 
     private static final Logger LOGGER = Logger.getLogger(SignUpController.class.getPackage() + "." + SignUpController.class.getName());
 
@@ -86,8 +89,19 @@ public class SignUpController {
      *
      * @param root Parent will be used
      */
-    void initStage(Parent root, User usuario) {
+    void initStage(Parent root, User usuario, String mod) {
         Scene scene = new Scene(root);
+        if (mod == "modify") {
+            textEmail.setText(usuario.getEmail());
+            textFullName.setText(usuario.getFullname());
+            textLogin.setText(usuario.getLogin());
+            comboEntity.setValue(usuario.getCompany().getName());
+            comboEntity.setDisable(true);
+            comboPrivilege.setValue(usuario.getPrivilege());
+            comboPrivilege.setDisable(true);
+            btnCreateUser.setText("Confirmar");
+        }
+
         this.usuario = usuario;
 
         //The window starts
@@ -120,13 +134,15 @@ public class SignUpController {
         textEmail.setTooltip(emailTT);
         User usuPrueba = usuario;
         //cargar combos
+        /*
         cargarPrivilegios(usuario.getPrivilege());
         cargarEntidades(usuario);
-
+         */
         // Actions
         btnCancel.setOnAction(this::handleButtonAction);
         btnHelpSignUp.setOnAction(this::handleButtonAction);
         btnCreateUser.setOnAction(this::handleButtonAction);
+        btnCancel.setOnAction(this::handleButtonAction);
         textEmail.textProperty().addListener(this::handleTextChanged);
         textFullName.textProperty().addListener(this::handleTextChanged);
         textLogin.textProperty().addListener(this::handleTextChanged);
@@ -139,6 +155,18 @@ public class SignUpController {
     }
 
     public void handleButtonAction(ActionEvent event) {
+        if ((Button) event.getSource() == btnCancel) {
+            stage.close();
+        } else if ((Button) event.getSource() == btnCreateUser) {
+            User user = new User();
+            user=usuario;
+            user.setEmail(textEmail.getText());
+            user.setFullname(textFullName.getText());
+            user.setLogin(textLogin.getText());
+            user.setPrivilege((UserPrivilege) comboPrivilege.getValue());
+            user.setStatus(UserStatus.ENABLED);
+            userService.edit(user);
+        }
 
     }
 
@@ -178,15 +206,16 @@ public class SignUpController {
         CompanyClientService clientCompany = new CompanyClientService();
         if (usuario.getPrivilege().equals(UserPrivilege.SUPERADMIN)) {
             //entities = clientCompany.findAll(new GenericType<List<Company>>()); //llamar servidor y cargar entidades
-            List<Company> entities = Arrays.asList(usuario.getCompany()); 
+            List<Company> entities = Arrays.asList(usuario.getCompany());
             comboEntity = new ComboBox((ObservableList) entities);
             comboEntity.getSelectionModel().selectFirst();
-            
-        } else if (usuario.getPrivilege().equals(UserPrivilege.COMPANYADMIN)) {
+
+        }/* else if (usuario.getPrivilege().equals(UserPrivilege.COMPANYADMIN)) {
             List<Company> entities = Arrays.asList(usuario.getCompany()); 
             comboEntity.getItems().clear();
             comboEntity.getItems().addAll(entities);
         }
+         */
     }
 
     private void cargarPrivilegios(UserPrivilege privilegio) {

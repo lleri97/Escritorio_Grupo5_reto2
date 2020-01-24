@@ -8,6 +8,7 @@ package servicesRestfull;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 
 /**
  * Jersey REST client generated for REST resource:CompanyFacadeREST
@@ -26,7 +27,7 @@ public class CompanyClientService {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/grupo5_reto2_server-dev-fran/webresources";
+    private static final String BASE_URI = "http://localhost:8080/grupo5_reto2_server-dev-fran-update-document/webresources";
 
     public CompanyClientService() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
@@ -47,7 +48,7 @@ public class CompanyClientService {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
-    public <T> T findAll(Class<T> responseType) throws ClientErrorException {
+    public <T> T findAll(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }

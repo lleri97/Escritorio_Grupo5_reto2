@@ -10,10 +10,13 @@ import entitiesModels.Department;
 import entitiesModels.User;
 import entitiesModels.UserPrivilege;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,6 +29,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javax.ws.rs.core.GenericType;
+import servicesRestfull.AreaClientService;
 import servicesRestfull.CompanyClientService;
 import servicesRestfull.DepartmentClientService;
 
@@ -53,6 +58,7 @@ public class NewDepartmentController {
     @FXML
     private Button btnCancel;
 
+    private AreaClientService areaService;
     private User usuario;
     private Department depart;
     private Stage stage;
@@ -73,31 +79,32 @@ public class NewDepartmentController {
         btnCancel.setOnAction((event) -> {
             stage.close();
         });
-        
-        btnAddDepartment.setOnAction((event)->{
+
+        btnAddDepartment.setOnAction((event) -> {
             depart.setName(textFieldDepartment.getText());
-     
-            
+          //  depart.setCompanies(comboCompany.getValue());
             departmentService = new DepartmentClientService();
         });
-      //  cargarCompanias(usuario.getPrivilege());
+        cargarCompanias(usuario.getPrivilege());
         lblError.setVisible(false);
         stage.show();
     }
 
     private void cargarCompanias(UserPrivilege privilegio) {
-         companyService = new CompanyClientService();
+        companyService = new CompanyClientService();
         if (usuario.getPrivilege().equals(UserPrivilege.SUPERADMIN)) {
-            //entities = clientCompany.findAll(new GenericType<List<Company>>()); //llamar servidor y cargar entidades
-            List<Company> entities = Arrays.asList(usuario.getCompany());
-            comboCompany = new ComboBox((ObservableList) entities);
+            Set<Company> entities = new HashSet<Company>(); //llamar servidor y cargar entidades
+            entities = companyService.findAll(new GenericType<Set<Company>>() {
+            });
+
+            //llamar servidor y cargar entidades
+            comboCompany.getItems().addAll(entities);
             comboCompany.getSelectionModel().selectFirst();
 
         } else if (usuario.getPrivilege().equals(UserPrivilege.COMPANYADMIN)) {
-            List<Company> entities = Arrays.asList(usuario.getCompany());
+            Company entities = usuario.getCompany();
             comboCompany.getItems().clear();
-            comboCompany.getItems().addAll(entities);
+            comboCompany.getItems().addAll(entities.getName());
         }
     }
-
 }

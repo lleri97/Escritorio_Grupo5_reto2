@@ -8,6 +8,8 @@ package controllersDesktop;
 import entitiesModels.Company;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -25,7 +27,7 @@ import servicesRestfull.CompanyClientService;
  * @author Yeray
  */
 public class NewCompanyController {
-
+    
     @FXML
     private Label lblNewArea;
     @FXML
@@ -48,10 +50,8 @@ public class NewCompanyController {
     private CompanyClientService companyService;
     
     Stage stage;
-
     
- 
-     public void initStage(Parent root){
+    public void initStage(Parent root) {
         
         Scene sceneNewEntity = new Scene(root);
         stage = new Stage();
@@ -60,23 +60,24 @@ public class NewCompanyController {
         stage.initModality(Modality.APPLICATION_MODAL);
         lblError.setVisible(false);
         
-        btnCancel.setOnAction((event)->{
+        btnCancel.setOnAction((event) -> {
             stage.close();
         });
-        btnAddCompany.setOnAction((event)->{
+        btnAddCompany.setOnAction((event) -> {
             addCompany();
         });
         
-        
         stage.show();
-        
         
     }
     
-    public void addCompany(){
+    public void addCompany() {
+        company = new Company();
+        companyService= new CompanyClientService();
+        
         company.setCif(textFieldCif.getText());
         company.setName(textFieldNameCompany.getText());
-        
+        companyService.create(company);
         
     }
 }

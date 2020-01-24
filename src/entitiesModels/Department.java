@@ -27,17 +27,21 @@ public class Department implements Serializable {
     private final SimpleStringProperty name;
     
     private final SimpleListProperty<Area> areas;
-
+    
+     private SimpleListProperty<Department> companies;
+     
     public Department() {
         this.id = new SimpleIntegerProperty();
         this.name = new SimpleStringProperty();
         this.areas = new SimpleListProperty();
+        this.companies= new SimpleListProperty();
     }
 
     public Department(int id, String name, ObservableList<Company> companies, ObservableList<Area> areas) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
         this.areas = new SimpleListProperty(areas);
+        this.companies= new SimpleListProperty(companies);
     }
 
     public Integer getId() {
@@ -62,6 +66,13 @@ public class Department implements Serializable {
 
     public void setArea(Collection<Area> areas) {
         this.areas.setAll(areas);
+    }
+
+    /**
+     * @param companies the companies to set
+     */
+    public void setCompanies(Collection<Department> companies) {
+        this.companies.setAll(companies);
     }
 
 }

@@ -6,18 +6,15 @@
 package controllersDesktop;
 
 import entitiesModels.Document;
+import entitiesModels.DocumentStatus;
 import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.net.URL;
 import java.nio.file.Files;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.sql.Blob;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -31,6 +28,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javax.sql.rowset.serial.SerialBlob;
 import servicesRestfull.DocumentClientService;
 
 /**
@@ -39,7 +37,7 @@ import servicesRestfull.DocumentClientService;
  * @author Yeray
  */
 public class NewDocumentController {
-    
+
     @FXML
     private Label lblNewDocument;
     @FXML
@@ -60,22 +58,22 @@ public class NewDocumentController {
     private Button btnAddDocument;
     @FXML
     private Button btnCancel;
-    
+
     private Stage stage;
-    
+
     private Document doc;
-    
+
     private byte[] content;
-    
+
     private File file;
-    
+
     DocumentClientService documentClient;
 
     /**
      * Initializes the controller class.
      */
     public void initStage(Parent root) {
-        
+
         Scene sceneNewDocument = new Scene(root);
         stage = new Stage();
         stage.setScene(sceneNewDocument);
@@ -95,26 +93,31 @@ public class NewDocumentController {
                 okButton.setId("okbutton");
                 alert.showAndWait();
             } else {
+                doc.setDescription(textAreaDescription.getText());
+                doc.setName(textFielTittle.getText());
+                doc.setStatus(DocumentStatus.ENABLED);
+                doc.setVisibility(Boolean.TRUE);
+
                 documentClient.createNewDocument(doc);
             }
         });
         hyperlinkDocument.setOnAction((event) -> {
             chooseFile();
-            
+
         });
-        
+
         textAreaDescription.textProperty().addListener(this::handleTextChanged);
         textFielTittle.textProperty().addListener(this::handleTextChanged);
-        
+
         stage.show();
-        
+
     }
-    
+
     public void chooseFile() {
         FileChooser fc = new FileChooser();
         fc.setTitle("Buscar foto:");
         fc.getExtensionFilters().add(new ExtensionFilter("PDF files (*.pdf)", "*.PDF", "*.pdf"));
-        
+
         file = fc.showOpenDialog(null);
         if (file != null) {
             lblSelectedDoc.setVisible(true);
@@ -128,20 +131,13 @@ public class NewDocumentController {
             Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void handleTextChanged(ObservableValue observable, String oldValue, String newValue) {
-        
-        if (textAreaDescription.getText().length()>0 || textFielTittle.getText().length() > 0) {
-            btnAddDocument.setDisable(true);
+
+        if (textAreaDescription.getText().length() > 0 || textFielTittle.getText().length() > 0) {
+            btnAddDocument.setDisable(false);
         }
-        
-    }
-    
-    public void cargarDocs(){
-        
-        //Metodo para recoger todos los docs de la base de datos y pasarlos a la tabla
 
     }
-    
-    
+
 }

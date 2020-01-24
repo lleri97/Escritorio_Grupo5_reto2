@@ -6,7 +6,11 @@
 package controllersDesktop;
 
 import entitiesModels.User;
+import entitiesModels.UserPrivilege;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -23,6 +27,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -33,6 +39,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 
 /**
  * LogOutController Class
@@ -75,6 +82,8 @@ public class LogOutController {
     private Button btnCloseConnection;
     @FXML
     private Button btnExit;
+    @FXML
+    private ImageView photoProfileImg;
 
     ContextMenu cm;
 
@@ -110,7 +119,19 @@ public class LogOutController {
      * @param client Client will be used
      * @param user User that contains the profile data
      */
-    public void initStage(Parent root, User usu) {
+    public void initStage(Parent root, User usu) throws IOException {
+        MenuItem cmItemUser = new MenuItem("Usuario");
+        cmItemUser.setOnAction((event) -> {
+            createTabUsers();
+        });
+        if (usu.getPrivilege() == UserPrivilege.USER) {
+            btnUsers.setVisible(false);
+            btnUsers.setDisable(true);
+            cmItemUser.setDisable(true);
+            cmItemUser.setVisible(false);
+        } else {
+
+        }
         Scene scene = new Scene(root);
         usuario = new User();
         usuario = usu;
@@ -137,10 +158,7 @@ public class LogOutController {
         btnDocuments.setOnAction(this::handleButtonAction);
         btnModify.setOnAction(this::handleButtonAction);
         cm = new ContextMenu();
-        MenuItem cmItemUser = new MenuItem("Usuario");
-        cmItemUser.setOnAction((event) -> {
-            createTabUsers();
-        });
+
         MenuItem cmItemEntity = new MenuItem("Entidades");
         cmItemEntity.setOnAction((event) -> {
             createTabEntity();
@@ -157,20 +175,22 @@ public class LogOutController {
         cmItemAreas.setOnAction((event) -> {
             createTabAreas();
         });
-        cm.getItems().addAll(cmItemAreas,cmItemDepart,cmItemDocuments,cmItemEntity,cmItemUser);
-        paneUser.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent e)->{
-            if(e.getButton()== MouseButton.SECONDARY){
-                cm.show(paneUser, e.getScreenX(),e.getScreenY());
+
+        cm.getItems().addAll(cmItemAreas, cmItemDepart, cmItemDocuments, cmItemEntity, cmItemUser);
+        paneUser.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> {
+            if (e.getButton() == MouseButton.SECONDARY) {
+                cm.show(paneUser, e.getScreenX(), e.getScreenY());
             }
         });
-        
-        /*
-        txtNombreUsu.setText("Nombre completo: "+usu.getFullname());
-        txtLogin.setText("Usuario: "+usu.getLogin());
-        txtEntity.setText("Entidad/Empresa"+usu.getCompany().getName().toString());
-        txtPrivilege.setText("Tipo usuario: "+usu.getPrivilege().toString());
-        txtEmail.setText("Email: "+usu.getEmail()); 
-         */
+
+        txtNombreUsu.setText("Nombre completo: " + usu.getFullname());
+        txtLogin.setText("Usuario: " + usu.getLogin());
+        txtEntity.setText("Entidad/Empresa: " + usu.getCompany().getName().toString());
+        txtPrivilege.setText("Tipo usuario: " + usu.getPrivilege().toString());
+        txtEmail.setText("Email: " + usu.getEmail());
+        InputStream myInputStream = new ByteArrayInputStream(usu.getPhoto());
+        photoProfileImg.setImage(new Image(myInputStream));
+
         stage.show();
 
         LOGGER.info("Profile loaded successfully.");
@@ -298,7 +318,8 @@ public class LogOutController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU02_SignUp.fxml"));
             Parent root = (Parent) loader.load();
             controller = ((SignUpController) loader.getController());
-            controller.initStage(root, usuario);
+            String mod = "modify";
+            controller.initStage(root, usuario, mod);
         } catch (IOException ex) {
             Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -93,7 +93,8 @@ public class tabUsersController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU02_SignUp.fxml"));
                 Parent root = (Parent) loader.load();
                 controller = ((SignUpController) loader.getController());
-                controller.initStage(root, usuario);
+                String mod="modify";
+                controller.initStage(root, usuario, mod);
             } catch (IOException ex) {
                 Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
             }

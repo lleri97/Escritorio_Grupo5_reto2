@@ -6,20 +6,17 @@
 package entitiesModels;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Ruben
  */
-@XmlRootElement
+@XmlRootElement(name = "company")
 public class Company implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,41 +27,39 @@ public class Company implements Serializable {
 
     private final SimpleStringProperty cif;
 
-
-    private final Set <Department> departments;
-
-    public Company(int id, String name, String cif, Set<Department> departments) {
-        this.id = new SimpleIntegerProperty(id);
-        this.name = new SimpleStringProperty(name);
-        this.cif = new SimpleStringProperty(cif);
-        this.departments = new HashSet<>(departments);
-    }
+    private Set<Department> departments;
 
     public Company() {
         this.id = new SimpleIntegerProperty();
         this.name = new SimpleStringProperty();
         this.cif = new SimpleStringProperty();
-        this.departments = new HashSet<>();
     }
 
-    public SimpleIntegerProperty getId() {
-        return id;
+    public Company(int id, String name, String cif, Set<Department> departments) {
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.cif = new SimpleStringProperty(cif);
+        this.departments = departments;
+    }
+
+    public int getId() {
+        return this.id.get();
     }
 
     public void setId(int id) {
         this.id.set(id);
     }
 
-    public SimpleStringProperty getName() {
-        return name;
+    public String getName() {
+        return this.name.get();
     }
 
     public void setName(String name) {
         this.name.set(name);
     }
 
-    public SimpleStringProperty getCif() {
-        return cif;
+    public String getCif() {
+        return this.cif.get();
     }
 
     public void setCif(String cif) {
@@ -72,11 +67,15 @@ public class Company implements Serializable {
     }
 
     public Set<Department> getDepartments() {
-        return this.departments;
+        return departments;
     }
 
     public void setDepartments(Set<Department> departments) {
-        this.departments.addAll(departments);
+        this.departments = departments;
     }
 
+    @Override
+    public String toString() {
+        return name.get();
+    }
 }

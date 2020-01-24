@@ -5,17 +5,13 @@
  */
 package controllersDesktop;
 
-import entitiesModels.Company;
-import entitiesModels.Department;
+import entitiesModels.Area;
+import entitiesModels.Document;
 import entitiesModels.User;
 import entitiesModels.UserPrivilege;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-import javafx.collections.ObservableList;
+import java.util.HashSet;
+import java.util.Set;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,8 +20,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import servicesRestfull.CompanyClientService;
+import javax.ws.rs.core.GenericType;
+import servicesRestfull.AreaClientService;
 import servicesRestfull.DepartmentClientService;
+import servicesRestfull.DocumentClientService;
 
 /**
  * FXML Controller class
@@ -51,11 +49,12 @@ public class NewAreaController {
     @FXML
     private Button btnCancel;
     @FXML
-    private ComboBox comboDepart;
-    @FXML
-    private ComboBox comboCompany;
+    private ComboBox comboDocument;
 
     private User usuario;
+
+    private DocumentClientService documentService;
+    private DepartmentClientService departService;
 
     Stage stage;
 
@@ -75,43 +74,35 @@ public class NewAreaController {
             stage.close();
         });
         btnAddArea.setOnAction((value) -> {
-
+            Area area = new Area();
+            area.setName(textFieldNameArea.getText());
+            area.setDocuments((Set<Document>) comboDocument.getValue());
+            AreaClientService areaService = new AreaClientService();
+            areaService.create(area);
         });
-      //  cargarCompanias(usuario.getPrivilege());
-        //cargarDepart(usuario.getPrivilege());
+        cargarDocumentos(usuario.getPrivilege());
+
 
         stage.show();
 
     }
 
-    private void cargarCompanias(UserPrivilege privilegio) {
-        CompanyClientService service = new CompanyClientService();
+    private void cargarDocumentos(UserPrivilege privilegio) {
+        documentService = new DocumentClientService();
         if (usuario.getPrivilege().equals(UserPrivilege.SUPERADMIN)) {
-            //entities = clientCompany.findAll(new GenericType<List<Company>>()); //llamar servidor y cargar entidades
-            List<Company> entities = Arrays.asList(usuario.getCompany());
-            comboCompany = new ComboBox((ObservableList) entities);
-            comboCompany.getSelectionModel().selectFirst();
+            Set<Document> documents = new HashSet<Document>(); //llamar servidor y cargar entidades
+            documents = documentService.findAll(new GenericType<Set<Document>>() {
+            });
+            comboDocument.getItems().clear();
+            comboDocument.getItems().addAll(documents);
+          
 
         } else if (usuario.getPrivilege().equals(UserPrivilege.COMPANYADMIN)) {
-            List<Company> entities = Arrays.asList(usuario.getCompany());
-            comboCompany.getItems().clear();
-            comboCompany.getItems().addAll(entities);
+          
+            comboDocument.getItems().clear();
+            comboDocument.getItems().addAll(usuario.getDocuments());
         }
     }
 
-    private void cargarDepart(UserPrivilege privilegio) {
-        DepartmentClientService clientDepart = new DepartmentClientService();
-        if (usuario.getPrivilege().equals(UserPrivilege.SUPERADMIN)) {
-            //depart = clientDepart.findAll(new GenericType<List<Company>>()); //llamar servidor y cargar entidades
-            List<Department> depart = Arrays.asList();
-            comboCompany = new ComboBox((ObservableList) depart);
-            comboCompany.getSelectionModel().selectFirst();
-
-        } else if (usuario.getPrivilege().equals(UserPrivilege.COMPANYADMIN)) {
-            List<Company> entities = Arrays.asList();
-            comboCompany.getItems().clear();
-            comboCompany.getItems().addAll(entities);
-        }
-    }
 
 }

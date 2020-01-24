@@ -6,6 +6,7 @@
 package controllersDesktop;
 
 import entitiesModels.User;
+import entitiesModels.UserPrivilege;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -32,27 +33,28 @@ public class tabDepartmentController {
     
     User usuario;
     
-    
-
-   public void inicializar(User usuario){
-        this.usuario=usuario;
-        
+    public void inicializar(User usuario) {
+        this.usuario = usuario;
+        if (usuario.getPrivilege() == UserPrivilege.USER) {
+            btnNewDepartment.setVisible(false);
+            btnNewDepartment.setDisable(true);
+        }
         btnNewDepartment.setOnAction((event) -> {
             lanzarNewDepartmentWindow();
         });
         
     }
     
-            public void lanzarNewDepartmentWindow() {
+    public void lanzarNewDepartmentWindow() {
         
-            try {
-                NewDepartmentController controller = new NewDepartmentController();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewDepartment.fxml"));
-                Parent root = (Parent) loader.load();
-                controller = ((NewDepartmentController) loader.getController());
-                controller.initStage(root, usuario);
-            } catch (IOException ex) {
-            }
+        try {
+            NewDepartmentController controller = new NewDepartmentController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewDepartment.fxml"));
+            Parent root = (Parent) loader.load();
+            controller = ((NewDepartmentController) loader.getController());
+            controller.initStage(root, usuario);
+        } catch (IOException ex) {
         }
-
+    }
+    
 }
