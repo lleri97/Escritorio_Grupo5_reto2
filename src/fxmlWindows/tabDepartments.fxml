@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.tabDepartmentController">
+<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controllersDesktop.tabDepartmentController">
     
     <children>
-        <Button layoutX="37.0" layoutY="25.0" mnemonicParsing="false" text="Nuevo departamento" fx:id="btnNewDepartment" />
-        <TreeTableView layoutX="37.0" layoutY="109.0" prefHeight="324.0" prefWidth="924.0">
+        <Button fx:id="btnNewDepartment" layoutX="37.0" layoutY="25.0" mnemonicParsing="false" text="Nuevo departamento" />
+        <TableView fx:id="tableDepartments" layoutX="37.0" layoutY="109.0" prefHeight="324.0" prefWidth="924.0">
             <columns>
-                <TreeTableColumn prefWidth="129.0" text="ID" />
-                <TreeTableColumn prefWidth="378.0" text="Nombre" />
-                <TreeTableColumn prefWidth="416.0" text="Acciones" />
+                <TableColumn fx:id="columnID" prefWidth="129.0" text="ID" />
+                <TableColumn fx:id="columnName" prefWidth="378.0" text="Nombre" />
+
             </columns>
-        </TreeTableView>
-        <Button layoutX="37.0" layoutY="65.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="84.0" text="Buscar:" />
+        </TableView>
+        <Button fx:id="btnSearchDepartment" layoutX="37.0" layoutY="65.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="84.0" text="Buscar:" />
+      <Button fx:id="btnDeleteDepartment" layoutX="793.0" layoutY="25.0" mnemonicParsing="false" text="Eliminar" />
+      <Button fx:id="btnModifyDepartment" layoutX="793.0" layoutY="65.0" mnemonicParsing="false" text="Modificar" />
     </children>
                                
 </AnchorPane>

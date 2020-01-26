@@ -7,6 +7,7 @@ package controllersDesktop;
 
 import entitiesModels.Document;
 import entitiesModels.DocumentStatus;
+import entitiesModels.User;
 import java.io.File;
 import java.nio.file.Paths;
 import java.nio.file.Files;
@@ -72,8 +73,14 @@ public class NewDocumentController {
     /**
      * Initializes the controller class.
      */
-    public void initStage(Parent root) {
-
+    public void initStage(Parent root, Document doc,User user) {
+        
+        if(doc.getName()!=""){
+            textFielTittle.setText(doc.getName());
+            textAreaDescription.setText(doc.getDescription());
+            lblSelectedDoc.setText(doc.getName());
+        }
+        
         Scene sceneNewDocument = new Scene(root);
         stage = new Stage();
         stage.setScene(sceneNewDocument);
@@ -97,7 +104,7 @@ public class NewDocumentController {
                 doc.setName(textFielTittle.getText());
                 doc.setStatus(DocumentStatus.ENABLED);
                 doc.setVisibility(Boolean.TRUE);
-
+                doc.setUser(user);
                 documentClient.createNewDocument(doc);
             }
         });

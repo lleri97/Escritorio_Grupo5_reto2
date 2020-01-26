@@ -5,11 +5,17 @@
  */
 package controllersDesktop;
 
+import entitiesModels.Document;
 import entitiesModels.User;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,6 +32,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.ws.rs.core.GenericType;
+import servicesRestfull.DocumentClientService;
+import servicesRestfull.UserClientService;
 
 /**
  *
@@ -40,6 +49,12 @@ public class tabUsersController {
     @FXML
     private Button btnNewUser;
     @FXML
+    private Button btnSearch;
+    @FXML
+    private Button btnModifyUser;
+    @FXML
+    private Button btnDeleteUser;
+    @FXML
     private TableView tableUsers;
     @FXML
     private TableColumn nameColumn;
@@ -49,9 +64,8 @@ public class tabUsersController {
     private TableColumn companyColumn;
     @FXML
     private TableColumn lastAccessColumn;
-    
-    
-    private ObservableList<User> usersData;
+
+    private Set<User> usersData;
     private User usuario;
 
     public User getUsu() {
@@ -62,42 +76,87 @@ public class tabUsersController {
         this.usuario = usu;
     }
 
-   public void inicializar(User usuario){
-        this.usuario=usuario;
-        
+    public void initStage(User usuario) {
+        this.usuario = usuario;
+        btnDeleteUser.setVisible(false);
+        btnModifyUser.setVisible(false);
+
         btnNewUser.setOnAction((event) -> {
             lanzarNewUserWindow();
         });
-        
+        btnSearch.setOnAction((event) -> {
+            insertData();
+        });
+        btnDeleteUser.setOnAction(this::handleButtonAction);
+        btnModifyUser.setOnAction(this::handleButtonAction);
+
+        tableUsers.getSelectionModel().selectedItemProperty().addListener(this::handleUsersTabSelectionChanged);
+
     }
 
-
-
     public void insertData() {
-        
+
         nameColumn.setCellValueFactory(
-                new PropertyValueFactory<>("Nombre"));
+                new PropertyValueFactory<>("fullname"));
         emailColumn.setCellValueFactory(
                 new PropertyValueFactory<>("Email"));
         companyColumn.setCellValueFactory(
-                new PropertyValueFactory<>("Compañia"));
+                new PropertyValueFactory<>("company"));
         lastAccessColumn.setCellValueFactory(
-                new PropertyValueFactory<>("Ultimo acceso"));
+                new PropertyValueFactory<>("lastAccess"));
 
-        // tableUsers.setItems();
+        UserClientService userService = new UserClientService();
+        usersData = new HashSet<User>();
+        usersData = userService.findAll(new GenericType<Set<User>>() {
+        });
+
+        List<User> list = new ArrayList<User>(usersData);
+        ObservableList<User> userList = FXCollections.observableArrayList(list);
+        tableUsers.setItems(userList);
     }
-        public void lanzarNewUserWindow() {
-        
+
+    public void lanzarNewUserWindow() {
+
+        try {
+            SignUpController controller = new SignUpController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU02_SignUp.fxml"));
+            Parent root = (Parent) loader.load();
+            controller = ((SignUpController) loader.getController());
+            String mod = "modify";
+            controller.initStage(root, usuario, mod);
+        } catch (IOException ex) {
+            Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void handleUsersTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
+        btnDeleteUser.setVisible(true);
+        btnModifyUser.setVisible(true);
+
+    }
+
+    public void handleButtonAction(ActionEvent event) {
+        if ((Button) event.getSource() == btnModifyUser) {
+
             try {
                 SignUpController controller = new SignUpController();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU02_SignUp.fxml"));
                 Parent root = (Parent) loader.load();
                 controller = ((SignUpController) loader.getController());
-                String mod="modify";
-                controller.initStage(root, usuario, mod);
+                String mod = "modify";
+                User user = new User();
+                user= (User) tableUsers.getSelectionModel().getSelectedItem();
+                controller.initStage(root, user, mod);
             } catch (IOException ex) {
                 Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
             }
+
+        }else if((Button)event.getSource()==btnDeleteUser){
+            UserClientService userService= new UserClientService();
+            User deleteUser = new User();
+            deleteUser= (User) tableUsers.getSelectionModel().getSelectedItem();
+            userService.remove(deleteUser.getId());   
+            insertData();
         }
-    
+    }
 }

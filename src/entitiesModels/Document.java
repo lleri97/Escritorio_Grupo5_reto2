@@ -33,11 +33,13 @@ public class Document implements Serializable {
 
     private Boolean visibility;
 
-    private DocumentStatus status;
+    private DocumentStatus status;   
 
     private byte[] documentContent;
 
     private final SimpleObjectProperty<Date> uploadDate;
+    
+    private User user;
 
     public Document() {
         this.name = new SimpleStringProperty();
@@ -109,6 +111,9 @@ public class Document implements Serializable {
 
     public void setUploadDate(Date uploadDate) {
         this.uploadDate.set(uploadDate);
+    }
+     public void setUser(User user) {
+        this.user = user;
     }
 
 }

@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -80,10 +82,15 @@ public class NewDepartmentController {
             stage.close();
         });
 
-        btnAddDepartment.setOnAction((event) -> {
-            depart.setName(textFieldDepartment.getText());
-          //  depart.setCompanies(comboCompany.getValue());
-            departmentService = new DepartmentClientService();
+        btnAddDepartment.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                depart = new Department();
+                depart.setName(textFieldDepartment.getText().toString());
+                depart.setCompany((Company) comboCompany.getValue());
+                departmentService = new DepartmentClientService();
+                departmentService.create(depart);
+            }
         });
         cargarCompanias(usuario.getPrivilege());
         lblError.setVisible(false);

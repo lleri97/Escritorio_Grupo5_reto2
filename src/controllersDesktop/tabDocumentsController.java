@@ -5,50 +5,147 @@
  */
 package controllersDesktop;
 
+import entitiesModels.Document;
 import entitiesModels.User;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javax.ws.rs.core.GenericType;
+import servicesRestfull.DocumentClientService;
+import servicesRestfull.UserClientService;
 
 /**
  * FXML Controller class
  *
  * @author Yeray
  */
-public class tabDocumentsController  {
-    
-    
+public class tabDocumentsController {
+
     @FXML
     private Button btnNewDocument;
-    private User usuario;
+    @FXML
+    private Button btnSearch;
+    @FXML
+    private Button btnDeleteDocument;
+    @FXML
+    private Button btnModifyDocument;
+    @FXML
+    private TableView tableDocuments;
+    @FXML
+    private TableColumn columnName;
+    @FXML
+    private TableColumn columnDescription;
+    @FXML
+    private TableColumn columnStatus;
+    @FXML
+    private TableColumn columnDate;
 
-     public void inicializar(User usuario){
-        this.usuario=usuario;
-        
+    private User usuario;
+    private Document doc;
+
+    private Set<Document> documentList;
+
+    public void inicializar(User usuario) {
+        this.usuario = usuario;
+        btnDeleteDocument.setVisible(false);
+        btnModifyDocument.setVisible(false);
+
         btnNewDocument.setOnAction((event) -> {
             lanzarNewDocumentWindow();
         });
-        
+        btnSearch.setOnAction((event) -> {
+            insertData();
+        });
+
+        btnDeleteDocument.setOnAction(this::handleButtonAction);
+        btnModifyDocument.setOnAction(this::handleButtonAction);
+        tableDocuments.getSelectionModel().selectedItemProperty().addListener(this::handleUsersTabSelectionChanged);
+
     }
-   
-    public void lanzarNewDocumentWindow(){
-    try {
+
+    public void lanzarNewDocumentWindow() {
+        try {
+            NewDocumentController controller = new NewDocumentController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewDocument.fxml"));
+            Parent root = (Parent) loader.load();
+            controller = ((NewDocumentController) loader.getController());
+            doc= new Document();
+            doc.setName("");
+            controller.initStage(root, doc, usuario);
+        } catch (IOException ex) {
+        }
+    }
+
+    public void insertData() {
+
+        columnName.setCellValueFactory(
+                new PropertyValueFactory<>("name"));
+        columnDescription.setCellValueFactory(
+                new PropertyValueFactory<>("description"));
+        columnDate.setCellValueFactory(
+                new PropertyValueFactory<>("uploadDate"));
+        columnStatus.setCellValueFactory(
+                new PropertyValueFactory<>("status"));
+
+        DocumentClientService documentService = new DocumentClientService();
+        documentList = new HashSet<Document>();
+        documentList = documentService.findAll(new GenericType<Set<Document>>() {
+        });
+
+        List<Document> list = new ArrayList<Document>(documentList);
+        ObservableList<Document> docList = FXCollections.observableArrayList(list);
+        tableDocuments.setItems(docList);
+    }
+   public void handleUsersTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
+        btnDeleteDocument.setVisible(true);
+        btnModifyDocument.setVisible(true);
+
+    }
+
+    
+    public void handleButtonAction(ActionEvent event) {
+        if ((Button) event.getSource() == btnModifyDocument) {
+
+            try {
                 NewDocumentController controller = new NewDocumentController();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewDocument.fxml"));
                 Parent root = (Parent) loader.load();
                 controller = ((NewDocumentController) loader.getController());
-                controller.initStage(root);
+                String mod = "modify";
+                doc = new Document();
+                doc = (Document) tableDocuments.getSelectionModel().getSelectedItem();
+                controller.initStage(root, doc, usuario);
             } catch (IOException ex) {
+                Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-}
 
+        } else if ((Button) event.getSource() == btnDeleteDocument) {
+            DocumentClientService documentService= new DocumentClientService();
+            Document deleteDoc = new Document();
+            deleteDoc = (Document) tableDocuments.getSelectionModel().getSelectedItem();
+            documentService.remove(deleteDoc.getId());
+            insertData();
+        }
+    }
+
+}

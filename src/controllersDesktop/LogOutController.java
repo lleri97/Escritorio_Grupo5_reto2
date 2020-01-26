@@ -188,8 +188,8 @@ public class LogOutController {
         txtEntity.setText("Entidad/Empresa: " + usu.getCompany().getName().toString());
         txtPrivilege.setText("Tipo usuario: " + usu.getPrivilege().toString());
         txtEmail.setText("Email: " + usu.getEmail());
-        InputStream myInputStream = new ByteArrayInputStream(usu.getPhoto());
-        photoProfileImg.setImage(new Image(myInputStream));
+        //InputStream myInputStream = new ByteArrayInputStream(usu.getPhoto());
+        //photoProfileImg.setImage(new Image(myInputStream));
 
         stage.show();
 
@@ -269,7 +269,7 @@ public class LogOutController {
             AnchorPane pane = loader.load();
             contentPane.getChildren().setAll(pane);
             tabUsers = (tabUsersController) loader.getController();
-            tabUsers.inicializar(usuario);
+            tabUsers.initStage(usuario);
         } catch (IOException ex) {
             Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
         }

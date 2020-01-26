@@ -33,6 +33,12 @@ public class tabAreasController  {
      */
     @FXML
     private Button btnNewArea;
+    @FXML
+    private Button btnSearchAreas;
+    @FXML
+    private Button btnDeleteArea;
+    @FXML
+    private Button btnModifyArea;
     
     
     private User usuario;
