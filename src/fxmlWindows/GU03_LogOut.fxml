@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="796.0" prefWidth="1169.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.LogOutController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="796.0" prefWidth="1169.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.LogOutController">
     <left>
         
         <VBox prefHeight="586.0" prefWidth="178.0" style="-fx-background-color: #36394B;" BorderPane.alignment="CENTER">
@@ -104,6 +104,7 @@
                                 <Separator layoutX="131.0" layoutY="34.0" orientation="VERTICAL" prefHeight="112.0" prefWidth="0.0" />
                                 <Separator layoutX="20.0" layoutY="34.0" orientation="VERTICAL" prefHeight="112.0" prefWidth="0.0" />
                                 <Button fx:id="btnModify" layoutX="190.0" layoutY="192.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" text="Modificar" />
+                        <Button fx:id="btnRefreshProfile" layoutX="307.0" layoutY="192.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Refrescar perfil" />
                             </children>
                         </AnchorPane>
                     </children>

@@ -7,7 +7,9 @@ package controllersDesktop;
 
 import entitiesModels.Document;
 import entitiesModels.User;
+import entitiesModels.UserPrivilege;
 import java.io.IOException;
+import static java.sql.Types.NULL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -77,7 +79,9 @@ public class tabUsersController {
     }
 
     public void initStage(User usuario) {
+        
         this.usuario = usuario;
+
         btnDeleteUser.setVisible(false);
         btnModifyUser.setVisible(false);
 
@@ -85,7 +89,7 @@ public class tabUsersController {
             lanzarNewUserWindow();
         });
         btnSearch.setOnAction((event) -> {
-            insertData();
+            insertData(usuario);
         });
         btnDeleteUser.setOnAction(this::handleButtonAction);
         btnModifyUser.setOnAction(this::handleButtonAction);
@@ -94,7 +98,7 @@ public class tabUsersController {
 
     }
 
-    public void insertData() {
+    public void insertData(User usuario) {
 
         nameColumn.setCellValueFactory(
                 new PropertyValueFactory<>("fullname"));
@@ -109,10 +113,26 @@ public class tabUsersController {
         usersData = new HashSet<User>();
         usersData = userService.findAll(new GenericType<Set<User>>() {
         });
+        if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN) {
+            List<User> list = new ArrayList<User>(usersData);
+            ObservableList<User> userList = FXCollections.observableArrayList(list);
+            tableUsers.setItems(userList);
+        } else if (usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
+            List<User> list = new ArrayList<User>(usersData);
+            ObservableList<User> userList = FXCollections.observableArrayList();
+            for (int i = 0; i <usersData.size(); i++) {
+                if (list.get(i).getCompany() != null) {
+                    if (usuario.getCompany().getId() == list.get(i).getCompany().getId()) {
+                        userList.add(list.get(i));
+                    }
+                }
+               
+                  
+               
+            }
 
-        List<User> list = new ArrayList<User>(usersData);
-        ObservableList<User> userList = FXCollections.observableArrayList(list);
-        tableUsers.setItems(userList);
+            tableUsers.setItems(userList);
+        }
     }
 
     public void lanzarNewUserWindow() {
@@ -145,18 +165,18 @@ public class tabUsersController {
                 controller = ((SignUpController) loader.getController());
                 String mod = "modify";
                 User user = new User();
-                user= (User) tableUsers.getSelectionModel().getSelectedItem();
+                user = (User) tableUsers.getSelectionModel().getSelectedItem();
                 controller.initStage(root, user, mod);
             } catch (IOException ex) {
                 Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        }else if((Button)event.getSource()==btnDeleteUser){
-            UserClientService userService= new UserClientService();
+        } else if ((Button) event.getSource() == btnDeleteUser) {
+            UserClientService userService = new UserClientService();
             User deleteUser = new User();
-            deleteUser= (User) tableUsers.getSelectionModel().getSelectedItem();
-            userService.remove(deleteUser.getId());   
-            insertData();
+            deleteUser = (User) tableUsers.getSelectionModel().getSelectedItem();
+            userService.remove(deleteUser.getId());
+            insertData(usuario);
         }
     }
 }

@@ -28,6 +28,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -51,37 +53,60 @@ public class tabEntityController {
     @FXML
     private Label lblSearchEntity;
     @FXML
-    
+    private TableView tableEntity;
+    @FXML
+    private TableColumn columnName;
+    @FXML
+    private TableColumn columnCIF;
+    @FXML
+    private TableColumn columnDepartment;
+    @FXML
+    private Button btnDeleteEntity;
+    @FXML
+    private Button btnModifyEntity;
 
-    
+    private Set<Company> companyList;
+
     private CompanyClientService companyClient;
 
     private User usuario;
 
-    public void inicializar(User usuario) {
+    public void initStage(User usuario) {
         this.usuario = usuario;
+        btnDeleteEntity.setVisible(false);
+        btnModifyEntity.setVisible(false);
 
-        if (usuario.getPrivilege() == UserPrivilege.USER || usuario.getPrivilege()==UserPrivilege.COMPANYADMIN) {
+        if (usuario.getPrivilege() == UserPrivilege.USER || usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
             btnNewCompany.setDisable(true);
             btnNewCompany.setVisible(false);
             btnSearchEntity.setDisable(true);
             btnSearchEntity.setVisible(false);
             lblSearchEntity.setVisible(false);
+            insertData();
+
         }
-    }
-/*
+
         btnNewCompany.setOnAction((event) -> {
             lanzarNewEntityWindow();
         });
         btnSearchEntity.setOnAction((event) -> {
-           insertData();
+
+            insertData();
+
         });
+        btnDeleteEntity.setOnAction((event) -> {
+            Company companyDelete = new Company();
+            companyDelete = (Company) tableEntity.getSelectionModel().getSelectedItem();
+            companyClient.remove(companyDelete.getId());
+            insertData();
+        });
+        tableEntity.getSelectionModel().selectedItemProperty().addListener(this::handleEntityTabSelectionChanged);
 
     }
-    
-     public void handleDepartmentTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
-        btnDeleteDepartment.setVisible(true);
-        btnModifyDepartment.setVisible(true);
+
+    public void handleEntityTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
+        btnDeleteEntity.setVisible(true);
+        btnModifyEntity.setVisible(true);
 
     }
 
@@ -97,21 +122,28 @@ public class tabEntityController {
             Logger.getLogger("Esto peta aqui");
         }
     }
-    
+
     public void insertData() {
-        columnID.setCellValueFactory(
-                new PropertyValueFactory<>("id"));
+        columnCIF.setCellValueFactory(
+                new PropertyValueFactory<>("cif"));
         columnName.setCellValueFactory(
                 new PropertyValueFactory<>("name"));
+        columnDepartment.setCellValueFactory(
+                new PropertyValueFactory<>("department"));
+        ObservableList<Company> entityList;
+        if (usuario.getPrivilege() == UserPrivilege.USER || usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
+            entityList = FXCollections.observableArrayList();
+            entityList.add(usuario.getCompany());
+        } else {
+            companyClient = new CompanyClientService();
+            companyList = new HashSet<Company>();
+            companyList = companyClient.findAll(new GenericType<Set<Company>>() {
+            });
+            List<Company> list = new ArrayList<Company>(companyList);
+            entityList = FXCollections.observableArrayList(list);
+        }
 
-        departmentService = new DepartmentClientService();
-        departmentList = new HashSet<Department>();
-        departmentList = departmentService.FindAllDepartment(new GenericType<Set<Department>>() {
-        });
-
-        List<Department> list = new ArrayList<Department>(departmentList);
-        ObservableList<Department> departList = FXCollections.observableArrayList(list);
-        tableDepartments.setItems(departList);
+        tableEntity.setItems(entityList);
     }
-*/
+
 }

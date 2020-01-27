@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -20,7 +21,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -39,7 +42,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javax.imageio.ImageIO;
+import servicesRestfull.UserClientService;
 
 /**
  * LogOutController Class
@@ -84,6 +89,8 @@ public class LogOutController {
     private Button btnExit;
     @FXML
     private ImageView photoProfileImg;
+    @FXML
+    private Button btnRefreshProfile;
 
     ContextMenu cm;
 
@@ -192,6 +199,20 @@ public class LogOutController {
         //photoProfileImg.setImage(new Image(myInputStream));
 
         stage.show();
+        stage.setOnCloseRequest((WindowEvent event) -> {
+            // consume event
+            event.consume();
+            // show close dialog
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Close Confirmation");
+            alert.setHeaderText("Do you really want to quit?");
+            alert.initOwner(stage);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                lanzarLoginWindow();
+                stage.close();
+            }
+        });
 
         LOGGER.info("Profile loaded successfully.");
 
@@ -222,6 +243,8 @@ public class LogOutController {
             createTabEntity();
         } else if ((Button) event.getSource() == btnModify) {
             openModifyUserWindow();
+        } else if ((Button) event.getSource() == btnRefreshProfile) {
+            refreshProfile();
         }
 
     }
@@ -236,7 +259,7 @@ public class LogOutController {
             AnchorPane pane = loader.load();
             contentPane.getChildren().setAll(pane);
             tabAreas = (tabAreasController) loader.getController();
-            tabAreas.inicializar(usuario);
+            tabAreas.initStage(usuario);
         } catch (IOException ex) {
             Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -253,7 +276,7 @@ public class LogOutController {
             AnchorPane pane = loader.load();
             contentPane.getChildren().setAll(pane);
             tabDepartment = (tabDepartmentController) loader.getController();
-            tabDepartment.inicializar(usuario);
+            tabDepartment.initStage(usuario);
         } catch (IOException ex) {
             Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -287,7 +310,7 @@ public class LogOutController {
             AnchorPane pane = loader.load();
             contentPane.getChildren().setAll(pane);
             tabDocuments = (tabDocumentsController) loader.getController();
-            tabDocuments.inicializar(usuario);
+            tabDocuments.initStage(usuario);
         } catch (IOException ex) {
             Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -303,7 +326,7 @@ public class LogOutController {
             AnchorPane pane = loader.load();
             contentPane.getChildren().setAll(pane);
             tabEntity = (tabEntityController) loader.getController();
-            tabEntity.inicializar(usuario);
+            tabEntity.initStage(usuario);
         } catch (IOException ex) {
             Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -322,6 +345,44 @@ public class LogOutController {
             controller.initStage(root, usuario, mod);
         } catch (IOException ex) {
             Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void loadData(User usu) {
+        txtNombreUsu.setText("Nombre completo: " + usu.getFullname());
+        txtLogin.setText("Usuario: " + usu.getLogin());
+        if (usu.getCompany() != null) {
+            txtEntity.setText("Entidad/Empresa: " + usu.getCompany().getName().toString());
+        } else {
+            txtEntity.setText("Entidad/Empresa: ADMINISTRADOR - 2DAM2CURIOUS");
+        }
+        txtPrivilege.setText("Tipo usuario: " + usu.getPrivilege().toString());
+        txtEmail.setText("Email: " + usu.getEmail());
+        if (usu.getPhoto() != null) {
+            InputStream myInputStream = new ByteArrayInputStream(usu.getPhoto());
+            photoProfileImg.setImage(new Image(myInputStream));
+        }
+    }
+
+    private void refreshProfile() {
+        UserClientService client = new UserClientService();
+        User usu = client.find(User.class, Integer.toString(usuario.getId()));
+        loadData(usu);
+    }
+
+    public void lanzarLoginWindow() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxmlWindows/GU01_Login.fxml"));
+            Parent root = (Parent) loader.load();
+            //Get controller for graph
+            LoginController stageController = ((LoginController) loader.getController());
+            //Set a reference for Stage
+            stageController.setStage(stage);
+            //Initializes primary stage
+            stageController.initStage(root);
+        } catch (IOException ex) {
+            LOGGER.warning(ex.getMessage());
         }
     }
 }

@@ -5,6 +5,7 @@
  */
 package servicesRestfull;
 
+import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -14,13 +15,13 @@ import javax.ws.rs.core.GenericType;
  * Jersey REST client generated for REST resource:UserFacadeREST [user]<br>
  * USAGE:
  * <pre>
- *        UserClientService client = new UserClientService();
- *        Object response = client.XXX(...);
- *        // do whatever with response
- *        client.close();
+ * UserClientService client = new UserClientService();
+ * Object response = client.XXX(...);
+ * // do whatever with response
+ * client.close();
  * </pre>
  *
- * @author Yeray
+ * @author Jon Gonzalez
  */
 public class UserClientService {
 
@@ -69,5 +70,5 @@ public class UserClientService {
     public void close() {
         client.close();
     }
-    
+
 }

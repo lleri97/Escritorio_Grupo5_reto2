@@ -2,21 +2,23 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TreeTableColumn?>
-<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.tabEntityController">
     <children>
         <Label fx:id="lblSearchEntity" layoutX="30.0" layoutY="27.0" prefHeight="17.0" prefWidth="74.0" text="Busqueda:" />
         <Button fx:id="btnNewCompany" layoutX="861.0" layoutY="23.0" mnemonicParsing="false" text="Nueva Entidad" />
-        <TreeTableView fx:id="tableEntity" layoutX="33.0" layoutY="109.0" prefHeight="324.0" prefWidth="922.0">
+        <TableView fx:id="tableEntity" layoutX="33.0" layoutY="109.0" prefHeight="324.0" prefWidth="922.0">
             <columns>
-                <TreeTableColumn fx:id="columnName"prefWidth="129.0" text="Nombre" />
-                <TreeTableColumn fx:id="columnCif" prefWidth="223.0" text="CIF" />
-                <TreeTableColumn fx:id="column" prefWidth="390.0" text="Departments" />
+                <TableColumn fx:id="columnName" prefWidth="75.0" text="Nombre" />
+                <TableColumn fx:id="columnCIF" prefWidth="75.0" text="CIF" />
+                <TableColumn fx:id="columnDepartment" prefWidth="75.0" text="Departamentos" />
             </columns>
-        </TreeTableView>
+        </TableView>
         <Button fx:id="btnSearchEntity" layoutX="104.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="84.0" text="Buscar:" />
+      <Button fx:id="btnModifyEntity" layoutX="861.0" layoutY="71.0" mnemonicParsing="false" text="Modificar" />
+      <Button fx:id="btnDeleteEntity" layoutX="861.0" layoutY="46.0" mnemonicParsing="false" text="Eliminar" />
     </children>
 </AnchorPane>

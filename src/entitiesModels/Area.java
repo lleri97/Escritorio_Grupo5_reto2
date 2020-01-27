@@ -27,29 +27,27 @@ public class Area implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    private final SimpleIntegerProperty id;
+    private int id;
     
     private final SimpleStringProperty name;
     
     private Set<Document> documents;
 
     public Area() {
-        this.id = new SimpleIntegerProperty();
         this.name = new SimpleStringProperty();
     }
 
-    public Area(int id, String name, Set<Document> documents) {
-        this.id = new SimpleIntegerProperty(id);
+    public Area( String name, Set<Document> documents) {
         this.name = new SimpleStringProperty(name);
         this.documents = documents;
     }
 
-    public Integer getId() {
-        return this.id.get();
+    public int getId() {
+        return this.id;
     }
     
     public void setId(int id){
-        this.id.set(id);
+        this.id=id;
     }
 
     public String getName() {

@@ -21,7 +21,7 @@ public class Company implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final SimpleIntegerProperty id;
+    private  int id;
 
     private final SimpleStringProperty name;
 
@@ -30,24 +30,22 @@ public class Company implements Serializable {
     private Set<Department> departments;
 
     public Company() {
-        this.id = new SimpleIntegerProperty();
         this.name = new SimpleStringProperty();
         this.cif = new SimpleStringProperty();
     }
 
     public Company(int id, String name, String cif, Set<Department> departments) {
-        this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
         this.cif = new SimpleStringProperty(cif);
         this.departments = departments;
     }
 
     public int getId() {
-        return this.id.get();
+        return this.id;
     }
 
     public void setId(int id) {
-        this.id.set(id);
+        this.id=id;
     }
 
     public String getName() {

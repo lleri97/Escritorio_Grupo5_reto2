@@ -62,7 +62,7 @@ public class tabDepartmentController {
 
     User usuario;
 
-    public void inicializar(User usuario) {
+    public void initStage(User usuario) {
 
         this.usuario = usuario;
         if (usuario.getPrivilege() == UserPrivilege.USER) {
@@ -84,6 +84,7 @@ public class tabDepartmentController {
             deleteDepart = (Department) tableDepartments.getSelectionModel().getSelectedItem();
 
             departmentService.remove(deleteDepart.getId());
+            insertData();
         });
 
     }
@@ -120,6 +121,8 @@ public class tabDepartmentController {
         List<Department> list = new ArrayList<Department>(departmentList);
         ObservableList<Department> departList = FXCollections.observableArrayList(list);
         tableDepartments.setItems(departList);
+                
+        
     }
 
 }

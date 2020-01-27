@@ -5,21 +5,35 @@
  */
 package controllersDesktop;
 
+import entitiesModels.Area;
+import entitiesModels.Department;
 import entitiesModels.User;
 import entitiesModels.UserPrivilege;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javax.ws.rs.core.GenericType;
+import servicesRestfull.AreaClientService;
+import servicesRestfull.DepartmentClientService;
 
 /**
  * FXML Controller class
@@ -39,12 +53,19 @@ public class tabAreasController  {
     private Button btnDeleteArea;
     @FXML
     private Button btnModifyArea;
+    @FXML
+    private TableView tableAreas;
+    @FXML
+    private TableColumn columnName;
     
+    private AreaClientService areaService;
     
     private User usuario;
+    private Set <Area> areaList;
+    Class responseType;
     
     
-    public void inicializar(User usuario){
+    public void initStage(User usuario){
         this.usuario=usuario;
         if(usuario.getPrivilege()==UserPrivilege.USER){
             btnNewArea.setDisable(true);
@@ -53,6 +74,15 @@ public class tabAreasController  {
         
         btnNewArea.setOnAction((event) -> {
             lanzarNewAreaWindow();
+        });
+        btnSearchAreas.setOnAction((event)->{
+            insertData();
+        });
+        btnDeleteArea.setOnAction((event)->{
+            Area areaDelete = new Area();
+            areaDelete= (Area) tableAreas.getSelectionModel().getSelectedItem();
+            areaService.remove(areaDelete.getId());
+            insertData();
         });
         
     }
@@ -68,6 +98,24 @@ public class tabAreasController  {
             }
         }
 
+    public void insertData() {
+
+        columnName.setCellValueFactory(
+                new PropertyValueFactory<>("name"));
+
+        areaService = new AreaClientService();
+        areaList = new HashSet<Area>();
+        areaList = areaService.FindAllArea(new GenericType<Set<Area>>() {
+        });
+        
+        
+        
+        List<Area> list = new ArrayList<Area>(areaList);
+        
+        
+        ObservableList<Area> areaList = FXCollections.observableArrayList(list);
+        tableAreas.setItems(areaList);
+    }
    
     
 }

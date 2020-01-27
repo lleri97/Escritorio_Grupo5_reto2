@@ -42,7 +42,7 @@ public class Department implements Serializable {
         this.areas = new SimpleListProperty(areas);
     }
 
-    public Integer getId() {
+    public int getId() {
         return this.id.get();
     }
     

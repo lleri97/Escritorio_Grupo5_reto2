@@ -7,6 +7,7 @@ package controllersDesktop;
 
 import entitiesModels.Document;
 import entitiesModels.User;
+import entitiesModels.UserPrivilege;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class tabDocumentsController {
 
     private Set<Document> documentList;
 
-    public void inicializar(User usuario) {
+    public void initStage(User usuario) {     
         this.usuario = usuario;
         btnDeleteDocument.setVisible(false);
         btnModifyDocument.setVisible(false);

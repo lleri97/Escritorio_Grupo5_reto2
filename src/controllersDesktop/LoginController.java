@@ -5,7 +5,6 @@
  */
 package controllersDesktop;
 
-import entitiesModels.Company;
 import entitiesModels.User;
 import java.io.IOException;
 import java.util.Optional;
@@ -29,8 +28,11 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.Mnemonic;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import servicesRestfull.CompanyClientService;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
 import servicesRestfull.UserClientService;
+import utils.UtilsWindows;
 
 /**
  *
@@ -155,22 +157,18 @@ public class LoginController {
 
     //**************************M E T H O D S***********************************
     private void loginAction() {
+        UtilsWindows alert = new UtilsWindows();
         try {
             // Login Button Settings
             //It is verified that the fields cannot be empty
             if (textFieldPassword.getText().equals("") || textFieldUsername.getText().equals("")) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Error");
-                alert.setContentText("Uncompleted data");
-                Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
-                okButton.setId("okbutton");
-                alert.showAndWait();
+                alert.alertWarning("Error", "Debe introducir el login y la contraseña.");
             } else {// The user is built
                 User usu = new User();
 
                 UserClientService client = new UserClientService();
                 usu = client.login(User.class, textFieldUsername.getText(), textFieldPassword.getText());
-              //If the credentials are correct, if not go to exceptions
+                //If the credentials are correct, if not go to exceptions
                 LOGGER.info("Login made successfully. Loading user profile.");
                 LogOutController controller = new LogOutController();
                 loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU03_LogOut.fxml"));
@@ -180,8 +178,18 @@ public class LoginController {
                 stage.close();
             }
 
+        } catch (NotAuthorizedException ex) {
+            LOGGER.warning(ex.getMessage());
+            alert.alertError("Error", "Login de usuario incorrecto.");
+        } catch (NotFoundException ex) {
+            LOGGER.warning(ex.getMessage());
+            alert.alertInformation("Error", "Contraseña incorrecta.");
+        } catch (InternalServerErrorException ex) {
+            LOGGER.warning(ex.getMessage());
+            alert.alertWarning("Error", "Usuario no disponible, consulte con su empresa/entidad.");
         } catch (IOException ex) {
             LOGGER.severe(ex.getMessage());
+            alert.alertWarning("Error", "Error grave. Pongase en contacto con su empresa/entidad.");
         }
     }
 
@@ -189,20 +197,26 @@ public class LoginController {
         try {
             // Help button configuration
             LOGGER.info("Loading help window.");
-
             loader = new FXMLLoader(getClass().getResource("/fxmlWindows/HelpLogin.fxml"));
             root = (Parent) loader.load();
             LoginHelpController controller = ((LoginHelpController) loader.getController());
             controller.initStage(root);
-
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
         }
-
     }
 
-    private Runnable recoverPasswordAction() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void recoverPasswordAction() {
+        try {
+            // Help button configuration
+            LOGGER.info("Loading recover password window.");
+            loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_RecoverPassword.fxml"));
+            root = (Parent) loader.load();
+            RecoverPasswordController controller = ((RecoverPasswordController) loader.getController());
+            controller.initStage(root);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
     }
 
 }
