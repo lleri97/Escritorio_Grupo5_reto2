@@ -60,7 +60,6 @@ public class NewDepartmentController {
     @FXML
     private Button btnCancel;
 
-    private AreaClientService areaService;
     private User usuario;
     private Department depart;
     private Stage stage;
@@ -70,7 +69,32 @@ public class NewDepartmentController {
     /**
      * Initializes the controller class.
      */
-    public void initStage(Parent root, User usuario) {
+    public void initStage(Parent root, User usuario, Department department) {
+        if (department.getName() != "") {
+            textFieldDepartment.setText(department.getName());
+            Set<Company> entities = new HashSet<Company>();
+            entities.add(department.getCompanies());
+            comboCompany.getItems().add(entities);
+            btnAddDepartment.setText("confirmar");
+            btnAddDepartment.setOnAction((event)->{
+                department.setName(textFieldDepartment.getText());
+                department.setCompanies((Company) comboCompany.getSelectionModel().getSelectedItem());
+               departmentService.edit(department, department.getId());
+            });
+
+        } else {
+            btnAddDepartment.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    depart = new Department();
+                    depart.setName(textFieldDepartment.getText().toString());
+                    depart.setCompanies((Company) comboCompany.getValue());
+                    departmentService = new DepartmentClientService();
+                    departmentService.create(depart);
+                }
+            });
+
+        }
         this.usuario = usuario;
         Scene sceneNewDepartment = new Scene(root);
         stage = new Stage();
@@ -82,16 +106,6 @@ public class NewDepartmentController {
             stage.close();
         });
 
-        btnAddDepartment.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                depart = new Department();
-                depart.setName(textFieldDepartment.getText().toString());
-                depart.setCompany((Company) comboCompany.getValue());
-                departmentService = new DepartmentClientService();
-                departmentService.create(depart);
-            }
-        });
         cargarCompanias(usuario.getPrivilege());
         lblError.setVisible(false);
         stage.show();
@@ -111,7 +125,7 @@ public class NewDepartmentController {
         } else if (usuario.getPrivilege().equals(UserPrivilege.COMPANYADMIN)) {
             Company entities = usuario.getCompany();
             comboCompany.getItems().clear();
-            comboCompany.getItems().addAll(entities.getName());
+            comboCompany.getItems().addAll(entities);
         }
     }
 }

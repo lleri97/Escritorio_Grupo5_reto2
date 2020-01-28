@@ -2,9 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
@@ -12,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="956.0" style="-fx-background-color: #5E9ABA;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.SignUpController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="956.0" style="-fx-background-color: #5E9ABA;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.SignUpController">
    <children>
       <Separator layoutY="506.0" prefHeight="0.0" prefWidth="956.0" />
       <VBox layoutX="581.0" layoutY="66.0" prefHeight="407.0" prefWidth="284.0">
@@ -51,10 +53,10 @@
       </HBox>
       <Label fx:id="lblEmail1" alignment="CENTER" layoutX="478.0" layoutY="102.0" prefHeight="32.0" prefWidth="102.0" text="Login:" textAlignment="RIGHT" textFill="WHITE" />
       <Label fx:id="lblEmail11" alignment="CENTER" layoutX="478.0" layoutY="146.0" prefHeight="32.0" prefWidth="102.0" text="Email:" textAlignment="RIGHT" textFill="WHITE" />
-      <Label fx:id="lblEmail121" alignment="CENTER" layoutX="26.0" layoutY="146.0" prefHeight="32.0" prefWidth="118.0" text="Tipo usuario:" textAlignment="RIGHT" textFill="WHITE" />
+      <Label fx:id="lblEmail121" alignment="CENTER" contentDisplay="CENTER" layoutX="26.0" layoutY="146.0" prefHeight="32.0" prefWidth="118.0" text="Tipo usuario:" textAlignment="RIGHT" textFill="WHITE" />
       <Label fx:id="lblEmail1211" alignment="CENTER" contentDisplay="CENTER" layoutX="-4.0" layoutY="102.0" prefHeight="32.0" prefWidth="151.0" text="Nombre completo:" textAlignment="RIGHT" textFill="WHITE" />
       <Label fx:id="lblEmail1212" alignment="CENTER" layoutX="478.0" layoutY="238.0" prefHeight="32.0" prefWidth="102.0" text="Foto perfil:" textAlignment="RIGHT" textFill="WHITE" />
-      <VBox layoutX="144.0" layoutY="86.0" prefHeight="152.0" prefWidth="284.0">
+      <VBox layoutX="144.0" layoutY="86.0" prefHeight="355.0" prefWidth="284.0">
          <children>
             <TextField id="textEmail" fx:id="textFullName" prefHeight="32.0" prefWidth="375.0">
                <VBox.margin>
@@ -63,15 +65,26 @@
             </TextField>
             <Label />
             <ComboBox fx:id="comboPrivilege" prefHeight="25.0" prefWidth="290.0" style="-fx-background-color: white;" />
+            <Label />
+            <DatePicker fx:id="dPickerNacimiento" prefHeight="34.0" prefWidth="284.0" />
+            <Label />
+            <PasswordField fx:id="textPassword" prefHeight="31.0" prefWidth="284.0" />
+            <Label />
+            <PasswordField fx:id="textConfirmPassword" prefHeight="31.0" prefWidth="284.0" />
+            <Label />
+            <CheckBox fx:id="checkbStatus" mnemonicParsing="false" text="Usuario Activo" textFill="WHITE" />
          </children>
       </VBox>
       <Label fx:id="lblEmail1213" alignment="CENTER" layoutX="478.0" layoutY="194.0" prefHeight="32.0" prefWidth="102.0" text="Entidad:" textAlignment="RIGHT" textFill="WHITE" />
-      <Label alignment="CENTER" layoutX="349.0" layoutY="26.0" prefHeight="47.0" prefWidth="264.0" style="-fx-border-color: white;" text="NUEVO USUARIO" textFill="WHITE">
+      <Label fx:id="lbltitle_id" alignment="CENTER" layoutX="349.0" layoutY="26.0" prefHeight="47.0" prefWidth="264.0" style="-fx-border-color: white;" text="NUEVO USUARIO" textFill="WHITE">
          <font>
             <Font name="Times New Roman" size="23.0" />
          </font>
       </Label>
-      <DatePicker layoutX="144.0" layoutY="264.0" prefHeight="26.0" prefWidth="284.0" />
-      <Label fx:id="lblBirthDay" alignment="CENTER" layoutX="26.0" layoutY="261.0" prefHeight="32.0" prefWidth="118.0" text="Fecha de nacimiento" textAlignment="RIGHT" textFill="WHITE" />
+      <Label fx:id="lblBirthDay" alignment="CENTER" layoutX="26.0" layoutY="194.0" prefHeight="32.0" prefWidth="118.0" text="Fecha de nacimiento" textAlignment="RIGHT" textFill="WHITE" />
+      <Label layoutX="10.0" layoutY="10.0" />
+      <Label fx:id="lblpassword" alignment="CENTER" contentDisplay="CENTER" layoutX="26.0" layoutY="238.0" prefHeight="32.0" prefWidth="118.0" text="Contraseña:" textAlignment="RIGHT" textFill="WHITE" />
+      <Label fx:id="lblpasswordConfirm" alignment="CENTER" layoutX="26.0" layoutY="285.0" prefHeight="32.0" prefWidth="118.0" text="Repita Contraseña:" textAlignment="RIGHT" textFill="WHITE" />
+      <Label layoutX="10.0" layoutY="10.0" />
    </children>
 </Pane>

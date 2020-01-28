@@ -84,6 +84,8 @@ public class tabAreasController  {
             areaService.remove(areaDelete.getId());
             insertData();
         });
+        btnModifyArea.setOnAction((event)->{
+        });
         
     }
        public void lanzarNewAreaWindow() {

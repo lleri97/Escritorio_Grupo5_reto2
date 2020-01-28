@@ -21,15 +21,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Department implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final SimpleIntegerProperty id;
-    
+
     private final SimpleStringProperty name;
-    
+
     private final SimpleListProperty<Area> areas;
-    
+
     private Company companies;
-     
+
     public Department() {
         this.id = new SimpleIntegerProperty();
         this.name = new SimpleStringProperty();
@@ -45,15 +45,15 @@ public class Department implements Serializable {
     public int getId() {
         return this.id.get();
     }
-    
-    public void setId(int id){
+
+    public void setId(int id) {
         this.id.set(id);
     }
 
     public String getName() {
         return this.name.get();
     }
-    
+
     public void setName(String name) {
         this.name.set(name);
     }
@@ -69,12 +69,12 @@ public class Department implements Serializable {
     /**
      * @param companies the companies to set
      */
-    public void setCompanies(Company companies) {
-        this.companies=companies;
+    public Company getCompanies() {
+        return companies;
     }
-    
-    public void setCompany(Company company){
-        this.companies=company;
+
+    public void setCompanies(Company companies) {
+        this.companies = companies;
     }
 
 }

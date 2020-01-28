@@ -47,6 +47,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.GenericType;
 import servicesRestfull.CompanyClientService;
 import servicesRestfull.UserClientService;
@@ -99,7 +100,7 @@ public class SignUpController {
     private File photo;
 
     private byte[] photoContent;
-    
+
     private byte[] photoContentDB;
 
     private User usuario;
@@ -125,6 +126,7 @@ public class SignUpController {
      * @param root Parent will be used
      */
     void initStage(Parent root, User usuario, String mod) {
+        this.usuario = usuario;
         this.mod = mod;
         Scene scene = new Scene(root);
         if (mod.equalsIgnoreCase("modify")) {
@@ -135,9 +137,9 @@ public class SignUpController {
             comboPrivilege.setValue(usuario.getPrivilege());
             textPassword.setText("");
             textConfirmPassword.setText("");
-            if(usuario.getStatus().equals(UserStatus.ENABLED)){
-                            checkbStatus.setSelected(true);
-            }else{
+            if (usuario.getStatus().equals(UserStatus.ENABLED)) {
+                checkbStatus.setSelected(true);
+            } else {
                 checkbStatus.setSelected(false);
             }
             if (usuario.getbDate() != null) {
@@ -157,9 +159,9 @@ public class SignUpController {
             lbltitle_id.setText("Nuevo usuario");
             textPassword.setVisible(false);
             textConfirmPassword.setVisible(false);
+            checkbStatus.setSelected(true);
         }
         photoContentDB = usuario.getPhoto();
-        this.usuario = usuario;
 
         //The window starts
         stage = new Stage();
@@ -228,7 +230,7 @@ public class SignUpController {
         } catch (IOException ex) {
             Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            if (photoContent == null){
+            if (photoContent == null) {
                 photoContent = photoContentDB;
             }
         }
@@ -274,7 +276,7 @@ public class SignUpController {
             Stage stage = (Stage) btnCancel.getScene().getWindow();
             stage.close();
         } else if ((Button) event.getSource() == btnCreateUser) {
-            
+
             usu.setLogin(textLogin.getText());
             usu.setEmail(textEmail.getText());
             usu.setFullname(textFullName.getText());
@@ -282,15 +284,16 @@ public class SignUpController {
             usu.setPassword(textPassword.getText());
             usu.setLastAccess(usuario.getLastAccess());
             if (!usuario.getPrivilege().equals(UserPrivilege.SUPERADMIN)) {
+                usu.setCompany((Company) usuario.getCompany());
+            } else {
                 usu.setCompany((Company) comboEntity.getValue());
             }
             usu.setPrivilege((UserPrivilege) comboPrivilege.getValue());
-            if(checkbStatus.isSelected()){
+            if (checkbStatus.isSelected()) {
                 usu.setStatus(UserStatus.ENABLED);
-            }else{
+            } else {
                 usu.setStatus(UserStatus.DISABLED);
             }
-            
 
             try {
                 LocalDate localDate = dPickerNacimiento.getValue();
@@ -313,14 +316,20 @@ public class SignUpController {
                             LOGGER.info("Sign Up made successfully. Loading user profile.");
                             alertTitle = "Nuevo usuario";
                             alertContentText = "Nuevo usuario registrado correctamente.";
-                        } catch (InternalServerErrorException e) {
-                            LOGGER.warning(e.getMessage());
-                            alert.alertError("Error", "Error al dar de alta al usuario.");
+                            stage.close();
                         } catch (NotAuthorizedException e) {
                             LOGGER.warning(e.getMessage());
                             alert.alertError("Error", "Login y/o email ya existen en la base de datos.");
+                        } catch (NotFoundException e) {
+                            LOGGER.warning(e.getMessage());
+                            alert.alertError("Error", "Error al enviar su nueva contraseña a su correo. Intentelo más tarde.");
+                        } catch (InternalServerErrorException e) {
+                            LOGGER.warning(e.getMessage());
+                            alert.alertError("Error", "Error al dar de alta al usuario.");
+                        } catch (Exception e) {
+                            LOGGER.warning(e.getMessage());
+                            alert.alertError("Error", "Error patatil.");
                         }
-
                     } else {//modificar
                         try {
                             usu.setId(usuario.getId());

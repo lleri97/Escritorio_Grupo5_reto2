@@ -27,7 +27,7 @@ import servicesRestfull.CompanyClientService;
  * @author Yeray
  */
 public class NewCompanyController {
-    
+
     @FXML
     private Label lblNewArea;
     @FXML
@@ -44,40 +44,52 @@ public class NewCompanyController {
     private Button btnAddCompany;
     @FXML
     private Button btnCancel;
-    
+
     private Company company;
-    
+
     private CompanyClientService companyService;
-    
+
     Stage stage;
-    
-    public void initStage(Parent root) {
-        
+
+    public void initStage(Parent root, Company company) {
+
+        if (company.getName() != "") {
+            textFieldNameCompany.setText(company.getName());
+            textFieldCif.setText(company.getCif());
+            btnAddCompany.setText("Confirmar");
+            btnAddCompany.setOnAction((event) -> {
+                company.setCif(textFieldCif.getText());
+                company.setName(textFieldNameCompany.getText());
+                companyService.edit(company,company.getId() );
+            });
+        } else {
+            btnAddCompany.setOnAction((event) -> {
+                addCompany();
+            });
+        }
+
         Scene sceneNewEntity = new Scene(root);
         stage = new Stage();
         stage.setScene(sceneNewEntity);
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         lblError.setVisible(false);
-        
+
         btnCancel.setOnAction((event) -> {
             stage.close();
         });
-        btnAddCompany.setOnAction((event) -> {
-            addCompany();
-        });
-        
-        stage.show();
-        
-    }
     
+        stage.show();
+
+    }
+
     public void addCompany() {
         company = new Company();
-        companyService= new CompanyClientService();
-        
+        companyService = new CompanyClientService();
+
         company.setCif(textFieldCif.getText());
         company.setName(textFieldNameCompany.getText());
         companyService.create(company);
-        
+
     }
 }

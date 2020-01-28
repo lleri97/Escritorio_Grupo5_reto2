@@ -79,20 +79,11 @@ public class NewDocumentController {
             textFielTittle.setText(doc.getName());
             textAreaDescription.setText(doc.getDescription());
             lblSelectedDoc.setText(doc.getName());
-        }
-        
-        Scene sceneNewDocument = new Scene(root);
-        stage = new Stage();
-        stage.setScene(sceneNewDocument);
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        btnAddDocument.setDisable(true);
-        lblError.setVisible(false);
-        lblSelectedDoc.setVisible(false);
-        btnCancel.setOnAction((event) -> {
-            stage.close();
-        });
-        btnAddDocument.setOnAction((event) -> {
+            btnAddDocument.setOnAction((event)->{
+            documentClient.updateDocument(doc);
+            });
+        }else{
+               btnAddDocument.setOnAction((event) -> {
             if (file == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("No hay ningun archivo cargado");
@@ -108,6 +99,20 @@ public class NewDocumentController {
                 documentClient.createNewDocument(doc);
             }
         });
+        }
+        
+        Scene sceneNewDocument = new Scene(root);
+        stage = new Stage();
+        stage.setScene(sceneNewDocument);
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        btnAddDocument.setDisable(true);
+        lblError.setVisible(false);
+        lblSelectedDoc.setVisible(false);
+        btnCancel.setOnAction((event) -> {
+            stage.close();
+        });
+     
         hyperlinkDocument.setOnAction((event) -> {
             chooseFile();
 

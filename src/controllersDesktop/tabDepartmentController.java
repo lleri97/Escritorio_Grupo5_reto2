@@ -73,7 +73,9 @@ public class tabDepartmentController {
         btnModifyDepartment.setVisible(false);
         tableDepartments.getSelectionModel().selectedItemProperty().addListener(this::handleDepartmentTabSelectionChanged);
         btnNewDepartment.setOnAction((event) -> {
-            lanzarNewDepartmentWindow();
+            Department depart = new Department();
+            depart.setId(0);
+            lanzarNewDepartmentWindow(depart);
         });
         btnSearchDepartment.setOnAction((event) -> {
             insertData();
@@ -86,6 +88,11 @@ public class tabDepartmentController {
             departmentService.remove(deleteDepart.getId());
             insertData();
         });
+        btnModifyDepartment.setOnAction((event)->{
+            Department depart= new Department();
+            depart= (Department) tableDepartments.getSelectionModel().getSelectedItem();
+            lanzarNewDepartmentWindow(depart);
+        });
 
     }
 
@@ -95,14 +102,14 @@ public class tabDepartmentController {
 
     }
 
-    public void lanzarNewDepartmentWindow() {
+    public void lanzarNewDepartmentWindow(Department depart) {
 
         try {
             NewDepartmentController controller = new NewDepartmentController();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewDepartment.fxml"));
             Parent root = (Parent) loader.load();
             controller = ((NewDepartmentController) loader.getController());
-            controller.initStage(root, usuario);
+            controller.initStage(root, usuario, depart);
         } catch (IOException ex) {
         }
     }
@@ -117,12 +124,29 @@ public class tabDepartmentController {
         departmentList = new HashSet<Department>();
         departmentList = departmentService.FindAllDepartment(new GenericType<Set<Department>>() {
         });
-
+        
+        if(usuario.getPrivilege()==UserPrivilege.COMPANYADMIN || usuario.getPrivilege()==UserPrivilege.USER){
+            
+            
+            List<Department> list = new ArrayList<Department>(departmentList);
+             ObservableList<Department> departList = FXCollections.observableArrayList();
+             List<Department> departamentos = new ArrayList<Department>(usuario.getCompany().getDepartments());
+            for(int i=0 ; i<departamentos.size(); i++){
+                for(int j=0; j<list.size();j++){
+                    if(departamentos.get(i).getId()==list.get(j).getId()){
+                        departList.add(list.get(j));
+                    }
+                
+                }
+                
+            }
+            tableDepartments.setItems(departList);
+        }else{
         List<Department> list = new ArrayList<Department>(departmentList);
         ObservableList<Department> departList = FXCollections.observableArrayList(list);
         tableDepartments.setItems(departList);
                 
-        
+        }
     }
 
 }

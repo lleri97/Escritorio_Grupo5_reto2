@@ -87,18 +87,22 @@ public class tabEntityController {
         }
 
         btnNewCompany.setOnAction((event) -> {
-            lanzarNewEntityWindow();
+            Company company= new Company();
+            lanzarNewEntityWindow(company);
         });
         btnSearchEntity.setOnAction((event) -> {
-
             insertData();
-
         });
         btnDeleteEntity.setOnAction((event) -> {
             Company companyDelete = new Company();
             companyDelete = (Company) tableEntity.getSelectionModel().getSelectedItem();
             companyClient.remove(companyDelete.getId());
             insertData();
+        });
+        btnModifyEntity.setOnAction((event)->{
+            Company company= new Company();
+            company = (Company) tableEntity.getSelectionModel().getSelectedItem();
+            lanzarNewEntityWindow(company);
         });
         tableEntity.getSelectionModel().selectedItemProperty().addListener(this::handleEntityTabSelectionChanged);
 
@@ -110,14 +114,14 @@ public class tabEntityController {
 
     }
 
-    public void lanzarNewEntityWindow() {
+    public void lanzarNewEntityWindow(Company entity) {
 
         try {
             NewCompanyController controller = new NewCompanyController();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewCompany.fxml"));
             Parent root = (Parent) loader.load();
             controller = ((NewCompanyController) loader.getController());
-            controller.initStage(root);
+            controller.initStage(root,entity);
         } catch (IOException ex) {
             Logger.getLogger("Esto peta aqui");
         }

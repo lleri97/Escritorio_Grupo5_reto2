@@ -6,8 +6,10 @@
 package controllersDesktop;
 
 import entitiesModels.Document;
+import entitiesModels.DocumentStatus;
 import entitiesModels.User;
 import entitiesModels.UserPrivilege;
+import entitiesModels.UserStatus;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -60,14 +63,22 @@ public class tabDocumentsController {
     private TableColumn columnStatus;
     @FXML
     private TableColumn columnDate;
+    @FXML
+    private CheckBox chkBoxDisabled;
+    @FXML
+    private CheckBox chkBoxEnabled;
 
     private User usuario;
     private Document doc;
 
     private Set<Document> documentList;
 
-    public void initStage(User usuario) {     
+    public void initStage(User usuario) {
         this.usuario = usuario;
+        if (usuario.getPrivilege() == UserPrivilege.USER) {
+            chkBoxDisabled.setVisible(false);
+            chkBoxEnabled.setVisible(false);
+        }
         btnDeleteDocument.setVisible(false);
         btnModifyDocument.setVisible(false);
 
@@ -90,7 +101,7 @@ public class tabDocumentsController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewDocument.fxml"));
             Parent root = (Parent) loader.load();
             controller = ((NewDocumentController) loader.getController());
-            doc= new Document();
+            doc = new Document();
             doc.setName("");
             controller.initStage(root, doc, usuario);
         } catch (IOException ex) {
@@ -112,18 +123,23 @@ public class tabDocumentsController {
         documentList = new HashSet<Document>();
         documentList = documentService.findAll(new GenericType<Set<Document>>() {
         });
-
-        List<Document> list = new ArrayList<Document>(documentList);
-        ObservableList<Document> docList = FXCollections.observableArrayList(list);
-        tableDocuments.setItems(docList);
+        if (chkBoxDisabled.isSelected() && chkBoxEnabled.isSelected()) {
+            chargeAllDocs();
+        } else if (chkBoxDisabled.isSelected()) {
+            chargeDisabledDocs();
+        }else if(chkBoxEnabled.isSelected()){
+            chargeEnabledUsers();
+    }else{
+            chargeAllDocs();
     }
-   public void handleUsersTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
+    }
+
+    public void handleUsersTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
         btnDeleteDocument.setVisible(true);
         btnModifyDocument.setVisible(true);
 
     }
 
-    
     public void handleButtonAction(ActionEvent event) {
         if ((Button) event.getSource() == btnModifyDocument) {
 
@@ -132,7 +148,6 @@ public class tabDocumentsController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewDocument.fxml"));
                 Parent root = (Parent) loader.load();
                 controller = ((NewDocumentController) loader.getController());
-                String mod = "modify";
                 doc = new Document();
                 doc = (Document) tableDocuments.getSelectionModel().getSelectedItem();
                 controller.initStage(root, doc, usuario);
@@ -141,7 +156,7 @@ public class tabDocumentsController {
             }
 
         } else if ((Button) event.getSource() == btnDeleteDocument) {
-            DocumentClientService documentService= new DocumentClientService();
+            DocumentClientService documentService = new DocumentClientService();
             Document deleteDoc = new Document();
             deleteDoc = (Document) tableDocuments.getSelectionModel().getSelectedItem();
             documentService.remove(deleteDoc.getId());
@@ -149,4 +164,42 @@ public class tabDocumentsController {
         }
     }
 
-}
+    public void chargeAllDocs() {
+
+        List<Document> list = new ArrayList<Document>(documentList);
+        ObservableList<Document> docList = FXCollections.observableArrayList(list);
+        tableDocuments.setItems(docList);
+
+    }
+
+    private void chargeDisabledDocs() {
+        if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN || usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
+            List<Document> list = new ArrayList<Document>(documentList);
+            ObservableList<Document> docList = FXCollections.observableArrayList();
+
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getStatus() == DocumentStatus.DISABLED) {
+                    docList.add(list.get(i));
+                }
+            }
+            tableDocuments.setItems(docList);
+
+        }
+    }
+
+    private void chargeEnabledUsers() {
+        if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN || usuario.getPrivilege()==UserPrivilege.COMPANYADMIN) {
+                List<Document> list = new ArrayList<Document>(documentList);
+                ObservableList<Document> docList = FXCollections.observableArrayList();
+
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getStatus() == DocumentStatus.ENABLED) {
+                        docList.add(list.get(i));
+                    }
+                }
+                tableDocuments.setItems(docList);
+
+            }
+        }
+    }
+

@@ -8,6 +8,7 @@ package controllersDesktop;
 import entitiesModels.Document;
 import entitiesModels.User;
 import entitiesModels.UserPrivilege;
+import entitiesModels.UserStatus;
 import java.io.IOException;
 import static java.sql.Types.NULL;
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class tabUsersController {
     }
 
     public void initStage(User usuario) {
-        
+
         this.usuario = usuario;
 
         btnDeleteUser.setVisible(false);
@@ -113,25 +114,12 @@ public class tabUsersController {
         usersData = new HashSet<User>();
         usersData = userService.findAll(new GenericType<Set<User>>() {
         });
-        if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN) {
-            List<User> list = new ArrayList<User>(usersData);
-            ObservableList<User> userList = FXCollections.observableArrayList(list);
-            tableUsers.setItems(userList);
-        } else if (usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
-            List<User> list = new ArrayList<User>(usersData);
-            ObservableList<User> userList = FXCollections.observableArrayList();
-            for (int i = 0; i <usersData.size(); i++) {
-                if (list.get(i).getCompany() != null) {
-                    if (usuario.getCompany().getId() == list.get(i).getCompany().getId()) {
-                        userList.add(list.get(i));
-                    }
-                }
-               
-                  
-               
-            }
-
-            tableUsers.setItems(userList);
+        if (chkBoxHabilitado.isSelected() && chkBoxDeshabilitado.isSelected()) {
+            chargeAllUsers();
+        } else if (chkBoxDeshabilitado.isSelected()) {
+            chargeDisabledUsers();
+        } else if (chkBoxHabilitado.isSelected()) {
+            chargeEnabledUsers();
         }
     }
 
@@ -177,6 +165,73 @@ public class tabUsersController {
             deleteUser = (User) tableUsers.getSelectionModel().getSelectedItem();
             userService.remove(deleteUser.getId());
             insertData(usuario);
+        }
+    }
+
+    public void chargeAllUsers() {
+        if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN) {
+            List<User> list = new ArrayList<User>(usersData);
+            ObservableList<User> userList = FXCollections.observableArrayList(list);
+            tableUsers.setItems(userList);
+        } else if (usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
+            List<User> list = new ArrayList<User>(usersData);
+            ObservableList<User> userList = FXCollections.observableArrayList();
+            for (int i = 0; i < usersData.size(); i++) {
+                if (list.get(i).getCompany() != null) {
+                    if (usuario.getCompany().getId() == list.get(i).getCompany().getId()) {
+                        userList.add(list.get(i));
+                    }
+                }
+            }
+            tableUsers.setItems(userList);
+        }
+    }
+
+    private void chargeDisabledUsers() {
+        if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN) {
+            List<User> list = new ArrayList<User>(usersData);
+            ObservableList<User> userList = FXCollections.observableArrayList();
+            for (int i = 0; i < usersData.size(); i++) {
+                if (list.get(i).getStatus() == UserStatus.DISABLED) {
+                    userList.add(list.get(i));
+                }
+            }
+            tableUsers.setItems(userList);
+        } else if (usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
+            List<User> list = new ArrayList<User>(usersData);
+            ObservableList<User> userList = FXCollections.observableArrayList();
+            for (int i = 0; i < usersData.size(); i++) {
+                if (list.get(i).getCompany() != null) {
+                    if (usuario.getCompany().getId() == list.get(i).getCompany().getId() && list.get(i).getStatus() == UserStatus.DISABLED) {
+                        userList.add(list.get(i));
+                    }
+                }
+            }
+            tableUsers.setItems(userList);
+        }
+    }
+
+    private void chargeEnabledUsers() {
+        if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN) {
+            List<User> list = new ArrayList<User>(usersData);
+            ObservableList<User> userList = FXCollections.observableArrayList();
+            for (int i = 0; i < usersData.size(); i++) {
+                if (list.get(i).getStatus() == UserStatus.ENABLED) {
+                    userList.add(list.get(i));
+                }
+            }
+            tableUsers.setItems(userList);
+        } else if (usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
+            List<User> list = new ArrayList<User>(usersData);
+            ObservableList<User> userList = FXCollections.observableArrayList();
+            for (int i = 0; i < usersData.size(); i++) {
+                if (list.get(i).getCompany() != null) {
+                    if (usuario.getCompany().getId() == list.get(i).getCompany().getId() && list.get(i).getStatus() == UserStatus.ENABLED) {
+                        userList.add(list.get(i));
+                    }
+                }
+            }
+            tableUsers.setItems(userList);
         }
     }
 }
