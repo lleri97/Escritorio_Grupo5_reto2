@@ -22,6 +22,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
@@ -36,6 +37,8 @@ import utils.UtilsWindows;
  */
 public class NewDocumentController {
 
+    @FXML
+    private BorderPane paneNewDoc;
     @FXML
     private Label lblNewDocument;
     @FXML
@@ -133,7 +136,7 @@ public class NewDocumentController {
         UtilsWindows alert = new UtilsWindows();
         Document document = new Document();
         if (content == null) {
-            alert.alertWarning("Aviso", "No hay ningun archivo cargado.","");
+            alert.alertWarning("Aviso", "No hay ningun archivo cargado.", "");
         } else {
             try {
                 if (textAreaDescription.getText().length() == 0 || textFielTittle.getText().length() == 0) {
@@ -147,18 +150,18 @@ public class NewDocumentController {
                 document.setVisibility(Boolean.TRUE);
                 if (mod.equalsIgnoreCase("modify")) {
                     documentClient.updateDocument(document);
-                    alert.alertInformation("Información", "Documento modificado con exito.","");
+                    alert.alertInformation("Información", "Documento modificado con exito.", "");
 
                 } else {
                     documentClient.createNewDocument(document);
-                    alert.alertInformation("Información", "Documento subido con exito.","");
+                    alert.alertInformation("Información", "Documento subido con exito.", "");
                 }
                 stage.close();
             } catch (Exception e) {
                 if (textAreaDescription.getText().length() == 0 || textFielTittle.getText().length() == 0) {
-                    alert.alertWarning("Aviso", "Los campos no pueden estar vacíos","");
+                    alert.alertWarning("Aviso", "Los campos no pueden estar vacíos", "");
                 } else {
-                    alert.alertError("Error", "Error al subir el documento.","");
+                    alert.alertError("Error", "Error al subir el documento.", "");
                     Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, e);
                 }
             }

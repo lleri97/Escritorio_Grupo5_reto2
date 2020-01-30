@@ -196,19 +196,19 @@ public class LoginController {
 
         } catch (ProcessingException ex) {
             LOGGER.warning(ex.getMessage());
-            alert.alertError("Error", "Hay un problema con la conexión, consulte con su empresa/entidad.","");
+            alert.alertError("Error", "Hay un problema con la conexión, consulte con su empresa/entidad.","okButtonServerBad");
         } catch (NotAuthorizedException ex) {
             LOGGER.warning(ex.getMessage());
-            alert.alertError("Error", "Login de usuario incorrecto.","");
+            alert.alertError("Error", "Login de usuario incorrecto.","okButtonLoginIncorrecto");
         } catch (NotFoundException ex) {
             LOGGER.warning(ex.getMessage());
-            alert.alertInformation("Error", "Contraseña incorrecta.","");
+            alert.alertInformation("Error", "Contraseña incorrecta.","okButtonPasswordIncorrecto");
         } catch (InternalServerErrorException ex) {
             LOGGER.warning(ex.getMessage());
-            alert.alertWarning("Error", "Usuario no disponible, consulte con su empresa/entidad.","");
+            alert.alertWarning("Error", "Usuario no disponible, consulte con su empresa/entidad.","okButtonCamposVacios");
         } catch (IOException ex) {
             LOGGER.severe(ex.getMessage());
-            alert.alertWarning("Error", "Error grave. Pongase en contacto con su empresa/entidad.","");
+            alert.alertWarning("Error", "Error grave. Pongase en contacto con su empresa/entidad.","okButtonCamposVacios");
         }
     }
 

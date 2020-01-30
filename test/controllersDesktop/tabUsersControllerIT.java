@@ -68,6 +68,8 @@ public class tabUsersControllerIT extends ApplicationTest {
     public void test_d_searchUsers_empty() {
         clickOn("#chkBoxHabilitado");
         clickOn("#btnSearch");
+        FxAssert.verifyThat("#okButtonChkNoSelected", isVisible());
+        clickOn("#okButtonChkNoSelected");
     }
 
 }

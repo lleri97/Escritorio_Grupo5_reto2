@@ -40,6 +40,7 @@ import javafx.stage.WindowEvent;
 import javax.ws.rs.core.GenericType;
 import servicesRestfull.DocumentClientService;
 import servicesRestfull.UserClientService;
+import utils.UtilsWindows;
 
 /**
  *
@@ -74,6 +75,7 @@ public class tabUsersController {
 
     private Set<User> usersData;
     private User usuario;
+    private UtilsWindows util;
 
     public User getUsu() {
         return usuario;
@@ -84,7 +86,7 @@ public class tabUsersController {
     }
 
     public void initStage(User usuario) {
-
+        util= new UtilsWindows();
         this.usuario = usuario;
         chkBoxHabilitado.setSelected(true);
         btnDeleteUser.setVisible(false);
@@ -124,8 +126,8 @@ public class tabUsersController {
             chargeDisabledUsers();
         } else if (chkBoxHabilitado.isSelected()) {
             chargeEnabledUsers();
-        }else if(!(chkBoxDeshabilitado.isSelected() && chkBoxHabilitado.isSelected())){
-           
+        }else{
+           util.alertInformation("No apareceran datos", "No se seleccionaron datos", "okButtonChkNoSelected");
         }
     }
 

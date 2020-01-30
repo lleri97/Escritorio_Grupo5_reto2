@@ -50,6 +50,8 @@ import servicesRestfull.UserClientService;
 public class tabDocumentsController {
 
     @FXML
+    private AnchorPane AnchorPaneDoc;
+    @FXML
     private Button btnNewDocument;
     @FXML
     private Button btnSearch;
