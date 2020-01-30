@@ -41,7 +41,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.Mnemonic;
-import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
@@ -52,6 +51,7 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.GenericType;
 import servicesRestfull.CompanyClientService;
 import servicesRestfull.UserClientService;
+import utils.EncryptionClientClass;
 import utils.UtilsWindows;
 import utils.Validator;
 
@@ -61,8 +61,6 @@ import utils.Validator;
  */
 public class SignUpController {
 
-    @FXML
-    private Pane signUpPane;
     @FXML
     private Button btnCancel;
     @FXML
@@ -92,8 +90,8 @@ public class SignUpController {
     @FXML
     private Label lbltitle_id;
     @FXML
-    private DatePicker dPickerNacimiento;// id.toEpochDay(); new Date(id.toEpochDay()); PARA LEER FECHA
-    // de date a localdate --> instant= Instant.ofEpochMilli(date.getTime());    LocalDateTime.ofInstant(instant,);
+    private DatePicker dPickerNacimiento;
+
     private static final Logger LOGGER = Logger.getLogger(SignUpController.class.getPackage() + "." + SignUpController.class.getName());
 
     private Stage stage;
@@ -245,7 +243,6 @@ public class SignUpController {
             Set<Company> entities = new HashSet<Company>(); //llamar servidor y cargar entidades
             entities = clientCompany.findAll(new GenericType<Set<Company>>() {
             });
-            //List<Company> entities = Arrays.asList(usuario.getCompany());
             comboEntity.getItems().clear();
             comboEntity.getItems().addAll(entities);
 
@@ -279,82 +276,91 @@ public class SignUpController {
             Stage stage = (Stage) btnCancel.getScene().getWindow();
             stage.close();
         } else if ((Button) event.getSource() == btnCreateUser) {
-
-            usu.setLogin(textLogin.getText());
-            usu.setEmail(textEmail.getText());
-            usu.setFullname(textFullName.getText());
-            usu.setPhoto(photoContent);
-            usu.setPassword(textPassword.getText());
-            usu.setLastAccess(usuario.getLastAccess());
-            if (!usuario.getPrivilege().equals(UserPrivilege.SUPERADMIN)) {
-                usu.setCompany((Company) usuario.getCompany());
-            } else {
-                usu.setCompany((Company) comboEntity.getValue());
-            }
-            usu.setPrivilege((UserPrivilege) comboPrivilege.getValue());
-            if (checkbStatus.isSelected()) {
-                usu.setStatus(UserStatus.ENABLED);
-            } else {
-                usu.setStatus(UserStatus.DISABLED);
-            }
-
-            try {
-                LocalDate localDate = dPickerNacimiento.getValue();
-                Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-                usu.setbDate(Date.from(instant));
-            } catch (Exception e) {
-                fechaVacia = true;
-            } finally {
-                dataOK = dataValidator(usu);
-                if (dataOK) {
-                    String alertTitle = "";
-                    String alertContentText = "";
-                    if (mod != "modify") {//crear
-                        try {
-                            client.create(usu);
-                            textLogin.clear();
-                            textEmail.clear();
-                            textFullName.clear();
-                            dPickerNacimiento.setValue(LocalDate.now());
-                            LOGGER.info("Sign Up made successfully. Loading user profile.");
-                            alertTitle = "Nuevo usuario";
-                            alertContentText = "Nuevo usuario registrado correctamente.";
-                            stage.close();
-                        } catch (NotAuthorizedException e) {
-                            LOGGER.warning(e.getMessage());
-                            alert.alertError("Error", "Login y/o email ya existen en la base de datos.","okButtonLoginYaExiste");
-                        } catch (NotFoundException e) {
-                            LOGGER.warning(e.getMessage());
-                            alert.alertError("Error", "Error al enviar su nueva contraseña a su correo. Intentelo más tarde.","okButtonErroEmail");
-                        } catch (InternalServerErrorException e) {
-                            LOGGER.warning(e.getMessage());
-                            alert.alertError("Error", "Error al dar de alta al usuario.","okButtonErrorSignUp");
-                        } catch (Exception e) {
-                            LOGGER.warning(e.getMessage());
-                            alert.alertError("Error", "Error patatil.","okButtonErrorGrave");
-                        }
-                    } else {//modificar
-                        try {
-                            usu.setId(usuario.getId());
-                            client.edit(usu);
-                            LOGGER.info("Update made successfully. Loading user profile.");
-                            alertTitle = "Modificar perfil.";
-                            alertContentText = "Los datos del perfil han sido modificados correctamente..";
-                        } catch (InternalServerErrorException e) {
-                            LOGGER.warning(e.getMessage());
-                            alert.alertError("Error", "Login y/o email ya existen en la base de datos.","okButtonLoginYaExiste");
-                        }
-
-                    }
-                    // An alert is issued giving a message that the operation has been a success
-                    Alert alert = new Alert(AlertType.INFORMATION);
-                    alert.setTitle(alertTitle);
-                    alert.setContentText(alertContentText);
-                    Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
-                    okButton.setId("okbutton");
-                    alert.showAndWait();
+            if (textPassword.getText().equals(textConfirmPassword.getText())) {
+                usu.setLogin(textLogin.getText());
+                usu.setEmail(textEmail.getText());
+                usu.setFullname(textFullName.getText());
+                usu.setPhoto(photoContent);
+                usu.setPassword(textPassword.getText());
+                usu.setLastAccess(usuario.getLastAccess());
+                if (!usuario.getPrivilege().equals(UserPrivilege.SUPERADMIN)) {
+                    usu.setCompany((Company) usuario.getCompany());
+                } else {
+                    usu.setCompany((Company) comboEntity.getValue());
                 }
+                usu.setPrivilege((UserPrivilege) comboPrivilege.getValue());
+                if (checkbStatus.isSelected()) {
+                    usu.setStatus(UserStatus.ENABLED);
+                } else {
+                    usu.setStatus(UserStatus.DISABLED);
+                }
+
+                try {
+                    LocalDate localDate = dPickerNacimiento.getValue();
+                    Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+                    usu.setbDate(Date.from(instant));
+                } catch (Exception e) {
+                    fechaVacia = true;
+                } finally {
+                    dataOK = dataValidator(usu);
+                    if (dataOK) {
+                        String alertTitle = "";
+                        String alertContentText = "";
+                        //encriptamos
+                        String encryptedPass = null;
+                        try {
+                            encryptedPass = EncryptionClientClass.encrypt(textPassword.getText());
+                        } catch (Exception ex) {
+                            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        usu.setPassword(encryptedPass);
+                        if (mod != "modify") {//crear
+                            try {
+                                client.create(usu);
+                                textLogin.clear();
+                                textEmail.clear();
+                                textFullName.clear();
+                                dPickerNacimiento.setValue(LocalDate.now());
+                                LOGGER.info("Sign Up made successfully. Loading user profile.");
+                                alertTitle = "Nuevo usuario";
+                                alertContentText = "Nuevo usuario registrado correctamente.";
+                                stage.close();
+                            } catch (NotAuthorizedException e) {
+                                LOGGER.warning(e.getMessage());
+                                alert.alertError("Error", "Login y/o email ya existen en la base de datos.","");
+                            } catch (NotFoundException e) {
+                                LOGGER.warning(e.getMessage());
+                                alert.alertError("Error", "Error al enviar su nueva contraseña a su correo. Intentelo más tarde.","");
+                            } catch (InternalServerErrorException e) {
+                                LOGGER.warning(e.getMessage());
+                                alert.alertError("Error", "Error al dar de alta al usuario.","");
+                            }
+                        } else {//modificar
+                            try {
+                                usu.setId(usuario.getId());
+                                client.edit(usu);
+                                LOGGER.info("Update made successfully. Loading user profile.");
+                                alertTitle = "Modificar perfil.";
+                                alertContentText = "Los datos del perfil han sido modificados correctamente..";
+                            } catch (InternalServerErrorException e) {
+                                LOGGER.warning(e.getMessage());
+                                alert.alertError("Error", "Login y/o email ya existen en la base de datos.","");
+                            }
+
+                        }
+                        // An alert is issued giving a message that the operation has been a success
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle(alertTitle);
+                        alert.setContentText(alertContentText);
+                        Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
+                        okButton.setId("okbutton");
+                        alert.showAndWait();
+                    }
+                }
+            } else {
+                alert.alertWarning("Error", "Las contraseñas no coinciden.","");
             }
+
         }
     }
 
@@ -379,6 +385,10 @@ public class SignUpController {
         }
         if (fechaVacia && !usuario.getPrivilege().equals(UserPrivilege.SUPERADMIN)) {
             stringErrorData = stringErrorData + "\n-Debe seleccionar una fecha de nacimiento.";
+            ret = false;
+        }
+        if (!Validator.passwordChecker(textPassword.getText())) {
+            stringErrorData = stringErrorData + "\n-La contraseña debe tener al menos minusculas, mayusculas, números y entre 8 y 40 caracteres.";
             ret = false;
         }
         if (!ret) {

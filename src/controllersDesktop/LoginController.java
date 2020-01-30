@@ -8,6 +8,7 @@ package controllersDesktop;
 import entitiesModels.User;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -31,7 +32,9 @@ import javafx.stage.WindowEvent;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.ProcessingException;
 import servicesRestfull.UserClientService;
+import utils.EncryptionClientClass;
 import utils.UtilsWindows;
 
 /**
@@ -96,7 +99,13 @@ public class LoginController {
         sceneLogin.addMnemonic(recoverPassword);
 
         //Adding Accelerators to scene
-        Runnable rLogin = () -> loginAction();
+        Runnable rLogin = () -> {
+            try {
+                loginAction();
+            } catch (Exception ex) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        };
         Runnable rHelp = () -> helpButtonAction();
         Runnable rRecover = () -> recoverPasswordAction();
 
@@ -105,25 +114,29 @@ public class LoginController {
         sceneLogin.getAccelerators().put(recoverKc, rRecover);
 
         //PROMPTEXTS
-        textFieldUsername.setPromptText("Enter your username");
+        textFieldUsername.setPromptText("Inserte su nombre de usuario");
         textFieldUsername.setFocusTraversable(false);
-        textFieldPassword.setPromptText("Enter your password");
+        textFieldPassword.setPromptText("Inserte su contraseña");
         textFieldPassword.setFocusTraversable(false);
 
         // Tooltips config
-        Tooltip usernameTT = new Tooltip("INSERT your user LOGIN");
+        Tooltip usernameTT = new Tooltip("Inserte su nombre de usuario");
         textFieldUsername.setTooltip(usernameTT);
-        Tooltip passwdTT = new Tooltip("INSERT your user PASSWORD");
+        Tooltip passwdTT = new Tooltip("Inserte su contraseña");
         textFieldPassword.setTooltip(passwdTT);
-        Tooltip loginTT = new Tooltip("CLICK here for LOGIN");
+        Tooltip loginTT = new Tooltip("Pulse para hacer login");
         btnLogIn.setTooltip(loginTT);
-        Tooltip helpTT = new Tooltip("CLICK here for HELP");
+        Tooltip helpTT = new Tooltip("Pulse para ayuda");
         btnHelpLogIn.setTooltip(helpTT);
 
         // *****************CONTROLS*************** 
         // LOGIN BUTTON
         btnLogIn.setOnAction((event) -> {
-            loginAction();
+            try {
+                loginAction();
+            } catch (Exception ex) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         // RECOVER PASSWORD HYPERLINK
         hplRecoverPassword.setOnAction((event) -> {
@@ -143,8 +156,8 @@ public class LoginController {
             event.consume();
             // show close dialog
             Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("Close Confirmation");
-            alert.setHeaderText("Do you really want to quit?");
+            alert.setTitle("Confirmación");
+            alert.setHeaderText("¿Está seguro que desea salir de la aplicación?");
             alert.initOwner(stage);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
@@ -156,18 +169,21 @@ public class LoginController {
     }
 
     //**************************M E T H O D S***********************************
-    private void loginAction() {
+    private void loginAction() throws Exception {
         UtilsWindows alert = new UtilsWindows();
         try {
             // Login Button Settings
             //It is verified that the fields cannot be empty
             if (textFieldPassword.getText().equals("") || textFieldUsername.getText().equals("")) {
-                alert.alertWarning("Error", "Debe introducir el login y la contraseña.","okButtonCamposVacios");
+                alert.alertWarning("Error", "Debe introducir el login y la contraseña.","");
             } else {// The user is built
                 User usu = new User();
-
                 UserClientService client = new UserClientService();
-                usu = client.login(User.class, textFieldUsername.getText(), textFieldPassword.getText());
+                //encriptamos
+                EncryptionClientClass instance = new EncryptionClientClass();
+                String encryptedPassword = null;
+                encryptedPassword = instance.encrypt(textFieldPassword.getText());
+                usu = client.login(User.class, textFieldUsername.getText(), encryptedPassword);
                 //If the credentials are correct, if not go to exceptions
                 LOGGER.info("Login made successfully. Loading user profile.");
                 LogOutController controller = new LogOutController();
@@ -178,20 +194,21 @@ public class LoginController {
                 stage.close();
             }
 
+        } catch (ProcessingException ex) {
+            LOGGER.warning(ex.getMessage());
+            alert.alertError("Error", "Hay un problema con la conexión, consulte con su empresa/entidad.","");
         } catch (NotAuthorizedException ex) {
             LOGGER.warning(ex.getMessage());
-            alert.alertError("Error", "Login de usuario incorrecto.","okButtonLoginIncorrecto");
-            
+            alert.alertError("Error", "Login de usuario incorrecto.","");
         } catch (NotFoundException ex) {
             LOGGER.warning(ex.getMessage());
-            alert.alertInformation("Error", "Contraseña incorrecta.","okButtonPasswordIncorrecto");
-            
+            alert.alertInformation("Error", "Contraseña incorrecta.","");
         } catch (InternalServerErrorException ex) {
             LOGGER.warning(ex.getMessage());
-            alert.alertWarning("Error", "Usuario no disponible, consulte con su empresa/entidad.","okButtonError");
+            alert.alertWarning("Error", "Usuario no disponible, consulte con su empresa/entidad.","");
         } catch (IOException ex) {
             LOGGER.severe(ex.getMessage());
-            alert.alertWarning("Error", "Error grave. Pongase en contacto con su empresa/entidad.","okButtonError");
+            alert.alertWarning("Error", "Error grave. Pongase en contacto con su empresa/entidad.","");
         }
     }
 

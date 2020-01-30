@@ -38,7 +38,7 @@ public class RecoverPasswordController {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setResizable(false);
-        stage.setTitle("Recover Password");
+        stage.setTitle("Recuperación de contraseña");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
 
@@ -60,11 +60,11 @@ public class RecoverPasswordController {
                 userEmail.setEmail(TextFieldEmail.getText());
                 UserClientService client = new UserClientService();
                 client.recoverPassword(userEmail, TextFieldEmail.getText());
-                alert.alertInformation("Recuperación de contraseña", "Su nueva contraseña ha sido enviada a su email con éxito.","okButtonRecover");
+                alert.alertInformation("Recuperación de contraseña", "Su nueva contraseña ha sido enviada a su email con éxito.","");
             } catch (InternalServerErrorException e) {
-                alert.alertError("Error", "Fallo al enviar su nueva contraseña a su correo.","okButtonFalloEnvio");
+                alert.alertError("Error", "Fallo al enviar su nueva contraseña a su correo.","");
             } catch (NotAuthorizedException e) {
-                alert.alertWarning("Error", "El email introducido no existe.","okButtonEmailNoExiste");
+                alert.alertWarning("Error", "El email introducido no existe.","");
             }
 
         }

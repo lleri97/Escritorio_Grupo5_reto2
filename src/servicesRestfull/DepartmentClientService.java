@@ -27,7 +27,7 @@ public class DepartmentClientService {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/grupo5_reto2_server-dev-fran-update-document/webresources";
+    private static final String BASE_URI = "http://localhost:8080/grupo5_reto2_server-development_SERVER_Fran/webresources";
 
     public DepartmentClientService() {
         client = javax.ws.rs.client.ClientBuilder.newClient();

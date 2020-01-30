@@ -124,6 +124,8 @@ public class tabUsersController {
             chargeDisabledUsers();
         } else if (chkBoxHabilitado.isSelected()) {
             chargeEnabledUsers();
+        }else if(!(chkBoxDeshabilitado.isSelected() && chkBoxHabilitado.isSelected())){
+           
         }
     }
 

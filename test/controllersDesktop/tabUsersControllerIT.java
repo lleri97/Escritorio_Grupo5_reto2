@@ -7,8 +7,12 @@ package controllersDesktop;
 
 import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Boolean;
 import entitiesModels.User;
+import java.io.IOException;
 import java.util.function.Predicate;
 import javafx.stage.Stage;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
 import org.eclipse.persistence.jpa.jpql.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +44,7 @@ public class tabUsersControllerIT extends ApplicationTest {
     public void test_a_searchUser_Enabled() {
         clickOn("#btnSearch");
         clickOn("#tableUsers");
-        FxAssert.verifyThat("Yeray Ramos", isVisible());
+        FxAssert.verifyThat("Yerray Ramos", isVisible());
         clickOn("#btnModifyUser");
         FxAssert.verifyThat("#signUpPane", isVisible());
     }
@@ -61,17 +65,9 @@ public class tabUsersControllerIT extends ApplicationTest {
     }
 
     @Test
-    public void test_c_searchUsers_empty() {
+    public void test_d_searchUsers_empty() {
         clickOn("#chkBoxHabilitado");
         clickOn("#btnSearch");
-        Boolean isEmpty= false;
-        if ("#tableUsers".isEmpty()) {
-            isEmpty=true;
-            
-
-        }
-        Boolean miau=true;
-
     }
 
 }

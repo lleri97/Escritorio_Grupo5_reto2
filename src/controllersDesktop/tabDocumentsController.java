@@ -10,17 +10,17 @@ import entitiesModels.DocumentStatus;
 import entitiesModels.User;
 import entitiesModels.UserPrivilege;
 import entitiesModels.UserStatus;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +36,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javax.ws.rs.core.GenericType;
 import servicesRestfull.DocumentClientService;
 import servicesRestfull.UserClientService;
@@ -48,8 +50,6 @@ import servicesRestfull.UserClientService;
 public class tabDocumentsController {
 
     @FXML
-    private AnchorPane tabDocs;
-    @FXML
     private Button btnNewDocument;
     @FXML
     private Button btnSearch;
@@ -57,6 +57,8 @@ public class tabDocumentsController {
     private Button btnDeleteDocument;
     @FXML
     private Button btnModifyDocument;
+    @FXML
+    private Button btnDownloadDocument;
     @FXML
     private TableView tableDocuments;
     @FXML
@@ -75,16 +77,22 @@ public class tabDocumentsController {
     private User usuario;
     private Document doc;
 
+    private Stage stage;
+
     private Set<Document> documentList;
 
-    public void initStage(User usuario) {
+    public void initStage(User usuario, Stage stage) {
+        stage = new Stage();
+        this.stage = stage;
         this.usuario = usuario;
+        chkBoxEnabled.setSelected(true);
         if (usuario.getPrivilege() == UserPrivilege.USER) {
             chkBoxDisabled.setVisible(false);
             chkBoxEnabled.setVisible(false);
         }
         btnDeleteDocument.setVisible(false);
         btnModifyDocument.setVisible(false);
+        btnDownloadDocument.setVisible(false);
 
         btnNewDocument.setOnAction((event) -> {
             lanzarNewDocumentWindow();
@@ -95,6 +103,7 @@ public class tabDocumentsController {
 
         btnDeleteDocument.setOnAction(this::handleButtonAction);
         btnModifyDocument.setOnAction(this::handleButtonAction);
+        btnDownloadDocument.setOnAction(this::handleButtonAction);
         tableDocuments.getSelectionModel().selectedItemProperty().addListener(this::handleUsersTabSelectionChanged);
 
     }
@@ -107,7 +116,7 @@ public class tabDocumentsController {
             controller = ((NewDocumentController) loader.getController());
             doc = new Document();
             doc.setName("");
-            controller.initStage(root, doc, usuario);
+            controller.initStage(root, doc, usuario, "");
         } catch (IOException ex) {
         }
     }
@@ -132,7 +141,7 @@ public class tabDocumentsController {
         } else if (chkBoxDisabled.isSelected()) {
             chargeDisabledDocs();
         } else if (chkBoxEnabled.isSelected()) {
-            chargeEnabledDocs();
+            chargeEnabledUsers();
         } else {
             chargeAllDocs();
         }
@@ -141,7 +150,7 @@ public class tabDocumentsController {
     public void handleUsersTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
         btnDeleteDocument.setVisible(true);
         btnModifyDocument.setVisible(true);
-
+        btnDownloadDocument.setVisible(true);
     }
 
     public void handleButtonAction(ActionEvent event) {
@@ -154,17 +163,33 @@ public class tabDocumentsController {
                 controller = ((NewDocumentController) loader.getController());
                 doc = new Document();
                 doc = (Document) tableDocuments.getSelectionModel().getSelectedItem();
-                controller.initStage(root, doc, usuario);
+                controller.initStage(root, doc, usuario, "modify");
             } catch (IOException ex) {
                 Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         } else if ((Button) event.getSource() == btnDeleteDocument) {
-            DocumentClientService documentService = new DocumentClientService();
-            Document deleteDoc = new Document();
-            deleteDoc = (Document) tableDocuments.getSelectionModel().getSelectedItem();
-            documentService.remove(deleteDoc.getId());
-            insertData();
+            try {
+                DocumentClientService documentService = new DocumentClientService();
+                Document deleteDoc = new Document();
+                deleteDoc = (Document) tableDocuments.getSelectionModel().getSelectedItem();
+                documentService.remove(deleteDoc.getId());
+                insertData();
+            } catch (Exception e) {
+                Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, e);
+            }
+        } else if ((Button) event.getSource() == btnDownloadDocument) {
+            try {
+                FileChooser fileChooser = new FileChooser();
+                FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
+                fileChooser.getExtensionFilters().add(extensionFilter);
+                File downloadFile = fileChooser.showSaveDialog(stage);
+                doc = new Document();
+                doc = (Document) tableDocuments.getSelectionModel().getSelectedItem();
+                bytesToFile(downloadFile, doc.getDocumentContent());
+            } catch (Exception e) {
+                Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, e);
+            }
         }
     }
 
@@ -181,21 +206,46 @@ public class tabDocumentsController {
             List<Document> list = new ArrayList<Document>(documentList);
             ObservableList<Document> docList = FXCollections.observableArrayList();
 
-            Collection listDoc = list.stream().filter(doc -> doc.getStatus() == DocumentStatus.DISABLED).collect(Collectors.toList());
-            docList.addAll(listDoc);
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getStatus() == DocumentStatus.DISABLED) {
+                    docList.add(list.get(i));
+                }
+            }
             tableDocuments.setItems(docList);
 
         }
     }
 
-    private void chargeEnabledDocs() {
+    private void chargeEnabledUsers() {
         if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN || usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
             List<Document> list = new ArrayList<Document>(documentList);
             ObservableList<Document> docList = FXCollections.observableArrayList();
-            Collection listDoc = list.stream().filter(doc -> doc.getStatus() == DocumentStatus.ENABLED).collect(Collectors.toList());
-            docList.addAll(listDoc);
+
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getStatus() == DocumentStatus.ENABLED) {
+                    docList.add(list.get(i));
+                }
+            }
             tableDocuments.setItems(docList);
 
+        }
+    }
+
+    private void bytesToFile(File downloadFile, byte[] documentContent) {
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(downloadFile.getPath());
+            fos.write(documentContent);
+        } catch (Exception e) {
+            Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (Exception e) {
+                    Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
         }
     }
 }

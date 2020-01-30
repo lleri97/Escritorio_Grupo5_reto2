@@ -5,6 +5,7 @@
  */
 package servicesRestfull;
 
+import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -21,20 +22,21 @@ import javax.ws.rs.core.GenericType;
  *        client.close();
  * </pre>
  *
- * @author Yeray
+ * @author Jon Gonzalez
  */
 public class DocumentClientService {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/grupo5_reto2_server-dev-fran-update-document/webresources";
+        private static final String BASE_URI = "http://localhost:8080/grupo5_reto2_server-development_SERVER_Fran/webresources";
 
+    
     public DocumentClientService() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("document");
     }
 
-    public <T> T find(Class<T> responseType, int id) throws ClientErrorException {
+    public <T> T find(Class<T> responseType, String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);

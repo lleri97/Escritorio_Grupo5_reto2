@@ -11,16 +11,13 @@ import entitiesModels.User;
 import java.io.File;
 import java.nio.file.Paths;
 import java.nio.file.Files;
-import java.sql.Blob;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -29,8 +26,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javax.sql.rowset.serial.SerialBlob;
 import servicesRestfull.DocumentClientService;
+import utils.UtilsWindows;
 
 /**
  * FXML Controller class
@@ -62,64 +59,51 @@ public class NewDocumentController {
 
     private Stage stage;
 
-    private Document doc;
-
     private byte[] content;
 
     private File file;
 
-    DocumentClientService documentClient;
+    private User user;
+
+    private String mod;
 
     /**
      * Initializes the controller class.
      */
-    public void initStage(Parent root, Document doc,User user) {
-        
-        if(doc.getName()!=""){
+    public void initStage(Parent root, Document doc, User user, String mod) {
+        content = doc.getDocumentContent();
+        this.mod = mod;
+        this.user = user;
+        if (doc.getName() != "") {
             textFielTittle.setText(doc.getName());
             textAreaDescription.setText(doc.getDescription());
             lblSelectedDoc.setText(doc.getName());
-            btnAddDocument.setOnAction((event)->{
-            documentClient.updateDocument(doc);
-            });
-        }else{
-               btnAddDocument.setOnAction((event) -> {
-            if (file == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("No hay ningun archivo cargado");
-                Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
-                okButton.setId("okbutton");
-                alert.showAndWait();
-            } else {
-                doc.setDescription(textAreaDescription.getText());
-                doc.setName(textFielTittle.getText());
-                doc.setStatus(DocumentStatus.ENABLED);
-                doc.setVisibility(Boolean.TRUE);
-                doc.setUser(user);
-                documentClient.createNewDocument(doc);
-            }
-        });
         }
-        
+
         Scene sceneNewDocument = new Scene(root);
         stage = new Stage();
         stage.setScene(sceneNewDocument);
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
-        btnAddDocument.setDisable(true);
+        btnAddDocument.setDisable(false);
         lblError.setVisible(false);
         lblSelectedDoc.setVisible(false);
+        if (mod.equalsIgnoreCase("modify")) {
+            btnAddDocument.setText("Modicar");
+            lblNewDocument.setText("Modificar documento.");
+            hyperlinkDocument.setText("Pulse para cambiar el contenido del documento.");
+        }
         btnCancel.setOnAction((event) -> {
             stage.close();
         });
-     
+
+        btnAddDocument.setOnAction((event) -> {
+            newDocumentAction();
+        });
         hyperlinkDocument.setOnAction((event) -> {
             chooseFile();
 
         });
-
-        textAreaDescription.textProperty().addListener(this::handleTextChanged);
-        textFielTittle.textProperty().addListener(this::handleTextChanged);
 
         stage.show();
 
@@ -127,6 +111,7 @@ public class NewDocumentController {
 
     public void chooseFile() {
         FileChooser fc = new FileChooser();
+        Document document = new Document();
         fc.setTitle("Buscar foto:");
         fc.getExtensionFilters().add(new ExtensionFilter("PDF files (*.pdf)", "*.PDF", "*.pdf"));
 
@@ -137,19 +122,48 @@ public class NewDocumentController {
         }
         try {
             content = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
-            doc = new Document();
-            doc.setDocumentContent(content);
+            document = new Document();
+            document.setDocumentContent(content);
         } catch (Exception ex) {
             Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void handleTextChanged(ObservableValue observable, String oldValue, String newValue) {
+    private void newDocumentAction() {
+        UtilsWindows alert = new UtilsWindows();
+        Document document = new Document();
+        if (content == null) {
+            alert.alertWarning("Aviso", "No hay ningun archivo cargado.","");
+        } else {
+            try {
+                if (textAreaDescription.getText().length() == 0 || textFielTittle.getText().length() == 0) {
+                    throw new Exception();
+                }
+                DocumentClientService documentClient = new DocumentClientService();
+                document.setDescription(textAreaDescription.getText());
+                document.setName(textFielTittle.getText());
+                document.setDocumentContent(content);
+                document.setStatus(DocumentStatus.ENABLED);
+                document.setVisibility(Boolean.TRUE);
+                if (mod.equalsIgnoreCase("modify")) {
+                    documentClient.updateDocument(document);
+                    alert.alertInformation("Información", "Documento modificado con exito.","");
 
-        if (textAreaDescription.getText().length() > 0 || textFielTittle.getText().length() > 0) {
-            btnAddDocument.setDisable(false);
+                } else {
+                    documentClient.createNewDocument(document);
+                    alert.alertInformation("Información", "Documento subido con exito.","");
+                }
+                stage.close();
+            } catch (Exception e) {
+                if (textAreaDescription.getText().length() == 0 || textFielTittle.getText().length() == 0) {
+                    alert.alertWarning("Aviso", "Los campos no pueden estar vacíos","");
+                } else {
+                    alert.alertError("Error", "Error al subir el documento.","");
+                    Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+
         }
-
     }
 
 }

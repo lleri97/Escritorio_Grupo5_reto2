@@ -153,8 +153,8 @@ public class LogOutController {
             btnUsers.setDisable(true);
             dataItemUsers.setDisable(true);
             dataItemUsers.setVisible(false);
-        } 
-        
+        }
+
         Scene scene = new Scene(root);
         usuario = new User();
         usuario = usu;
@@ -195,7 +195,7 @@ public class LogOutController {
         });
         dataItemDepart = new MenuItem("Departamentos");
         dataItemDepart.setId("dataItemDepart");
-        dataItemDepart.setOnAction((event)->{
+        dataItemDepart.setOnAction((event) -> {
             createTabDepartments();
         });
         dataItemArea = new MenuItem("Areas");
@@ -211,14 +211,7 @@ public class LogOutController {
             }
         });
 
-        txtNombreUsu.setText("Nombre completo: " + usu.getFullname());
-        txtLogin.setText("Usuario: " + usu.getLogin());
-        txtEntity.setText("Entidad/Empresa: " + usu.getCompany().getName().toString());
-        txtPrivilege.setText("Tipo usuario: " + usu.getPrivilege().toString());
-        txtEmail.setText("Email: " + usu.getEmail());
-        //InputStream myInputStream = new ByteArrayInputStream(usu.getPhoto());
-        //photoProfileImg.setImage(new Image(myInputStream));
-
+        loadData(usu);
         stage.show();
         stage.setOnCloseRequest((WindowEvent event) -> {
             // consume event
@@ -339,13 +332,13 @@ public class LogOutController {
      * pane
      */
     private void createTabDocuments() {
-        try {
+         try {
             tabDocumentsController tabDocuments = new tabDocumentsController();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/tabDocuments.fxml"));
             AnchorPane pane = loader.load();
             contentPane.getChildren().setAll(pane);
             tabDocuments = (tabDocumentsController) loader.getController();
-            tabDocuments.initStage(usuario);
+            tabDocuments.initStage(usuario, stage);
         } catch (IOException ex) {
             Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -383,7 +376,7 @@ public class LogOutController {
         }
     }
 
-    private void loadData(User usu) {
+        private void loadData(User usu) {
         txtNombreUsu.setText("Nombre completo: " + usu.getFullname());
         txtLogin.setText("Usuario: " + usu.getLogin());
         if (usu.getCompany() != null) {
@@ -397,7 +390,7 @@ public class LogOutController {
             InputStream myInputStream = new ByteArrayInputStream(usu.getPhoto());
             photoProfileImg.setImage(new Image(myInputStream));
         }
-    }
+        }
 
     private void refreshProfile() {
         UserClientService client = new UserClientService();
@@ -421,4 +414,6 @@ public class LogOutController {
         }
     }
 
-}
+    }
+
+
