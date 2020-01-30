@@ -45,7 +45,9 @@ import servicesRestfull.DepartmentClientService;
  * @author Yeray
  */
 public class tabEntityController {
-
+    
+    @FXML
+    private AnchorPane tabEntity;
     @FXML
     private Button btnNewCompany;
     @FXML

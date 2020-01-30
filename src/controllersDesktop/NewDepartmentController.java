@@ -69,17 +69,21 @@ public class NewDepartmentController {
     /**
      * Initializes the controller class.
      */
-    public void initStage(Parent root, User usuario, Department department) {
-        if (department.getName() != "") {
+    public void initStage(Parent root, User usuario, Department department, String mod) {
+
+        if (mod == "modify") {
             textFieldDepartment.setText(department.getName());
             Set<Company> entities = new HashSet<Company>();
-            entities.add(department.getCompanies());
+            entities= department.getCompanies();
+            if(entities!=null){
             comboCompany.getItems().add(entities);
+            }
             btnAddDepartment.setText("confirmar");
-            btnAddDepartment.setOnAction((event)->{
+            btnAddDepartment.setOnAction((event) -> {
+                Department depart = new Department();
                 department.setName(textFieldDepartment.getText());
-                department.setCompanies((Company) comboCompany.getSelectionModel().getSelectedItem());
-               departmentService.edit(department, department.getId());
+             
+                departmentService.edit(depart);
             });
 
         } else {
@@ -88,7 +92,9 @@ public class NewDepartmentController {
                 public void handle(ActionEvent event) {
                     depart = new Department();
                     depart.setName(textFieldDepartment.getText().toString());
-                    depart.setCompanies((Company) comboCompany.getValue());
+                    Set<Company> comp = new HashSet<Company>();
+                    comp.add((Company) comboCompany.getValue());
+                    depart.setCompanies(comp);
                     departmentService = new DepartmentClientService();
                     departmentService.create(depart);
                 }

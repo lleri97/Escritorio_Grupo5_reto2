@@ -8,15 +8,18 @@ package controllersDesktop;
 import entitiesModels.Department;
 import entitiesModels.User;
 import entitiesModels.UserPrivilege;
+import entitiesModels.UserStatus;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -41,6 +44,8 @@ import servicesRestfull.DepartmentClientService;
  */
 public class tabDepartmentController {
 
+    @FXML
+    private AnchorPane tabDepart;
     @FXML
     private Button btnNewDepartment;
     @FXML
@@ -74,10 +79,11 @@ public class tabDepartmentController {
         tableDepartments.getSelectionModel().selectedItemProperty().addListener(this::handleDepartmentTabSelectionChanged);
         btnNewDepartment.setOnAction((event) -> {
             Department depart = new Department();
-            depart.setId(0);
-            lanzarNewDepartmentWindow(depart);
+            String mod = "";
+            lanzarNewDepartmentWindow(depart,mod);
         });
         btnSearchDepartment.setOnAction((event) -> {
+
             insertData();
         });
         btnDeleteDepartment.setOnAction((event) -> {
@@ -88,10 +94,11 @@ public class tabDepartmentController {
             departmentService.remove(deleteDepart.getId());
             insertData();
         });
-        btnModifyDepartment.setOnAction((event)->{
-            Department depart= new Department();
-            depart= (Department) tableDepartments.getSelectionModel().getSelectedItem();
-            lanzarNewDepartmentWindow(depart);
+        btnModifyDepartment.setOnAction((event) -> {
+            Department depart = new Department();
+            depart = (Department) tableDepartments.getSelectionModel().getSelectedItem();
+            String mod = "modify";
+            lanzarNewDepartmentWindow(depart, mod);
         });
 
     }
@@ -102,14 +109,14 @@ public class tabDepartmentController {
 
     }
 
-    public void lanzarNewDepartmentWindow(Department depart) {
+    public void lanzarNewDepartmentWindow(Department depart, String mod) {
 
         try {
             NewDepartmentController controller = new NewDepartmentController();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewDepartment.fxml"));
             Parent root = (Parent) loader.load();
             controller = ((NewDepartmentController) loader.getController());
-            controller.initStage(root, usuario, depart);
+            controller.initStage(root, usuario, depart, mod);
         } catch (IOException ex) {
         }
     }
@@ -124,28 +131,31 @@ public class tabDepartmentController {
         departmentList = new HashSet<Department>();
         departmentList = departmentService.FindAllDepartment(new GenericType<Set<Department>>() {
         });
-        
-        if(usuario.getPrivilege()==UserPrivilege.COMPANYADMIN || usuario.getPrivilege()==UserPrivilege.USER){
-            
-            
+
+        if (usuario.getPrivilege() == UserPrivilege.COMPANYADMIN || usuario.getPrivilege() == UserPrivilege.USER) {
+
             List<Department> list = new ArrayList<Department>(departmentList);
-             ObservableList<Department> departList = FXCollections.observableArrayList();
-             List<Department> departamentos = new ArrayList<Department>(usuario.getCompany().getDepartments());
-            for(int i=0 ; i<departamentos.size(); i++){
-                for(int j=0; j<list.size();j++){
-                    if(departamentos.get(i).getId()==list.get(j).getId()){
+            ObservableList<Department> departList = FXCollections.observableArrayList();
+            List<Department> departamentos = new ArrayList<Department>(usuario.getCompany().getDepartments());
+            Collection listDepart = list.stream().filter(depart -> depart.getId() == usuario.getId()).collect(Collectors.toList());
+            departList.addAll(listDepart);
+            
+            
+            for (int i = 0; i < departamentos.size(); i++) {
+                for (int j = 0; j < list.size(); j++) {
+                    if (departamentos.get(i).getId() == list.get(j).getId()) {
                         departList.add(list.get(j));
                     }
-                
+
                 }
-                
+
             }
             tableDepartments.setItems(departList);
-        }else{
-        List<Department> list = new ArrayList<Department>(departmentList);
-        ObservableList<Department> departList = FXCollections.observableArrayList(list);
-        tableDepartments.setItems(departList);
-                
+        } else {
+            List<Department> list = new ArrayList<Department>(departmentList);
+            ObservableList<Department> departList = FXCollections.observableArrayList(list);
+            tableDepartments.setItems(departList);
+
         }
     }
 

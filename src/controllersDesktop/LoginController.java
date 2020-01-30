@@ -162,7 +162,7 @@ public class LoginController {
             // Login Button Settings
             //It is verified that the fields cannot be empty
             if (textFieldPassword.getText().equals("") || textFieldUsername.getText().equals("")) {
-                alert.alertWarning("Error", "Debe introducir el login y la contraseña.");
+                alert.alertWarning("Error", "Debe introducir el login y la contraseña.","okButtonCamposVacios");
             } else {// The user is built
                 User usu = new User();
 
@@ -180,16 +180,18 @@ public class LoginController {
 
         } catch (NotAuthorizedException ex) {
             LOGGER.warning(ex.getMessage());
-            alert.alertError("Error", "Login de usuario incorrecto.");
+            alert.alertError("Error", "Login de usuario incorrecto.","okButtonLoginIncorrecto");
+            
         } catch (NotFoundException ex) {
             LOGGER.warning(ex.getMessage());
-            alert.alertInformation("Error", "Contraseña incorrecta.");
+            alert.alertInformation("Error", "Contraseña incorrecta.","okButtonPasswordIncorrecto");
+            
         } catch (InternalServerErrorException ex) {
             LOGGER.warning(ex.getMessage());
-            alert.alertWarning("Error", "Usuario no disponible, consulte con su empresa/entidad.");
+            alert.alertWarning("Error", "Usuario no disponible, consulte con su empresa/entidad.","okButtonError");
         } catch (IOException ex) {
             LOGGER.severe(ex.getMessage());
-            alert.alertWarning("Error", "Error grave. Pongase en contacto con su empresa/entidad.");
+            alert.alertWarning("Error", "Error grave. Pongase en contacto con su empresa/entidad.","okButtonError");
         }
     }
 

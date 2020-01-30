@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controllersDesktop.tabDepartmentController">
+<AnchorPane fx:id="tabDepart" prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controllersDesktop.tabDepartmentController">
     
     <children>
         <Button fx:id="btnNewDepartment" layoutX="37.0" layoutY="25.0" mnemonicParsing="false" text="Nuevo departamento" />

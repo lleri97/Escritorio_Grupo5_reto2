@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controllersDesktop.tabDocumentsController">
+<AnchorPane fx:id="tabDocs" prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controllersDesktop.tabDocumentsController">
      
     <children>
         <Label layoutX="30.0" layoutY="27.0" prefHeight="17.0" prefWidth="74.0" text="Busqueda:" />

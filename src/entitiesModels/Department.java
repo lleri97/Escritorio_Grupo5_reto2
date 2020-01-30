@@ -7,6 +7,7 @@ package entitiesModels;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Set;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -26,20 +27,18 @@ public class Department implements Serializable {
 
     private final SimpleStringProperty name;
 
-    private final SimpleListProperty<Area> areas;
+    private Set<Area> areas;
 
-    private Company companies;
+    private Set<Company> companies;
 
     public Department() {
         this.id = new SimpleIntegerProperty();
         this.name = new SimpleStringProperty();
-        this.areas = new SimpleListProperty();
     }
 
-    public Department(int id, String name, ObservableList<Area> areas) {
+    public Department(int id, String name) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
-        this.areas = new SimpleListProperty(areas);
     }
 
     public int getId() {
@@ -58,23 +57,23 @@ public class Department implements Serializable {
         this.name.set(name);
     }
 
-    public Collection<Area> getArea() {
-        return this.areas.get();
+    public Set<Area> getAreas() {
+        return areas;
     }
 
-    public void setArea(Collection<Area> areas) {
-        this.areas.setAll(areas);
+    public void setAreas(Set<Area> areas) {
+        this.areas = areas;
+    }
+
+    public Set<Company> getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(Set<Company> companies) {
+        this.companies = companies;
     }
 
     /**
      * @param companies the companies to set
      */
-    public Company getCompanies() {
-        return companies;
-    }
-
-    public void setCompanies(Company companies) {
-        this.companies = companies;
-    }
-
 }

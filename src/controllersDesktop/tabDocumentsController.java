@@ -13,12 +13,14 @@ import entitiesModels.UserStatus;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -45,6 +47,8 @@ import servicesRestfull.UserClientService;
  */
 public class tabDocumentsController {
 
+    @FXML
+    private AnchorPane tabDocs;
     @FXML
     private Button btnNewDocument;
     @FXML
@@ -127,11 +131,11 @@ public class tabDocumentsController {
             chargeAllDocs();
         } else if (chkBoxDisabled.isSelected()) {
             chargeDisabledDocs();
-        }else if(chkBoxEnabled.isSelected()){
-            chargeEnabledUsers();
-    }else{
+        } else if (chkBoxEnabled.isSelected()) {
+            chargeEnabledDocs();
+        } else {
             chargeAllDocs();
-    }
+        }
     }
 
     public void handleUsersTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
@@ -177,29 +181,21 @@ public class tabDocumentsController {
             List<Document> list = new ArrayList<Document>(documentList);
             ObservableList<Document> docList = FXCollections.observableArrayList();
 
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getStatus() == DocumentStatus.DISABLED) {
-                    docList.add(list.get(i));
-                }
-            }
+            Collection listDoc = list.stream().filter(doc -> doc.getStatus() == DocumentStatus.DISABLED).collect(Collectors.toList());
+            docList.addAll(listDoc);
             tableDocuments.setItems(docList);
 
         }
     }
 
-    private void chargeEnabledUsers() {
-        if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN || usuario.getPrivilege()==UserPrivilege.COMPANYADMIN) {
-                List<Document> list = new ArrayList<Document>(documentList);
-                ObservableList<Document> docList = FXCollections.observableArrayList();
+    private void chargeEnabledDocs() {
+        if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN || usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
+            List<Document> list = new ArrayList<Document>(documentList);
+            ObservableList<Document> docList = FXCollections.observableArrayList();
+            Collection listDoc = list.stream().filter(doc -> doc.getStatus() == DocumentStatus.ENABLED).collect(Collectors.toList());
+            docList.addAll(listDoc);
+            tableDocuments.setItems(docList);
 
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).getStatus() == DocumentStatus.ENABLED) {
-                        docList.add(list.get(i));
-                    }
-                }
-                tableDocuments.setItems(docList);
-
-            }
         }
     }
-
+}

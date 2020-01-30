@@ -46,6 +46,8 @@ public class tabAreasController  {
      * Initializes the controller class.
      */
     @FXML
+    private AnchorPane tabAreas;
+    @FXML
     private Button btnNewArea;
     @FXML
     private Button btnSearchAreas;
@@ -73,7 +75,9 @@ public class tabAreasController  {
         }
         
         btnNewArea.setOnAction((event) -> {
-            lanzarNewAreaWindow();
+            Area area = new Area();
+            String mod="";
+            lanzarNewAreaWindow(area,mod);
         });
         btnSearchAreas.setOnAction((event)->{
             insertData();
@@ -85,17 +89,21 @@ public class tabAreasController  {
             insertData();
         });
         btnModifyArea.setOnAction((event)->{
+            Area area =new Area();
+            area=(Area) tableAreas.getSelectionModel().getSelectedItem();
+            String mod= "modify";
+            lanzarNewAreaWindow(area,mod);
         });
         
     }
-       public void lanzarNewAreaWindow() {
+       public void lanzarNewAreaWindow(Area area, String mod) {
         
             try {
                 NewAreaController controller = new NewAreaController();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewArea.fxml"));
                 Parent root = (Parent) loader.load();
                 controller = ((NewAreaController) loader.getController());
-                controller.initStage(root, usuario);
+                controller.initStage(root, usuario,area,mod);
             } catch (IOException ex) {
             }
         }
@@ -109,12 +117,7 @@ public class tabAreasController  {
         areaList = new HashSet<Area>();
         areaList = areaService.FindAllArea(new GenericType<Set<Area>>() {
         });
-        
-        
-        
         List<Area> list = new ArrayList<Area>(areaList);
-        
-        
         ObservableList<Area> areaList = FXCollections.observableArrayList(list);
         tableAreas.setItems(areaList);
     }

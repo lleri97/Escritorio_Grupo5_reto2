@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -45,6 +47,8 @@ import servicesRestfull.UserClientService;
  */
 public class tabUsersController {
 
+    @FXML
+    private AnchorPane tabUsers;
     @FXML
     private CheckBox chkBoxHabilitado;
     @FXML
@@ -82,7 +86,7 @@ public class tabUsersController {
     public void initStage(User usuario) {
 
         this.usuario = usuario;
-
+        chkBoxHabilitado.setSelected(true);
         btnDeleteUser.setVisible(false);
         btnModifyUser.setVisible(false);
 
@@ -175,14 +179,10 @@ public class tabUsersController {
             tableUsers.setItems(userList);
         } else if (usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
             List<User> list = new ArrayList<User>(usersData);
+            List<User> listUser = new ArrayList<User>();
             ObservableList<User> userList = FXCollections.observableArrayList();
-            for (int i = 0; i < usersData.size(); i++) {
-                if (list.get(i).getCompany() != null) {
-                    if (usuario.getCompany().getId() == list.get(i).getCompany().getId()) {
-                        userList.add(list.get(i));
-                    }
-                }
-            }
+            listUser = (List<User>) list.stream().filter(user -> user.getCompany().getCif().equals(usuario.getCompany().getCif())).collect(Collectors.toList());
+            userList.addAll(listUser);
             tableUsers.setItems(userList);
         }
     }
@@ -191,22 +191,14 @@ public class tabUsersController {
         if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN) {
             List<User> list = new ArrayList<User>(usersData);
             ObservableList<User> userList = FXCollections.observableArrayList();
-            for (int i = 0; i < usersData.size(); i++) {
-                if (list.get(i).getStatus() == UserStatus.DISABLED) {
-                    userList.add(list.get(i));
-                }
-            }
+            Collection listUser = list.stream().filter(user -> user.getStatus() == UserStatus.DISABLED).collect(Collectors.toList());
+            userList.addAll(listUser);
             tableUsers.setItems(userList);
         } else if (usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
             List<User> list = new ArrayList<User>(usersData);
             ObservableList<User> userList = FXCollections.observableArrayList();
-            for (int i = 0; i < usersData.size(); i++) {
-                if (list.get(i).getCompany() != null) {
-                    if (usuario.getCompany().getId() == list.get(i).getCompany().getId() && list.get(i).getStatus() == UserStatus.DISABLED) {
-                        userList.add(list.get(i));
-                    }
-                }
-            }
+            Collection listUser = list.stream().filter(user -> user.getStatus() == UserStatus.DISABLED).collect(Collectors.toList());
+            userList.addAll(listUser);
             tableUsers.setItems(userList);
         }
     }
@@ -215,22 +207,14 @@ public class tabUsersController {
         if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN) {
             List<User> list = new ArrayList<User>(usersData);
             ObservableList<User> userList = FXCollections.observableArrayList();
-            for (int i = 0; i < usersData.size(); i++) {
-                if (list.get(i).getStatus() == UserStatus.ENABLED) {
-                    userList.add(list.get(i));
-                }
-            }
+            Collection listUser = list.stream().filter(user -> user.getStatus() == UserStatus.ENABLED).collect(Collectors.toList());
+            userList.addAll(listUser);
             tableUsers.setItems(userList);
         } else if (usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
             List<User> list = new ArrayList<User>(usersData);
             ObservableList<User> userList = FXCollections.observableArrayList();
-            for (int i = 0; i < usersData.size(); i++) {
-                if (list.get(i).getCompany() != null) {
-                    if (usuario.getCompany().getId() == list.get(i).getCompany().getId() && list.get(i).getStatus() == UserStatus.ENABLED) {
-                        userList.add(list.get(i));
-                    }
-                }
-            }
+            Collection listUser = list.stream().filter(user -> user.getStatus() == UserStatus.ENABLED).collect(Collectors.toList());
+            userList.addAll(listUser);
             tableUsers.setItems(userList);
         }
     }

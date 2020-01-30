@@ -61,7 +61,35 @@ public class NewAreaController {
     /**
      * Initializes the controller class.
      */
-    public void initStage(Parent root, User usuario) {
+    public void initStage(Parent root, User usuario,Area area,String mod) {
+        
+        if(mod=="modify"){
+            
+            
+        textFieldNameArea.setText(area.getName());
+            if(area.getDocuments()!=null){
+                comboDocument.getItems().addAll(area.getDocuments());
+            }
+             
+             btnAddArea.setText("Confirmar");
+             btnAddArea.setOnAction((value)->{
+             
+             area.setName(textFieldNameArea.getText());
+             Set<Document> docs= new HashSet<Document>();
+             docs.add((Document) comboDocument.getSelectionModel().getSelectedItem());
+             area.setDocuments(docs);
+            AreaClientService areaService = new AreaClientService();
+            areaService.edit(area);
+             });
+        }else{
+                 btnAddArea.setOnAction((value) -> {
+            Area createArea = new Area();
+           createArea.setName(textFieldNameArea.getText());
+            createArea.setDocuments((Set<Document>) comboDocument.getValue());
+            AreaClientService areaService = new AreaClientService();
+            areaService.create(createArea);
+        });
+        }
 
         this.usuario = usuario;
 
@@ -73,14 +101,9 @@ public class NewAreaController {
         btnCancel.setOnAction((value) -> {
             stage.close();
         });
-        btnAddArea.setOnAction((value) -> {
-            Area area = new Area();
-            area.setName(textFieldNameArea.getText());
-            area.setDocuments((Set<Document>) comboDocument.getValue());
-            AreaClientService areaService = new AreaClientService();
-            areaService.create(area);
-        });
-        cargarDocumentos(usuario.getPrivilege());
+   
+                cargarDocumentos(usuario.getPrivilege());
+
 
 
         stage.show();

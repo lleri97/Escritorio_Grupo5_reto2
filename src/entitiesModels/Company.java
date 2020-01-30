@@ -21,47 +21,39 @@ public class Company implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private  int id;
+    private int id;
 
-    private final SimpleStringProperty name;
+    private  String name;
 
-    private final SimpleStringProperty cif;
+    private  String cif;
 
     private Set<Department> departments;
+    private Set<User> users;
 
-    public Company() {
-        this.name = new SimpleStringProperty();
-        this.cif = new SimpleStringProperty();
-    }
 
-    public Company(int id, String name, String cif, Set<Department> departments) {
-        this.name = new SimpleStringProperty(name);
-        this.cif = new SimpleStringProperty(cif);
-        this.departments = departments;
-    }
 
     public int getId() {
         return this.id;
     }
 
     public void setId(int id) {
-        this.id=id;
+        this.id = id;
     }
 
     public String getName() {
-        return this.name.get();
+        return this.name;
     }
 
     public void setName(String name) {
-        this.name.set(name);
+        this.name = name;
     }
 
     public String getCif() {
-        return this.cif.get();
+        return this.cif;
     }
 
     public void setCif(String cif) {
-        this.cif.set(cif);
+        this.cif=cif;
     }
 
     public Set<Department> getDepartments() {
@@ -72,8 +64,16 @@ public class Company implements Serializable {
         this.departments = departments;
     }
 
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
     @Override
     public String toString() {
-        return name.get();
+        return name;
     }
 }

@@ -45,8 +45,6 @@ public class NewCompanyController {
     @FXML
     private Button btnCancel;
 
-    private Company company;
-
     private CompanyClientService companyService;
 
     Stage stage;
@@ -57,10 +55,13 @@ public class NewCompanyController {
             textFieldNameCompany.setText(company.getName());
             textFieldCif.setText(company.getCif());
             btnAddCompany.setText("Confirmar");
+
             btnAddCompany.setOnAction((event) -> {
-                company.setCif(textFieldCif.getText());
-                company.setName(textFieldNameCompany.getText());
-                companyService.edit(company,company.getId() );
+                Company comp = new Company();
+                comp = company;
+                comp.setCif(textFieldCif.getText());
+                comp.setName(textFieldNameCompany.getText());
+                companyService.edit(company);
             });
         } else {
             btnAddCompany.setOnAction((event) -> {
@@ -78,18 +79,18 @@ public class NewCompanyController {
         btnCancel.setOnAction((event) -> {
             stage.close();
         });
-    
+
         stage.show();
 
     }
 
     public void addCompany() {
-        company = new Company();
+        Company comp = new Company();
         companyService = new CompanyClientService();
 
-        company.setCif(textFieldCif.getText());
-        company.setName(textFieldNameCompany.getText());
-        companyService.create(company);
+        comp.setCif(textFieldCif.getText());
+        comp.setName(textFieldNameCompany.getText());
+        companyService.create(comp);
 
     }
 }

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="956.0" style="-fx-background-color: #5E9ABA;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.SignUpController">
+<Pane fx:id="signUpPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="956.0" style="-fx-background-color: #5E9ABA;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.SignUpController">
    <children>
       <Separator layoutY="506.0" prefHeight="0.0" prefWidth="956.0" />
       <VBox layoutX="581.0" layoutY="66.0" prefHeight="407.0" prefWidth="284.0">

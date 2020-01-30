@@ -26,6 +26,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -65,6 +67,20 @@ public class LogOutController {
     private Label txtPrivilege;
     @FXML
     private Label txtEntity;
+    @FXML
+    private MenuBar menuBarMain;
+    @FXML
+    private Menu menuMenu;
+    @FXML
+    private MenuItem dataItemUsers;
+    @FXML
+    private MenuItem dataItemEntity;
+    @FXML
+    private MenuItem dataItemDocs;
+    @FXML
+    private MenuItem dataItemDepart;
+    @FXML
+    private MenuItem dataItemArea;
     @FXML
     private MenuItem closeSessionItem;
     @FXML
@@ -127,18 +143,18 @@ public class LogOutController {
      * @param user User that contains the profile data
      */
     public void initStage(Parent root, User usu) throws IOException {
-        MenuItem cmItemUser = new MenuItem("Usuario");
-        cmItemUser.setOnAction((event) -> {
+        dataItemUsers = new MenuItem("Usuario");
+        dataItemUsers.setId("dataItemUsers");
+        dataItemUsers.setOnAction((event) -> {
             createTabUsers();
         });
         if (usu.getPrivilege() == UserPrivilege.USER) {
             btnUsers.setVisible(false);
             btnUsers.setDisable(true);
-            cmItemUser.setDisable(true);
-            cmItemUser.setVisible(false);
-        } else {
-
-        }
+            dataItemUsers.setDisable(true);
+            dataItemUsers.setVisible(false);
+        } 
+        
         Scene scene = new Scene(root);
         usuario = new User();
         usuario = usu;
@@ -165,25 +181,30 @@ public class LogOutController {
         btnDocuments.setOnAction(this::handleButtonAction);
         btnModify.setOnAction(this::handleButtonAction);
         cm = new ContextMenu();
+        cm.setId("cm");
 
-        MenuItem cmItemEntity = new MenuItem("Entidades");
-        cmItemEntity.setOnAction((event) -> {
+        dataItemEntity = new MenuItem("Entidades");
+        dataItemEntity.setId("dataItemEntity");
+        dataItemEntity.setOnAction((event) -> {
             createTabEntity();
         });
-        MenuItem cmItemDocuments = new MenuItem("Documentos");
-        cmItemDocuments.setOnAction((event) -> {
+        dataItemDocs = new MenuItem("Documentos");
+        dataItemDocs.setId("dataItemDocs");
+        dataItemDocs.setOnAction((event) -> {
             createTabDocuments();
         });
-        MenuItem cmItemDepart = new MenuItem("Departamentos");
-        cmItemDepart.setOnAction((event) -> {
+        dataItemDepart = new MenuItem("Departamentos");
+        dataItemDepart.setId("dataItemDepart");
+        dataItemDepart.setOnAction((event)->{
             createTabDepartments();
         });
-        MenuItem cmItemAreas = new MenuItem("Areas");
-        cmItemAreas.setOnAction((event) -> {
+        dataItemArea = new MenuItem("Areas");
+        dataItemArea.setId("dataItemArea");
+        dataItemArea.setOnAction((event) -> {
             createTabAreas();
         });
 
-        cm.getItems().addAll(cmItemAreas, cmItemDepart, cmItemDocuments, cmItemEntity, cmItemUser);
+        cm.getItems().addAll(dataItemUsers, dataItemEntity, dataItemDocs, dataItemDepart, dataItemArea);
         paneUser.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> {
             if (e.getButton() == MouseButton.SECONDARY) {
                 cm.show(paneUser, e.getScreenX(), e.getScreenY());
@@ -227,6 +248,20 @@ public class LogOutController {
             Platform.exit();
         });
 
+    }
+
+    public void menuButtonAction(ActionEvent event) {
+        if (event.getSource() == dataItemArea) {
+            createTabAreas();
+        } else if (event.getSource() == dataItemDepart) {
+            createTabDepartments();
+        } else if (event.getSource() == dataItemDocs) {
+            createTabDocuments();
+        } else if (event.getSource() == dataItemEntity) {
+            createTabEntity();
+        } else if (event.getSource() == dataItemUsers) {
+            createTabUsers();
+        }
     }
 
     public void handleButtonAction(ActionEvent event) {
@@ -385,4 +420,5 @@ public class LogOutController {
             LOGGER.warning(ex.getMessage());
         }
     }
+
 }

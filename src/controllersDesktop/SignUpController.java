@@ -41,6 +41,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.Mnemonic;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
@@ -60,6 +61,8 @@ import utils.Validator;
  */
 public class SignUpController {
 
+    @FXML
+    private Pane signUpPane;
     @FXML
     private Button btnCancel;
     @FXML
@@ -319,16 +322,16 @@ public class SignUpController {
                             stage.close();
                         } catch (NotAuthorizedException e) {
                             LOGGER.warning(e.getMessage());
-                            alert.alertError("Error", "Login y/o email ya existen en la base de datos.");
+                            alert.alertError("Error", "Login y/o email ya existen en la base de datos.","okButtonLoginYaExiste");
                         } catch (NotFoundException e) {
                             LOGGER.warning(e.getMessage());
-                            alert.alertError("Error", "Error al enviar su nueva contraseña a su correo. Intentelo más tarde.");
+                            alert.alertError("Error", "Error al enviar su nueva contraseña a su correo. Intentelo más tarde.","okButtonErroEmail");
                         } catch (InternalServerErrorException e) {
                             LOGGER.warning(e.getMessage());
-                            alert.alertError("Error", "Error al dar de alta al usuario.");
+                            alert.alertError("Error", "Error al dar de alta al usuario.","okButtonErrorSignUp");
                         } catch (Exception e) {
                             LOGGER.warning(e.getMessage());
-                            alert.alertError("Error", "Error patatil.");
+                            alert.alertError("Error", "Error patatil.","okButtonErrorGrave");
                         }
                     } else {//modificar
                         try {
@@ -339,7 +342,7 @@ public class SignUpController {
                             alertContentText = "Los datos del perfil han sido modificados correctamente..";
                         } catch (InternalServerErrorException e) {
                             LOGGER.warning(e.getMessage());
-                            alert.alertError("Error", "Login y/o email ya existen en la base de datos.");
+                            alert.alertError("Error", "Login y/o email ya existen en la base de datos.","okButtonLoginYaExiste");
                         }
 
                     }

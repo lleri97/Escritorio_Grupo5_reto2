@@ -60,11 +60,11 @@ public class RecoverPasswordController {
                 userEmail.setEmail(TextFieldEmail.getText());
                 UserClientService client = new UserClientService();
                 client.recoverPassword(userEmail, TextFieldEmail.getText());
-                alert.alertInformation("Recuperación de contraseña", "Su nueva contraseña ha sido enviada a su email con éxito.");
+                alert.alertInformation("Recuperación de contraseña", "Su nueva contraseña ha sido enviada a su email con éxito.","okButtonRecover");
             } catch (InternalServerErrorException e) {
-                alert.alertError("Error", "Fallo al enviar su nueva contraseña a su correo.");
+                alert.alertError("Error", "Fallo al enviar su nueva contraseña a su correo.","okButtonFalloEnvio");
             } catch (NotAuthorizedException e) {
-                alert.alertWarning("Error", "El email introducido no existe.");
+                alert.alertWarning("Error", "El email introducido no existe.","okButtonEmailNoExiste");
             }
 
         }

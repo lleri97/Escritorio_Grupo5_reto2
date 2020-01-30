@@ -104,39 +104,33 @@
                                 <Separator layoutX="131.0" layoutY="34.0" orientation="VERTICAL" prefHeight="112.0" prefWidth="0.0" />
                                 <Separator layoutX="20.0" layoutY="34.0" orientation="VERTICAL" prefHeight="112.0" prefWidth="0.0" />
                                 <Button fx:id="btnModify" layoutX="190.0" layoutY="192.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" text="Modificar" />
-                        <Button fx:id="btnRefreshProfile" layoutX="307.0" layoutY="192.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Refrescar perfil" />
+                                <Button fx:id="btnRefreshProfile" layoutX="307.0" layoutY="192.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Refrescar perfil" />
                             </children>
                         </AnchorPane>
                     </children>
                 </VBox>
-            <AnchorPane fx:id="contentPane" prefHeight="510.0" prefWidth="992.0" />
+                <AnchorPane fx:id="contentPane" prefHeight="510.0" prefWidth="992.0" />
             </children>
         </VBox>
     </center>
     <top>
         <HBox prefHeight="32.0" prefWidth="956.0" BorderPane.alignment="CENTER">
             <children>
-                <MenuBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="1204.0">
+                <MenuBar fx:id="menuBarMain" nodeOrientation="LEFT_TO_RIGHT" prefHeight="32.0" prefWidth="1204.0">
                     <menus>
-                        <Menu mnemonicParsing="false" text="Menu">
+                        <Menu fx:id="menuMenu" mnemonicParsing="false" text="Menu">
                             <items>
-                                <MenuItem fx:id="dataItem" mnemonicParsing="false" text="Users" />
-                                <MenuItem fx:id="confItem" mnemonicParsing="false" text="Entities" />
-                                <MenuItem fx:id="confItem1" mnemonicParsing="false" text="Documents" />
-                                <MenuItem fx:id="confItem2" mnemonicParsing="false" text="Departments" />
-                                <MenuItem fx:id="confItem3" mnemonicParsing="false" text="Areas" />
+                                <MenuItem fx:id="dataItemUsers" mnemonicParsing="false" text="Users" />
+                                <MenuItem fx:id="dataItemEntity" mnemonicParsing="false" text="Entities" />
+                                <MenuItem fx:id="dataItemDocs" mnemonicParsing="false" text="Documents" />
+                                <MenuItem fx:id="dataItemDepart" mnemonicParsing="false" text="Departments" />
+                                <MenuItem fx:id="dataItemArea" mnemonicParsing="false" text="Areas" />
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="Session">
+                        <Menu fx:id="menuSession" mnemonicParsing="false" text="Session">
                             <items>
                                 <MenuItem fx:id="closeSessionItem" mnemonicParsing="false" text="Close session" />
                                 <MenuItem fx:id="exitItem" mnemonicParsing="false" text="Exit" />
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Help">
-                            <items>
-                                <MenuItem fx:id="helpMenu" mnemonicParsing="true" text="Help" />
-                                <MenuItem fx:id="helpMenu1" mnemonicParsing="true" text="About us" />
                             </items>
                         </Menu>
                     </menus>
