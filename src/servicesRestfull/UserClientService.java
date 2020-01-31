@@ -5,6 +5,7 @@
  */
 package servicesRestfull;
 
+import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -26,7 +27,9 @@ public class UserClientService {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/grupo5_reto2_server-development_SERVER_Fran/webresources";
+     private static final String BASE_URI = "http://"
+            + ResourceBundle.getBundle("files.connectionHTTP").getString("http")
+            + "/grupo5_reto2_server-development_SERVER_Fran/webresources";
 
       public UserClientService() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
