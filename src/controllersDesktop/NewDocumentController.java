@@ -37,6 +37,7 @@ import utils.UtilsWindows;
  */
 public class NewDocumentController {
 
+ 
     @FXML
     private BorderPane paneNewDoc;
     @FXML
@@ -136,7 +137,7 @@ public class NewDocumentController {
         UtilsWindows alert = new UtilsWindows();
         Document document = new Document();
         if (content == null) {
-            alert.alertWarning("Aviso", "No hay ningun archivo cargado.", "");
+            alert.alertWarning("Aviso", "No hay ningun archivo cargado.", "okButtonDocNull");
         } else {
             try {
                 if (textAreaDescription.getText().length() == 0 || textFielTittle.getText().length() == 0) {
@@ -159,9 +160,9 @@ public class NewDocumentController {
                 stage.close();
             } catch (Exception e) {
                 if (textAreaDescription.getText().length() == 0 || textFielTittle.getText().length() == 0) {
-                    alert.alertWarning("Aviso", "Los campos no pueden estar vacíos", "");
+                    alert.alertWarning("Aviso", "Los campos no pueden estar vacíos", "okButtonNull");
                 } else {
-                    alert.alertError("Error", "Error al subir el documento.", "");
+                    alert.alertError("Error", "Error al subir el documento.", "okButtonError");
                     Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, e);
                 }
             }

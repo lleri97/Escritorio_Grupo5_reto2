@@ -36,7 +36,7 @@ public class SignUpControllerIT extends ApplicationTest {
         clickOn("#btnUsers");
 
     }
-/*
+
     @Test
     public void test_a_searchUser_Enabled() {
         clickOn("#btnSearch");
@@ -131,7 +131,7 @@ public class SignUpControllerIT extends ApplicationTest {
         closeCurrentWindow();
 
     }
-    */
+    
 
     @Test
     public void test_g_mailAlreadyInUse() {

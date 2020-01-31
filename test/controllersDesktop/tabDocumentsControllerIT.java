@@ -58,6 +58,10 @@ public class tabDocumentsControllerIT extends ApplicationTest {
         clickOn("python");
         clickOn("#btnModifyDocument");
         FxAssert.verifyThat("#paneNewDoc", isVisible());
+        doubleClickOn("#textFielTittle").write("prueba");
+        clickOn("#btnAddDocument");
+        clickOn("#btnSearch");
+        FxAssert.verifyThat("prueba",isVisible());
     }
 
     @Test
