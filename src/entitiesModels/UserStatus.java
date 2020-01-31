@@ -7,7 +7,7 @@ package entitiesModels;
 
 /**
  * This enumeration establishes the status in which the user is.
- * @author Fran
+ * @author Yeray
  */
 public enum UserStatus {
     /**

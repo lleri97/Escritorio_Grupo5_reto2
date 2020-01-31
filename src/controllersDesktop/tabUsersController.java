@@ -72,6 +72,7 @@ public class tabUsersController {
     private TableColumn companyColumn;
     @FXML
     private TableColumn lastAccessColumn;
+    private static final Logger LOGGER = Logger.getLogger(SignUpController.class.getPackage() + "." + SignUpController.class.getName());
 
     private Set<User> usersData;
     private User usuario;
@@ -85,8 +86,14 @@ public class tabUsersController {
         this.usuario = usu;
     }
 
+    /**
+     * Metodo de inicializacion de panel de usuarios
+     *
+     * @param usuario
+     */
     public void initStage(User usuario) {
-        util= new UtilsWindows();
+        LOGGER.info("Inicializando panel de administracion de usuarios");
+        util = new UtilsWindows();
         this.usuario = usuario;
         chkBoxHabilitado.setSelected(true);
         btnDeleteUser.setVisible(false);
@@ -102,11 +109,16 @@ public class tabUsersController {
         btnModifyUser.setOnAction(this::handleButtonAction);
 
         tableUsers.getSelectionModel().selectedItemProperty().addListener(this::handleUsersTabSelectionChanged);
-
+        LOGGER.info("Panel creado con exito");
     }
 
+    /**
+     * Metodo que inserta los datos en la tabla
+     *
+     * @param usuario
+     */
     public void insertData(User usuario) {
-
+        LOGGER.info("Insertando datos en la tabla");
         nameColumn.setCellValueFactory(
                 new PropertyValueFactory<>("fullname"));
         emailColumn.setCellValueFactory(
@@ -126,8 +138,8 @@ public class tabUsersController {
             chargeDisabledUsers();
         } else if (chkBoxHabilitado.isSelected()) {
             chargeEnabledUsers();
-        }else{
-           util.alertInformation("No apareceran datos", "No se seleccionaron datos", "okButtonChkNoSelected");
+        } else {
+            util.alertInformation("No apareceran datos", "No se seleccionaron datos", "okButtonChkNoSelected");
         }
     }
 
@@ -177,11 +189,13 @@ public class tabUsersController {
     }
 
     public void chargeAllUsers() {
+        LOGGER.info("Cargando todos los usuarios");
         if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN) {
             List<User> list = new ArrayList<User>(usersData);
             ObservableList<User> userList = FXCollections.observableArrayList(list);
             tableUsers.setItems(userList);
         } else if (usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
+            LOGGER.info("Cargando los usuarios de la empresa");
             List<User> list = new ArrayList<User>(usersData);
             List<User> listUser = new ArrayList<User>();
             ObservableList<User> userList = FXCollections.observableArrayList();
@@ -189,14 +203,18 @@ public class tabUsersController {
             userList.addAll(listUser);
             tableUsers.setItems(userList);
         }
+        LOGGER.info("Usuarios cargados con exito");
+
     }
 
     private void chargeDisabledUsers() {
+        LOGGER.info("Cargando los usuarios deshabilitados");
         if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN) {
             List<User> list = new ArrayList<User>(usersData);
             ObservableList<User> userList = FXCollections.observableArrayList();
             Collection listUser = list.stream().filter(user -> user.getStatus() == UserStatus.DISABLED).collect(Collectors.toList());
             userList.addAll(listUser);
+            LOGGER.info("Usuarios cargados con exito");
             tableUsers.setItems(userList);
         } else if (usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
             List<User> list = new ArrayList<User>(usersData);
@@ -204,10 +222,12 @@ public class tabUsersController {
             Collection listUser = list.stream().filter(user -> user.getStatus() == UserStatus.DISABLED).collect(Collectors.toList());
             userList.addAll(listUser);
             tableUsers.setItems(userList);
+            LOGGER.info("Usuarios deshabilitados de la empresa cargados con exito");
         }
     }
 
     private void chargeEnabledUsers() {
+        LOGGER.info("Cargando usuarios habilitados");
         if (usuario.getPrivilege() == UserPrivilege.SUPERADMIN) {
             List<User> list = new ArrayList<User>(usersData);
             ObservableList<User> userList = FXCollections.observableArrayList();
@@ -215,11 +235,14 @@ public class tabUsersController {
             userList.addAll(listUser);
             tableUsers.setItems(userList);
         } else if (usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
+            LOGGER.info("Cargando usuarios de su empresa");
             List<User> list = new ArrayList<User>(usersData);
             ObservableList<User> userList = FXCollections.observableArrayList();
             Collection listUser = list.stream().filter(user -> user.getStatus() == UserStatus.ENABLED).collect(Collectors.toList());
             userList.addAll(listUser);
             tableUsers.setItems(userList);
         }
+        LOGGER.info("Usuarios cargados con exito");
+
     }
 }

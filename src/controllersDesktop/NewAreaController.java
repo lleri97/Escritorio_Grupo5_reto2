@@ -11,6 +11,7 @@ import entitiesModels.User;
 import entitiesModels.UserPrivilege;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -29,10 +30,10 @@ import servicesRestfull.DocumentClientService;
 /**
  * FXML Controller class
  *
- * @author Yeray
+ * @author Andoni
  */
 public class NewAreaController {
-
+    
     @FXML
     private BorderPane paneNewArea;
     @FXML
@@ -53,51 +54,51 @@ public class NewAreaController {
     private Button btnCancel;
     @FXML
     private ComboBox comboDocument;
-
+    
     private User usuario;
-
+    
     private DocumentClientService documentService;
     private DepartmentClientService departService;
-
+    private static final Logger LOGGER = Logger.getLogger(LogOutController.class.getPackage() + "." + LogOutController.class.getName());
+    
     Stage stage;
 
     /**
-     * Initializes the controller class.
+     * Inicializa la clase controladora.
      */
-    public void initStage(Parent root, User usuario,Area area,String mod) {
-        
-        if(mod=="modify"){
-            
-            
-        textFieldNameArea.setText(area.getName());
-            if(area.getDocuments()!=null){
+    public void initStage(Parent root, User usuario, Area area, String mod) {
+        LOGGER.info("Iniciando ventana de areas");
+        if (mod == "modify") {
+            LOGGER.info("Iniciando modificacion de areas");
+            textFieldNameArea.setText(area.getName());
+            if (area.getDocuments() != null) {
                 comboDocument.getItems().addAll(area.getDocuments());
             }
-             
-             btnAddArea.setText("Confirmar");
-             btnAddArea.setOnAction((value)->{
-             
-             area.setName(textFieldNameArea.getText());
-             Set<Document> docs= new HashSet<Document>();
-             docs.add((Document) comboDocument.getSelectionModel().getSelectedItem());
-             area.setDocuments(docs);
-            AreaClientService areaService = new AreaClientService();
-            areaService.edit(area);
-             });
-        }else{
-                 btnAddArea.setOnAction((value) -> {
-            Area createArea = new Area();
-           createArea.setName(textFieldNameArea.getText());
-            createArea.setDocuments((Set<Document>) comboDocument.getValue());
-            AreaClientService areaService = new AreaClientService();
-            areaService.create(createArea);
-        });
-              
-                 
+            
+            btnAddArea.setText("Confirmar");
+            btnAddArea.setOnAction((value) -> {
+                LOGGER.info("Enviando datos al servidor para modificacion");
+                area.setName(textFieldNameArea.getText());
+                Set<Document> docs = new HashSet<Document>();
+                docs.add((Document) comboDocument.getSelectionModel().getSelectedItem());
+                area.setDocuments(docs);
+                AreaClientService areaService = new AreaClientService();
+                areaService.edit(area);
+                LOGGER.info("Modificacion en servidor correcta");
+            });
+        } else {
+            btnAddArea.setOnAction((value) -> {
+                Area createArea = new Area();
+                createArea.setName(textFieldNameArea.getText());
+                createArea.setDocuments((Set<Document>) comboDocument.getValue());
+                AreaClientService areaService = new AreaClientService();
+                areaService.create(createArea);
+            });
+            
         }
-
+        
         this.usuario = usuario;
-
+        
         Scene sceneNewArea = new Scene(root);
         stage = new Stage();
         stage.setScene(sceneNewArea);
@@ -106,31 +107,33 @@ public class NewAreaController {
         btnCancel.setOnAction((value) -> {
             stage.close();
         });
-   
-                cargarDocumentos(usuario.getPrivilege());
-
-
-
+        
+        cargarDocumentos(usuario.getPrivilege());
+        
         stage.show();
-
+        
     }
 
+    /**
+     * Cargara los documentos dependiendo del privilegio de usuario
+     *
+     * @param privilegio
+     */
     private void cargarDocumentos(UserPrivilege privilegio) {
         documentService = new DocumentClientService();
         if (usuario.getPrivilege().equals(UserPrivilege.SUPERADMIN)) {
+            LOGGER.info("Cargando todos los documentos");
             Set<Document> documents = new HashSet<Document>(); //llamar servidor y cargar entidades
             documents = documentService.findAll(new GenericType<Set<Document>>() {
             });
             comboDocument.getItems().clear();
             comboDocument.getItems().addAll(documents);
-          
-
+            
         } else if (usuario.getPrivilege().equals(UserPrivilege.COMPANYADMIN)) {
-          
+            LOGGER.info("Cargando documentos");
             comboDocument.getItems().clear();
             comboDocument.getItems().addAll(usuario.getDocuments());
         }
     }
-
-
+    
 }

@@ -39,12 +39,12 @@ import servicesRestfull.DepartmentClientService;
 /**
  * FXML Controller class
  *
- * @author Yeray
+ * @author Andoni
  */
-public class tabAreasController  {
+public class tabAreasController {
 
     /**
-     * Initializes the controller class.
+     * Inicializacion de panel de areas
      */
     @FXML
     private AnchorPane tabAreas;
@@ -64,15 +64,22 @@ public class tabAreasController  {
     private AreaClientService areaService;
     
     private User usuario;
-    private Set <Area> areaList;
+    private Set<Area> areaList;
     Class responseType;
-    
-    
-    public void initStage(User usuario){
-        this.usuario=usuario;
+    private static final Logger LOGGER = Logger.getLogger(SignUpController.class.getPackage() + "." + SignUpController.class.getName());
+
+    /**
+     * *
+     * Metodo de inicializacion de ventanas fxml
+     *
+     * @param usuario
+     */
+    public void initStage(User usuario) {
+        LOGGER.info("Inicializando panel de administracion de areas");
+        this.usuario = usuario;
         btnDeleteArea.setVisible(false);
         btnModifyArea.setVisible(false);
-        if(usuario.getPrivilege()==UserPrivilege.USER){
+        if (usuario.getPrivilege() == UserPrivilege.USER) {
             btnNewArea.setDisable(true);
             btnNewArea.setVisible(false);
             
@@ -80,44 +87,52 @@ public class tabAreasController  {
         
         btnNewArea.setOnAction((event) -> {
             Area area = new Area();
-            String mod="";
-            lanzarNewAreaWindow(area,mod);
+            String mod = "";
+            lanzarNewAreaWindow(area, mod);
         });
-        btnSearchAreas.setOnAction((event)->{
+        btnSearchAreas.setOnAction((event) -> {
             insertData();
         });
-        btnDeleteArea.setOnAction((event)->{
+        btnDeleteArea.setOnAction((event) -> {
             Area areaDelete = new Area();
-            areaDelete= (Area) tableAreas.getSelectionModel().getSelectedItem();
+            areaDelete = (Area) tableAreas.getSelectionModel().getSelectedItem();
             areaService.remove(areaDelete.getId());
             insertData();
         });
-        btnModifyArea.setOnAction((event)->{
-            Area area =new Area();
-            area=(Area) tableAreas.getSelectionModel().getSelectedItem();
-            String mod= "modify";
-            lanzarNewAreaWindow(area,mod);
+        btnModifyArea.setOnAction((event) -> {
+            Area area = new Area();
+            area = (Area) tableAreas.getSelectionModel().getSelectedItem();
+            String mod = "modify";
+            lanzarNewAreaWindow(area, mod);
         });
-                tableAreas.getSelectionModel().selectedItemProperty().addListener(this::handleAreasTabSelectionChanged);
-
+        tableAreas.getSelectionModel().selectedItemProperty().addListener(this::handleAreasTabSelectionChanged);
+        LOGGER.info("Carga realizada con exito");
     }
-       public void lanzarNewAreaWindow(Area area, String mod) {
+    
+    /**
+     * Metodo para lanzar la ventana de nuevo area
+     * @param area
+     * @param mod 
+     */
+    public void lanzarNewAreaWindow(Area area, String mod) {
         
-            try {
-                NewAreaController controller = new NewAreaController();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewArea.fxml"));
-                Parent root = (Parent) loader.load();
-                controller = ((NewAreaController) loader.getController());
-                controller.initStage(root, usuario,area,mod);
-            } catch (IOException ex) {
-            }
+        try {
+            NewAreaController controller = new NewAreaController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewArea.fxml"));
+            Parent root = (Parent) loader.load();
+            controller = ((NewAreaController) loader.getController());
+            controller.initStage(root, usuario, area, mod);
+        } catch (IOException ex) {
         }
-
+    }
+    /**
+     * Metodo de insercion de datos
+     */
     public void insertData() {
-
+        
         columnName.setCellValueFactory(
                 new PropertyValueFactory<>("name"));
-
+        
         areaService = new AreaClientService();
         areaList = new HashSet<Area>();
         areaList = areaService.FindAllArea(new GenericType<Set<Area>>() {
@@ -126,10 +141,16 @@ public class tabAreasController  {
         ObservableList<Area> areaList = FXCollections.observableArrayList(list);
         tableAreas.setItems(areaList);
     }
-     public void handleAreasTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
+    /***
+     * Metodo que relaciona la tabla con acciones
+     * @param observable
+     * @param olsValue
+     * @param newValue 
+     */
+    public void handleAreasTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
         btnDeleteArea.setVisible(true);
         btnModifyArea.setVisible(true);
-
+        
     }
     
 }

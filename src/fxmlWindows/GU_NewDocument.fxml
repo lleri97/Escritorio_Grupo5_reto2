@@ -9,19 +9,19 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="paneNewDoc" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="419.0" prefWidth="411.0" style="-fx-background-color: #5E9ABA;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.NewDocumentController">
+<BorderPane fx:id="paneNewDoc" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="419.0" prefWidth="411.0" style="-fx-background-color: #5E9ABA;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.NewDocumentController">
    <bottom>
       <AnchorPane prefHeight="54.0" prefWidth="411.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnAddDocument" layoutX="191.0" layoutY="15.0" mnemonicParsing="false" text="Add document" />
-            <Button fx:id="btnCancel" layoutX="326.0" layoutY="15.0" mnemonicParsing="false" text="Cancel" />
+            <Button fx:id="btnAddDocument" layoutX="251.0" layoutY="15.0" mnemonicParsing="false" text="Añadir" />
+            <Button fx:id="btnCancel" layoutX="326.0" layoutY="15.0" mnemonicParsing="false" text="Cancelar" />
          </children>
       </AnchorPane>
    </bottom>
    <top>
       <AnchorPane prefHeight="62.0" prefWidth="411.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="lblNewDocument" layoutX="107.0" layoutY="10.0" text="New document">
+            <Label fx:id="lblNewDocument" layoutX="86.0" layoutY="10.0" text="Nuevo documento">
                <font>
                   <Font size="29.0" />
                </font>
@@ -34,22 +34,22 @@
          <children>
             <TextField fx:id="textFielTittle" layoutX="154.0" layoutY="60.0" prefHeight="25.0" prefWidth="219.0" />
             <TextArea fx:id="textAreaDescription" layoutX="155.0" layoutY="123.0" prefHeight="91.0" prefWidth="218.0" />
-            <Label fx:id="lblTittle" layoutX="38.0" layoutY="60.0" prefHeight="17.0" prefWidth="64.0" text="Tittle:">
+            <Label fx:id="lblTittle" layoutX="38.0" layoutY="60.0" prefHeight="17.0" prefWidth="64.0" text="Titulo">
                <font>
                   <Font size="17.0" />
                </font>
             </Label>
-            <Hyperlink fx:id="hyperlinkDocument" layoutX="80.0" layoutY="239.0" text="Press here to add new document" visited="true">
+            <Hyperlink fx:id="hyperlinkDocument" layoutX="51.0" layoutY="239.0" text="Presione aqui para seleccionar documento" visited="true">
                <font>
                   <Font size="16.0" />
                </font>
             </Hyperlink>
-            <Label fx:id="lblDescription" layoutX="38.0" layoutY="123.0" prefHeight="26.0" prefWidth="108.0" text="Description: ">
+            <Label fx:id="lblDescription" layoutX="38.0" layoutY="123.0" prefHeight="26.0" prefWidth="108.0" text="Descripcion">
                <font>
                   <Font size="17.0" />
                </font>
             </Label>
-            <Label fx:id="lblError" layoutX="154.0" layoutY="94.0" text="Tittle already exist" textFill="#e80a0a" />
+            <Label fx:id="lblError" layoutX="154.0" layoutY="94.0" text="Titulo en uso" textFill="#e80a0a" />
             <Label fx:id="lblSelectedDoc" layoutX="88.0" layoutY="272.0" prefHeight="17.0" prefWidth="235.0" text="Label" />
          </children>
       </AnchorPane>

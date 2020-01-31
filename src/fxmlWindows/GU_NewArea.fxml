@@ -8,19 +8,19 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="paneNewArea" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="324.0" prefWidth="296.0" style="-fx-background-color: #5E9ABA;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.NewAreaController">
+<BorderPane fx:id="paneNewArea" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="324.0" prefWidth="296.0" style="-fx-background-color: #5E9ABA;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.NewAreaController">
    <bottom>
       <AnchorPane prefHeight="54.0" prefWidth="411.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnAddArea" layoutX="128.0" layoutY="15.0" mnemonicParsing="false" text="Add area" />
-            <Button fx:id="btnCancel" layoutX="220.0" layoutY="15.0" mnemonicParsing="false" text="Cancel" />
+            <Button fx:id="btnAddArea" layoutX="128.0" layoutY="15.0" mnemonicParsing="false" text="Añadir " />
+            <Button fx:id="btnCancel" layoutX="220.0" layoutY="15.0" mnemonicParsing="false" text="Cancelar" />
          </children>
       </AnchorPane>
    </bottom>
    <top>
       <AnchorPane prefHeight="75.0" prefWidth="341.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="lblNewArea" layoutX="88.0" layoutY="16.0" text="New area">
+            <Label fx:id="lblNewArea" layoutX="88.0" layoutY="16.0" text="Nueva area">
                <font>
                   <Font size="29.0" />
                </font>
@@ -37,7 +37,7 @@
                   <Font size="17.0" />
                </font>
             </Label>
-            <Label fx:id="lblError" layoutX="96.0" layoutY="49.0" text="Area already exist" textFill="#e80a0a" />
+            <Label fx:id="lblError" layoutX="96.0" layoutY="49.0" text="El area ya existe" textFill="#e80a0a" />
             <Label fx:id="lblCompany" alignment="CENTER" layoutX="4.0" layoutY="74.0" prefHeight="26.0" prefWidth="102.0" text="Documentos:">
                <font>
                   <Font size="17.0" />

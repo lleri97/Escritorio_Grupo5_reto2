@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -38,9 +39,9 @@ import servicesRestfull.CompanyClientService;
 import servicesRestfull.DepartmentClientService;
 
 /**
- * FXML Controller class
+ * Clase controladora de fxml
  *
- * @author Yeray
+ * @author Ruben
  */
 public class NewDepartmentController {
 
@@ -68,28 +69,31 @@ public class NewDepartmentController {
     private Stage stage;
     private CompanyClientService companyService;
     private DepartmentClientService departmentService;
+    private static final Logger LOGGER = Logger.getLogger(LogOutController.class.getPackage() + "." + LogOutController.class.getName());
 
     /**
-     * Initializes the controller class.
+     * Inicializa la clase controladora
      */
     public void initStage(Parent root, User usuario, Department department, String mod) {
-
+        LOGGER.info("inicializando la ventana de nuevo departamento");
         if (mod == "modify") {
+            LOGGER.info("Cargando ventana de modificacion");
             textFieldDepartment.setText(department.getName());
             Set<Company> entities = new HashSet<Company>();
-            entities= department.getCompanies();
-            if(entities!=null){
-            comboCompany.getItems().add(entities);
+            entities = department.getCompanies();
+            if (entities != null) {
+                comboCompany.getItems().add(entities);
             }
             btnAddDepartment.setText("confirmar");
             btnAddDepartment.setOnAction((event) -> {
                 Department depart = new Department();
                 department.setName(textFieldDepartment.getText());
-             
+
                 departmentService.edit(depart);
             });
 
         } else {
+            LOGGER.info("Cargando ventana de nuevo departamento");
             btnAddDepartment.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -117,12 +121,19 @@ public class NewDepartmentController {
 
         cargarCompanias(usuario.getPrivilege());
         lblError.setVisible(false);
+        LOGGER.info("Ventana cargada con exito");
         stage.show();
     }
 
+    /**
+     * Metodo para cargar las compañias dependiendo del privilegio del usuario
+     *
+     * @param privilegio
+     */
     private void cargarCompanias(UserPrivilege privilegio) {
         companyService = new CompanyClientService();
         if (usuario.getPrivilege().equals(UserPrivilege.SUPERADMIN)) {
+            LOGGER.info("Cargando compañias del super usuario");
             Set<Company> entities = new HashSet<Company>(); //llamar servidor y cargar entidades
             entities = companyService.findAll(new GenericType<Set<Company>>() {
             });
@@ -132,9 +143,11 @@ public class NewDepartmentController {
             comboCompany.getSelectionModel().selectFirst();
 
         } else if (usuario.getPrivilege().equals(UserPrivilege.COMPANYADMIN)) {
+            LOGGER.info("Cargando compañias");
             Company entities = usuario.getCompany();
             comboCompany.getItems().clear();
             comboCompany.getItems().addAll(entities);
         }
+        LOGGER.info("Compañias cargadas con exito");
     }
 }

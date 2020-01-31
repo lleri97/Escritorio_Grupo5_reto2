@@ -5,14 +5,14 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="tabDepart" prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controllersDesktop.tabDepartmentController">
+<AnchorPane fx:id="tabDepart" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.tabDepartmentController">
     
     <children>
         <Button fx:id="btnNewDepartment" layoutX="37.0" layoutY="25.0" mnemonicParsing="false" text="Nuevo departamento" />
         <TableView fx:id="tableDepartments" layoutX="37.0" layoutY="109.0" prefHeight="324.0" prefWidth="924.0">
             <columns>
-                <TableColumn fx:id="columnID" prefWidth="129.0" text="ID" />
-                <TableColumn fx:id="columnName" prefWidth="378.0" text="Nombre" />
+                <TableColumn fx:id="columnID" prefWidth="152.0" text="ID" />
+                <TableColumn fx:id="columnName" prefWidth="771.0" text="Nombre" />
 
             </columns>
         </TableView>

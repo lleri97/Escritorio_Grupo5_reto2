@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Ruben
+ * @author Ruben Yeray Andoni Fran
  */
 @XmlRootElement
 public class Document implements Serializable {

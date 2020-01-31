@@ -42,7 +42,7 @@ import servicesRestfull.DepartmentClientService;
 /**
  * FXML Controller class
  *
- * @author Yeray
+ * @author Fran
  */
 public class tabEntityController {
     
@@ -66,18 +66,25 @@ public class tabEntityController {
     private Button btnDeleteEntity;
     @FXML
     private Button btnModifyEntity;
-
+    
     private Set<Company> companyList;
-
+    private static final Logger LOGGER = Logger.getLogger(SignUpController.class.getPackage() + "." + SignUpController.class.getName());
+    
     private CompanyClientService companyClient;
-
+    
     private User usuario;
 
+    /**
+     * Metodo para inicializar ventanas de fxml
+     *
+     * @param usuario
+     */
     public void initStage(User usuario) {
+        LOGGER.info("Inicializando panel de administracion de entidades");
         this.usuario = usuario;
         btnDeleteEntity.setVisible(false);
         btnModifyEntity.setVisible(false);
-
+        
         if (usuario.getPrivilege() == UserPrivilege.USER || usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
             btnNewCompany.setDisable(true);
             btnNewCompany.setVisible(false);
@@ -85,11 +92,11 @@ public class tabEntityController {
             btnSearchEntity.setVisible(false);
             lblSearchEntity.setVisible(false);
             insertData();
-
+            
         }
-
+        
         btnNewCompany.setOnAction((event) -> {
-            Company company= new Company();
+            Company company = new Company();
             lanzarNewEntityWindow(company);
         });
         btnSearchEntity.setOnAction((event) -> {
@@ -101,34 +108,44 @@ public class tabEntityController {
             companyClient.remove(companyDelete.getId());
             insertData();
         });
-        btnModifyEntity.setOnAction((event)->{
-            Company company= new Company();
+        btnModifyEntity.setOnAction((event) -> {
+            Company company = new Company();
             company = (Company) tableEntity.getSelectionModel().getSelectedItem();
             lanzarNewEntityWindow(company);
         });
         tableEntity.getSelectionModel().selectedItemProperty().addListener(this::handleEntityTabSelectionChanged);
-
+        LOGGER.info("Panel de administracion de entidades cargado");
     }
-
+    /**
+     * Metodo que relaciona la tabla con acciones
+     * @param observable
+     * @param olsValue
+     * @param newValue 
+     */
     public void handleEntityTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
         btnDeleteEntity.setVisible(true);
         btnModifyEntity.setVisible(true);
-
+        
     }
-
+    /**
+     * Metodo ue lanza la ventana de nueva entidad
+     * @param entity 
+     */
     public void lanzarNewEntityWindow(Company entity) {
-
+        LOGGER.info("Lanzando vetana de nueva entidad");
         try {
             NewCompanyController controller = new NewCompanyController();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_NewCompany.fxml"));
             Parent root = (Parent) loader.load();
             controller = ((NewCompanyController) loader.getController());
-            controller.initStage(root,entity);
+            controller.initStage(root, entity);
         } catch (IOException ex) {
             Logger.getLogger("Esto peta aqui");
         }
     }
-
+    /**
+     * Metodo de insercion de datos en la tabla
+     */
     public void insertData() {
         columnCIF.setCellValueFactory(
                 new PropertyValueFactory<>("cif"));
@@ -137,19 +154,24 @@ public class tabEntityController {
         columnDepartment.setCellValueFactory(
                 new PropertyValueFactory<>("department"));
         ObservableList<Company> entityList;
+        LOGGER.info("Insertando datos en la tabla");
         if (usuario.getPrivilege() == UserPrivilege.USER || usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {
+            LOGGER.info("Cargando datos de entidades");
             entityList = FXCollections.observableArrayList();
             entityList.add(usuario.getCompany());
         } else {
+            LOGGER.info("Cargando todas las entidades");
             companyClient = new CompanyClientService();
             companyList = new HashSet<Company>();
             companyList = companyClient.findAll(new GenericType<Set<Company>>() {
             });
             List<Company> list = new ArrayList<Company>(companyList);
             entityList = FXCollections.observableArrayList(list);
+            
         }
-
+        
         tableEntity.setItems(entityList);
+        LOGGER.info("Datos cargados con exito");
     }
-
+    
 }

@@ -23,11 +23,12 @@ public class LoginHelpController {
     
 
     /**
-     * Method to initialize JavaFX windows
+     * Metodo de inicializacion de ventana
      * 
-     * @param root Parent will be used
+     * @param root
      */
     public void initStage(Parent root) {
+        LOGGER.info("Cargando la ventana de ayuda");
         Scene scene = new Scene(root);
         
         //The window starts
@@ -38,9 +39,12 @@ public class LoginHelpController {
         stage.setResizable(false);
         stage.setOnShowing(this::handleWindowShowing);
         stage.show();
-        LOGGER.info("Window loaded correctly.");
+        LOGGER.info("Ventana cargada correctamente");
     }
-
+    /**
+     * Metodo que se accion al mostrar la ventana
+     * @param event 
+     */
     private void handleWindowShowing(WindowEvent event) {
         WebEngine webEngine = wViewLogin.getEngine();
         //Load help page.

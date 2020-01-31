@@ -8,6 +8,7 @@ package controllersDesktop;
 import entitiesModels.Company;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -25,7 +26,7 @@ import servicesRestfull.CompanyClientService;
 /**
  * FXML Controller class
  *
- * @author Yeray
+ * @author Fran
  */
 public class NewCompanyController {
     
@@ -47,53 +48,67 @@ public class NewCompanyController {
     private Button btnAddCompany;
     @FXML
     private Button btnCancel;
-
+    
+    private static final Logger LOGGER = Logger.getLogger(LogOutController.class.getPackage() + "." + LogOutController.class.getName());
+    
     private CompanyClientService companyService;
-
+    
     Stage stage;
 
+    /**
+     * Inicializacion de la ventana de nueva compañia
+     *
+     * @param root
+     * @param company
+     */
     public void initStage(Parent root, Company company) {
-
+        LOGGER.info("Cargando ventana de nueva compañia");
         if (company.getName() != "") {
             textFieldNameCompany.setText(company.getName());
             textFieldCif.setText(company.getCif());
             btnAddCompany.setText("Confirmar");
-
+            
             btnAddCompany.setOnAction((event) -> {
+                LOGGER.info("Preparando para editar compañia en la base de datos");
                 Company comp = new Company();
                 comp = company;
                 comp.setCif(textFieldCif.getText());
                 comp.setName(textFieldNameCompany.getText());
                 companyService.edit(company);
+                LOGGER.info("Compañia editada con exito");
             });
         } else {
             btnAddCompany.setOnAction((event) -> {
+                LOGGER.info("Preparando para añadir compañia a la base de datos");
                 addCompany();
+                LOGGER.info("Compañia añadida con exito a la base de datos");
             });
         }
-
+        
         Scene sceneNewEntity = new Scene(root);
         stage = new Stage();
         stage.setScene(sceneNewEntity);
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);
         lblError.setVisible(false);
-
+        
         btnCancel.setOnAction((event) -> {
             stage.close();
         });
-
+        LOGGER.info("Ventana inicializada con exito");
         stage.show();
-
+        
     }
-
+    /**
+     * Metodo para añadir compañia al servidor
+     */
     public void addCompany() {
         Company comp = new Company();
         companyService = new CompanyClientService();
-
+        
         comp.setCif(textFieldCif.getText());
         comp.setName(textFieldNameCompany.getText());
         companyService.create(comp);
-
+        
     }
 }

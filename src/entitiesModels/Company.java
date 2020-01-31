@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Ruben
+ * @author Fran
  */
 @XmlRootElement(name = "company")
 public class Company implements Serializable {

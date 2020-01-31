@@ -58,10 +58,9 @@ import utils.Validator;
 
 /**
  *
- * @author Fran
+ * @author Yeray
  */
 public class SignUpController {
-
     
     @FXML
     private Pane signUpPane;
@@ -95,26 +94,26 @@ public class SignUpController {
     private Label lbltitle_id;
     @FXML
     private DatePicker dPickerNacimiento;
-
+    
     private static final Logger LOGGER = Logger.getLogger(SignUpController.class.getPackage() + "." + SignUpController.class.getName());
-
+    
     private Stage stage;
-
+    
     private boolean dataOK = false;
-
+    
     private File photo;
-
+    
     private byte[] photoContent;
-
+    
     private byte[] photoContentDB;
-
+    
     private User usuario;
-
+    
     private boolean fechaVacia = false;
-
+    
+    UtilsWindows alert = new UtilsWindows();
+    
     private String mod;
-
-    private UtilsWindows alert = new UtilsWindows();
 
     /**
      * Set a Stage in stage attribute
@@ -126,7 +125,7 @@ public class SignUpController {
     }
 
     /**
-     * Method to initialize JavaFX windows
+     * Metodo de inicializacion de de ventana fxml
      *
      * @param root Parent will be used
      */
@@ -135,6 +134,7 @@ public class SignUpController {
         this.mod = mod;
         Scene scene = new Scene(root);
         if (mod.equalsIgnoreCase("modify")) {
+            LOGGER.info("Inicializando la ventana de modificacion de usuario");
             lbltitle_id.setText("Modificar perfil");
             textEmail.setText(usuario.getEmail());
             textFullName.setText(usuario.getFullname());
@@ -161,6 +161,7 @@ public class SignUpController {
             }
             btnCreateUser.setText("Guardar");
         } else {
+            LOGGER.info("Inicializando la ventana de alta de usuario");
             lbltitle_id.setText("Nuevo usuario");
             textPassword.setVisible(false);
             textConfirmPassword.setVisible(false);
@@ -175,11 +176,11 @@ public class SignUpController {
         KeyCombination CreateUser = new KeyCodeCombination(KeyCode.C, KeyCombination.ALT_DOWN);
         KeyCombination Cancel = new KeyCodeCombination(KeyCode.X, KeyCombination.ALT_DOWN);
         KeyCombination Help = new KeyCodeCombination(KeyCode.H, KeyCombination.ALT_DOWN);
-
+        
         Mnemonic createUser = new Mnemonic(btnCreateUser, CreateUser);
         Mnemonic cancel = new Mnemonic(btnCancel, Cancel);
         Mnemonic help = new Mnemonic(btnHelpSignUp, Help);
-
+        
         scene.addMnemonic(help);
         scene.addMnemonic(cancel);
         scene.addMnemonic(createUser);
@@ -205,7 +206,7 @@ public class SignUpController {
         btnHelpSignUp.setOnAction(this::handleButtonAction);
         btnCreateUser.setOnAction(this::handleButtonAction);
         btnAddPic.setOnAction(this::addPicAction);
-
+        
         stage.setScene(scene);
         stage.setResizable(false);
         if (mod.equalsIgnoreCase("modify")) {
@@ -213,8 +214,9 @@ public class SignUpController {
         } else {
             stage.setTitle("Nuevo Usuario");
         }
-
+        
         stage.initModality(Modality.APPLICATION_MODAL);
+        LOGGER.info("Ventana iniciada con exito");
         stage.show();
     }
 
@@ -225,7 +227,7 @@ public class SignUpController {
         FileChooser fc = new FileChooser();
         fc.setTitle("Buscar foto:");
         fc.getExtensionFilters().add(new ExtensionFilter("Img files", "*.png"));
-
+        
         photo = fc.showOpenDialog(null);
         if (photo != null) {
             labSingleFile.setText("Selected File: " + photo.getAbsolutePath());
@@ -241,6 +243,12 @@ public class SignUpController {
         }
     }
 
+    /**
+     * Carga las entidades en el comboBox para modificar o dar de alta a un
+     * usuario
+     *
+     * @param usuario
+     */
     private void cargarEntidades(User usuario) {
         CompanyClientService clientCompany = new CompanyClientService();
         if (usuario.getPrivilege().equals(UserPrivilege.SUPERADMIN)) {
@@ -249,7 +257,7 @@ public class SignUpController {
             });
             comboEntity.getItems().clear();
             comboEntity.getItems().addAll(entities);
-
+            
         } else if (usuario.getPrivilege().equals(UserPrivilege.COMPANYADMIN)) {
             Company entities = usuario.getCompany();
             comboEntity.getItems().clear();
@@ -257,7 +265,13 @@ public class SignUpController {
         }
     }
 
+    /**
+     * Carga los privilegios en un comboBox para editar o crear un usuario
+     *
+     * @param privilegio
+     */
     private void cargarPrivilegios(UserPrivilege privilegio) {
+        LOGGER.info("Cargando privilegios al comboBox");
         if (privilegio.equals(UserPrivilege.SUPERADMIN)) {
             List<UserPrivilege> privileges;
             privileges = Arrays.asList(UserPrivilege.USER, UserPrivilege.COMPANYADMIN, UserPrivilege.SUPERADMIN);
@@ -269,17 +283,25 @@ public class SignUpController {
             comboPrivilege.getItems().clear();
             comboPrivilege.getItems().addAll(privileges);
         }
-
+        LOGGER.info("Privilegios cargados con exito");
     }
 
+    /**
+     * Metodo que relaciona botones con acciones
+     *
+     * @param event
+     */
     public void handleButtonAction(ActionEvent event) {
         UserClientService client = new UserClientService();
         User usu = new User();
         if ((Button) event.getSource() == btnCancel) {
+            LOGGER.info("Presionado el boton de cancelar");
             //Closes the Stage
             Stage stage = (Stage) btnCancel.getScene().getWindow();
             stage.close();
+            LOGGER.info("Ventana cerrada");
         } else if ((Button) event.getSource() == btnCreateUser) {
+            LOGGER.info("Boton de creacion de usuario pulsado");
             if (textPassword.getText().equals(textConfirmPassword.getText())) {
                 usu.setLogin(textLogin.getText());
                 usu.setEmail(textEmail.getText());
@@ -298,7 +320,7 @@ public class SignUpController {
                 } else {
                     usu.setStatus(UserStatus.DISABLED);
                 }
-
+                
                 try {
                     LocalDate localDate = dPickerNacimiento.getValue();
                     Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
@@ -320,6 +342,7 @@ public class SignUpController {
                         usu.setPassword(encryptedPass);
                         if (mod != "modify") {//crear
                             try {
+                                LOGGER.info("Creando usuario");
                                 client.create(usu);
                                 textLogin.clear();
                                 textEmail.clear();
@@ -329,29 +352,31 @@ public class SignUpController {
                                 alertTitle = "Nuevo usuario";
                                 alertContentText = "Nuevo usuario registrado correctamente.";
                                 stage.close();
+                                LOGGER.info("Usuario creado con exito");
                             } catch (NotAuthorizedException e) {
                                 LOGGER.warning(e.getMessage());
-                                alert.alertError("Error", "Login y/o email ya existen en la base de datos.","");
+                                alert.alertError("Error", "Login y/o email ya existen en la base de datos.", "");
                             } catch (NotFoundException e) {
                                 LOGGER.warning(e.getMessage());
-                                alert.alertError("Error", "Error al enviar su nueva contraseña a su correo. Intentelo más tarde.","");
+                                alert.alertError("Error", "Error al enviar su nueva contraseña a su correo. Intentelo más tarde.", "");
                             } catch (InternalServerErrorException e) {
                                 LOGGER.warning(e.getMessage());
-                                alert.alertError("Error", "Error al dar de alta al usuario.","");
+                                alert.alertError("Error", "Error al dar de alta al usuario.", "");
                             }
                         } else {//modificar
                             try {
+                                LOGGER.info("Modificando usuario");
                                 usu.setId(usuario.getId());
                                 client.edit(usu);
                                 LOGGER.info("Update made successfully. Loading user profile.");
                                 alertTitle = "Modificar perfil.";
-                                
                                 alertContentText = "Los datos del perfil han sido modificados correctamente..";
+                                LOGGER.info("Usuario modificado con exito");
                             } catch (InternalServerErrorException e) {
                                 LOGGER.warning(e.getMessage());
-                                alert.alertError("Error", "Login y/o email ya existen en la base de datos.","");
+                                alert.alertError("Error", "Login y/o email ya existen en la base de datos.", "");
                             }
-
+                            
                         }
                         // An alert is issued giving a message that the operation has been a success
                         Alert alert = new Alert(AlertType.INFORMATION);
@@ -363,13 +388,17 @@ public class SignUpController {
                     }
                 }
             } else {
-                alert.alertWarning("Error", "Las contraseñas no coinciden.","okButtonNoMatch");
+                alert.alertWarning("Error", "Las contraseñas no coinciden.", "okButtonNoMatch");
             }
-
+            
         }
     }
-
-  private boolean dataValidator(User user) {
+    /**
+     * Metodo de validacion de datos
+     * @param user
+     * @return 
+     */
+    private boolean dataValidator(User user) {
         boolean ret = true;
         String stringErrorData = "";
         if (textLogin.getText().trim().length() > 40 || textLogin.getText().trim().length() < 1) {
@@ -405,5 +434,5 @@ public class SignUpController {
         }
         return ret;
     }
-
+    
 }

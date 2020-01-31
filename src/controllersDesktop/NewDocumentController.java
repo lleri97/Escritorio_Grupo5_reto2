@@ -17,6 +17,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -33,11 +34,10 @@ import utils.UtilsWindows;
 /**
  * FXML Controller class
  *
- * @author Yeray
+ * @author Yeray Ruben Andoni
  */
 public class NewDocumentController {
-
- 
+    
     @FXML
     private BorderPane paneNewDoc;
     @FXML
@@ -60,30 +60,27 @@ public class NewDocumentController {
     private Button btnAddDocument;
     @FXML
     private Button btnCancel;
-
+    
     private Stage stage;
-
+    
     private byte[] content;
-
+    
     private File file;
-
+    
     private User user;
-
+    
     private String mod;
+    
+    private static final Logger LOGGER = Logger.getLogger(LogOutController.class.getPackage() + "." + LogOutController.class.getName());
 
     /**
-     * Initializes the controller class.
+     * Inicializa la clase controladora
      */
     public void initStage(Parent root, Document doc, User user, String mod) {
+        LOGGER.info("Inicializando la clase controladora");
         content = doc.getDocumentContent();
         this.mod = mod;
         this.user = user;
-        if (doc.getName() != "") {
-            textFielTittle.setText(doc.getName());
-            textAreaDescription.setText(doc.getDescription());
-            lblSelectedDoc.setText(doc.getName());
-        }
-
         Scene sceneNewDocument = new Scene(root);
         stage = new Stage();
         stage.setScene(sceneNewDocument);
@@ -93,6 +90,7 @@ public class NewDocumentController {
         lblError.setVisible(false);
         lblSelectedDoc.setVisible(false);
         if (mod.equalsIgnoreCase("modify")) {
+            LOGGER.info("Cargando datos para modificar");
             btnAddDocument.setText("Modicar");
             lblNewDocument.setText("Modificar documento.");
             hyperlinkDocument.setText("Pulse para cambiar el contenido del documento.");
@@ -100,25 +98,29 @@ public class NewDocumentController {
         btnCancel.setOnAction((event) -> {
             stage.close();
         });
-
+        
         btnAddDocument.setOnAction((event) -> {
             newDocumentAction();
         });
         hyperlinkDocument.setOnAction((event) -> {
             chooseFile();
-
+            
         });
-
+        
         stage.show();
-
+        LOGGER.info("Ventana cargada con exito");
     }
-
+    /**
+     * Metodo para seleccionar el archivo para subir a la base de datos
+     */
     public void chooseFile() {
+         UtilsWindows alert = new UtilsWindows();
+        LOGGER.info("Inicializando selector de archivos");
         FileChooser fc = new FileChooser();
         Document document = new Document();
         fc.setTitle("Buscar foto:");
         fc.getExtensionFilters().add(new ExtensionFilter("PDF files (*.pdf)", "*.PDF", "*.pdf"));
-
+        
         file = fc.showOpenDialog(null);
         if (file != null) {
             lblSelectedDoc.setVisible(true);
@@ -129,10 +131,12 @@ public class NewDocumentController {
             document = new Document();
             document.setDocumentContent(content);
         } catch (Exception ex) {
-            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+            alert.alertError("No hay documento", "Documento no seleccionado", "okButtonDocNull");
         }
     }
-
+    /**
+     * Metodo de nuevo documento
+     */
     private void newDocumentAction() {
         UtilsWindows alert = new UtilsWindows();
         Document document = new Document();
@@ -151,11 +155,11 @@ public class NewDocumentController {
                 document.setVisibility(Boolean.TRUE);
                 if (mod.equalsIgnoreCase("modify")) {
                     documentClient.updateDocument(document);
-                    alert.alertInformation("Información", "Documento modificado con exito.", "");
-
+                    alert.alertInformation("Información", "Documento modificado con exito.", "okButton");
+                    
                 } else {
                     documentClient.createNewDocument(document);
-                    alert.alertInformation("Información", "Documento subido con exito.", "");
+                    alert.alertInformation("Información", "Documento subido con exito.", "okButton");
                 }
                 stage.close();
             } catch (Exception e) {
@@ -166,8 +170,8 @@ public class NewDocumentController {
                     Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, e);
                 }
             }
-
+            
         }
     }
-
+    
 }

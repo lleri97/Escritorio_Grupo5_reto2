@@ -75,7 +75,12 @@ public class LoginController {
         this.stage = stage;
     }
 
+    /**
+     * inicializa la ventana 
+     * @param root 
+     */
     public void initStage(Parent root) {
+        LOGGER.info("Cargando ventana de inicio");
         Scene sceneLogin = new Scene(root);
 
         //The window starts
@@ -149,9 +154,11 @@ public class LoginController {
         });
 
         stage.setTitle("Login 2DAM2CURIOUS");
+         LOGGER.info("Ventana de inicio cargada");
         stage.show();
 
         stage.setOnCloseRequest((WindowEvent event) -> {
+             LOGGER.info("Cerrando ventana");
             // consume event
             event.consume();
             // show close dialog
@@ -162,13 +169,17 @@ public class LoginController {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
                 Platform.exit();
+                 LOGGER.info("Ventana de inicio cerrada");
             }
         });
 
-        LOGGER.info("Window loaded correctly.");
     }
 
     //**************************M E T H O D S***********************************
+    /**
+     * Compara el login y contraseña con los datos del servidor
+     * @throws Exception 
+     */
     private void loginAction() throws Exception {
         UtilsWindows alert = new UtilsWindows();
         try {
@@ -185,7 +196,7 @@ public class LoginController {
                 encryptedPassword = instance.encrypt(textFieldPassword.getText());
                 usu = client.login(User.class, textFieldUsername.getText(), encryptedPassword);
                 //If the credentials are correct, if not go to exceptions
-                LOGGER.info("Login made successfully. Loading user profile.");
+                LOGGER.info("Inicio correct, Cargando datos del usuario");
                 LogOutController controller = new LogOutController();
                 loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU03_LogOut.fxml"));
                 root = (Parent) loader.load();
@@ -211,11 +222,13 @@ public class LoginController {
             alert.alertWarning("Error", "Error grave. Pongase en contacto con su empresa/entidad.","okButtonCamposVacios");
         }
     }
-
+    /**
+     * Accion del boton de ayuda de la ventana
+     */
     private void helpButtonAction() {
         try {
             // Help button configuration
-            LOGGER.info("Loading help window.");
+            LOGGER.info("Cargand ventana de ayuda.");
             loader = new FXMLLoader(getClass().getResource("/fxmlWindows/HelpLogin.fxml"));
             root = (Parent) loader.load();
             LoginHelpController controller = ((LoginHelpController) loader.getController());
@@ -224,11 +237,14 @@ public class LoginController {
             LOGGER.severe(e.getMessage());
         }
     }
-
+    /**
+     * 
+     * Accion del hiperlink para recuperar contraseña
+     */
     private void recoverPasswordAction() {
         try {
             // Help button configuration
-            LOGGER.info("Loading recover password window.");
+            LOGGER.info("Cargando ventana de recuperacion de contraseña.");
             loader = new FXMLLoader(getClass().getResource("/fxmlWindows/GU_RecoverPassword.fxml"));
             root = (Parent) loader.load();
             RecoverPasswordController controller = ((RecoverPasswordController) loader.getController());

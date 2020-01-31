@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Francisco Romero Alonso
+ * @author Yeray
  */
 @XmlRootElement
 public class User implements Serializable {

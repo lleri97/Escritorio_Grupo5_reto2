@@ -52,7 +52,7 @@ import utils.UtilsWindows;
 /**
  * LogOutController Class
  *
- * @author Ruben
+ * @author Yeray
  */
 public class LogOutController {
 
@@ -139,13 +139,14 @@ public class LogOutController {
     }
 
     /**
-     * Method to initialize JavaFX window
+     * Metodo de inicializacion de la ventana principal
      *
-     * @param root Parent will be used
-     * @param client Client will be used
-     * @param user User that contains the profile data
+     * @param root 
+     * @param client 
+     * @param user 
      */
     public void initStage(Parent root, User usu) throws IOException {
+        LOGGER.info("inicializando vetnta principal");
         util = new UtilsWindows();
         dataItemUsers = new MenuItem("Usuario");
         dataItemUsers.setId("dataItemUsers");
@@ -217,27 +218,31 @@ public class LogOutController {
         });
 
         loadData(usu);
+        LOGGER.info("Ventana inicializada");
+
         stage.show();
         stage.setOnCloseRequest((WindowEvent event) -> {
+            LOGGER.info("Cerrando la ventana principal");
             // consume event
             event.consume();
             // show close dialog
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Close Confirmation");
-            alert.setHeaderText("Do you really want to quit?");
+            alert.setTitle("Confirmacion de cierre");
+            alert.setHeaderText("Realmente desea salir?");
             alert.initOwner(stage);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
                 lanzarLoginWindow();
                 stage.close();
+                LOGGER.info("ventana cerrada");
             }
+            
         });
 
-        LOGGER.info("Profile loaded successfully.");
 
         //Menu events
         closeSessionItem.setOnAction((event) -> {
-            LOGGER.info("Closing user profile.");
+            LOGGER.info("Cerrando perfil de usuario");
             util.alertConfirmation("Confirmacion", "Realmente desea cerrar sesion?");
             lanzarLoginWindow();
             stage.close();
@@ -245,13 +250,16 @@ public class LogOutController {
         });
 
         exitItem.setOnAction((event) -> {
-            LOGGER.info("Closing application");
+            LOGGER.info("Cerrando la aplicacion");
             util.alertConfirmation("Confirmacion", "Realmente desea salir de la aplicacion?");
             Platform.exit();
         });
 
     }
-
+    /**
+     * Metodo para relacionar los botones del menu con acciones
+     * @param event 
+     */
     public void menuButtonAction(ActionEvent event) {
         if (event.getSource() == dataItemArea) {
             createTabAreas();
@@ -265,7 +273,10 @@ public class LogOutController {
             createTabUsers();
         }
     }
-
+    /**
+     * Metodo para relacionar botones de la interfaz con acciones
+     * @param event 
+     */
     public void handleButtonAction(ActionEvent event) {
 
         if ((Button) event.getSource() == btnAreas) {
@@ -287,7 +298,7 @@ public class LogOutController {
     }
 
     /**
-     * Changes the anchor pane from the main frame and chages it for areas pane
+     * Crea el panel de areas para su gestion
      */
     public void createTabAreas() {
         try {
@@ -297,14 +308,14 @@ public class LogOutController {
             contentPane.getChildren().setAll(pane);
             tabAreas = (tabAreasController) loader.getController();
             tabAreas.initStage(usuario);
+            LOGGER.info("Creando panel de areas");
         } catch (IOException ex) {
             Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     /**
-     * Changes the anchor pane from the main frame and chages it for departments
-     * pane
+     * Crea el panel de departamentos para su gestion
      */
     public void createTabDepartments() {
         try {
@@ -314,13 +325,14 @@ public class LogOutController {
             contentPane.getChildren().setAll(pane);
             tabDepartment = (tabDepartmentController) loader.getController();
             tabDepartment.initStage(usuario);
+            LOGGER.info("creando panel de departamentos");
         } catch (IOException ex) {
             Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     /**
-     * Changes the anchor pane from the main frame and chages it for users pane
+     * Crea el panel de usuarios para su gestion
      */
     private void createTabUsers() {
         try {
@@ -330,6 +342,7 @@ public class LogOutController {
             contentPane.getChildren().setAll(pane);
             tabUsers = (tabUsersController) loader.getController();
             tabUsers.initStage(usuario);
+            LOGGER.info("Creando panel de usuarios");
         } catch (IOException ex) {
             Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -337,8 +350,7 @@ public class LogOutController {
     }
 
     /**
-     * Changes the anchor pane from the main frame and chages it for documents
-     * pane
+     * Crea el panel de documentos para su gestion
      */
     private void createTabDocuments() {
         try {
@@ -348,13 +360,14 @@ public class LogOutController {
             contentPane.getChildren().setAll(pane);
             tabDocuments = (tabDocumentsController) loader.getController();
             tabDocuments.initStage(usuario, stage);
+            LOGGER.info("Creando panel de documentos");
         } catch (IOException ex) {
             Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     /**
-     * Changes the anchor pane from the main frame and chages it for entity pane
+     * Crea el panel de entidades para su gestion
      */
     private void createTabEntity() {
         try {
@@ -364,13 +377,14 @@ public class LogOutController {
             contentPane.getChildren().setAll(pane);
             tabEntity = (tabEntityController) loader.getController();
             tabEntity.initStage(usuario);
+            LOGGER.info("Creando panel de compañias");
         } catch (IOException ex) {
             Logger.getLogger(LogOutController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     /**
-     * Open a new window to modify the user
+     * Abre la ventana de modificacion de usuario
      */
     private void openModifyUserWindow() {
         try {
@@ -380,12 +394,17 @@ public class LogOutController {
             controller = ((SignUpController) loader.getController());
             String mod = "modify";
             controller.initStage(root, usuario, mod);
+            LOGGER.info("Abriendo ventana de modificacion de usuarios");
         } catch (IOException ex) {
             Logger.getLogger(tabUsersController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    /**
+     * Carga los datos de el usuario
+     * @param usu 
+     */
     private void loadData(User usu) {
+        LOGGER.info("Cargando datos del usuario");
         txtNombreUsu.setText("Nombre completo: " + usu.getFullname());
         txtLogin.setText("Usuario: " + usu.getLogin());
         if (usu.getCompany() != null) {
@@ -399,16 +418,23 @@ public class LogOutController {
             InputStream myInputStream = new ByteArrayInputStream(usu.getPhoto());
             photoProfileImg.setImage(new Image(myInputStream));
         }
+        LOGGER.info("Datos del usuario cargados");
     }
-
+    /**
+     * Refresca el panel de los datos del usuario
+     */
     private void refreshProfile() {
         UserClientService client = new UserClientService();
         User usu = client.find(User.class, Integer.toString(usuario.getId()));
         loadData(usu);
+        LOGGER.info("Datos de perfil recargados");
     }
-
+    /**
+     * Lanza la ventana de inicio
+     */
     public void lanzarLoginWindow() {
         try {
+            LOGGER.info("Lanzando ventana de inicio");
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/fxmlWindows/GU01_Login.fxml"));
             Parent root = (Parent) loader.load();

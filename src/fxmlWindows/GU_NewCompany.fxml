@@ -11,15 +11,15 @@
    <bottom>
       <AnchorPane prefHeight="54.0" prefWidth="411.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnAddCompany" layoutX="147.0" layoutY="15.0" mnemonicParsing="false" text="Add company" />
-            <Button fx:id="btnCancel" layoutX="247.0" layoutY="15.0" mnemonicParsing="false" text="Cancel" />
+            <Button fx:id="btnAddCompany" layoutX="184.0" layoutY="15.0" mnemonicParsing="false" text="Añadir" />
+            <Button fx:id="btnCancel" layoutX="247.0" layoutY="15.0" mnemonicParsing="false" text="Cancelar" />
          </children>
       </AnchorPane>
    </bottom>
    <top>
       <AnchorPane prefHeight="75.0" prefWidth="341.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="lblNewArea" layoutX="69.0" layoutY="16.0" text="New company">
+            <Label fx:id="lblNewArea" layoutX="69.0" layoutY="16.0" text="Nueva compañia">
                <font>
                   <Font size="29.0" />
                </font>
@@ -31,12 +31,12 @@
       <AnchorPane prefHeight="208.0" prefWidth="348.0" BorderPane.alignment="CENTER">
          <children>
             <TextField fx:id="textFieldNameCompany" layoutX="105.0" layoutY="33.0" prefHeight="25.0" prefWidth="197.0" />
-            <Label fx:id="lblName" alignment="CENTER" layoutX="11.0" layoutY="33.0" prefHeight="26.0" prefWidth="81.0" text="Name">
+            <Label fx:id="lblName" alignment="CENTER" layoutX="11.0" layoutY="33.0" prefHeight="26.0" prefWidth="81.0" text="Nombre">
                <font>
                   <Font size="17.0" />
                </font>
             </Label>
-            <Label fx:id="lblError" layoutX="105.0" layoutY="121.0" text="Company already exist" textFill="#e80a0a" />
+            <Label fx:id="lblError" layoutX="105.0" layoutY="121.0" text="La compañia ya existe" textFill="#e80a0a" />
             <TextField fx:id="textFieldCif" layoutX="106.0" layoutY="84.0" prefHeight="25.0" prefWidth="197.0" />
             <Label fx:id="lblCif" alignment="CENTER" layoutX="12.0" layoutY="84.0" prefHeight="26.0" prefWidth="81.0" text="Cif">
                <font>
