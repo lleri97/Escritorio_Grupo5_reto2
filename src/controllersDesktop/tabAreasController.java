@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -69,9 +70,12 @@ public class tabAreasController  {
     
     public void initStage(User usuario){
         this.usuario=usuario;
+        btnDeleteArea.setVisible(false);
+        btnModifyArea.setVisible(false);
         if(usuario.getPrivilege()==UserPrivilege.USER){
             btnNewArea.setDisable(true);
             btnNewArea.setVisible(false);
+            
         }
         
         btnNewArea.setOnAction((event) -> {
@@ -94,7 +98,8 @@ public class tabAreasController  {
             String mod= "modify";
             lanzarNewAreaWindow(area,mod);
         });
-        
+                tableAreas.getSelectionModel().selectedItemProperty().addListener(this::handleAreasTabSelectionChanged);
+
     }
        public void lanzarNewAreaWindow(Area area, String mod) {
         
@@ -121,6 +126,10 @@ public class tabAreasController  {
         ObservableList<Area> areaList = FXCollections.observableArrayList(list);
         tableAreas.setItems(areaList);
     }
-   
+     public void handleAreasTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
+        btnDeleteArea.setVisible(true);
+        btnModifyArea.setVisible(true);
+
+    }
     
 }

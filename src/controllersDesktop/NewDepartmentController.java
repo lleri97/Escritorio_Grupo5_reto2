@@ -29,6 +29,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.ws.rs.core.GenericType;
@@ -43,6 +44,8 @@ import servicesRestfull.DepartmentClientService;
  */
 public class NewDepartmentController {
 
+    @FXML
+    private BorderPane paneNewDepart;
     @FXML
     private Label lblNewDepartment;
     @FXML

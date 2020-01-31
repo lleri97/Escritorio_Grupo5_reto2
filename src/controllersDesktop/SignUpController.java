@@ -41,6 +41,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.Mnemonic;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
@@ -61,6 +62,9 @@ import utils.Validator;
  */
 public class SignUpController {
 
+    
+    @FXML
+    private Pane signUpPane;
     @FXML
     private Button btnCancel;
     @FXML
@@ -341,6 +345,7 @@ public class SignUpController {
                                 client.edit(usu);
                                 LOGGER.info("Update made successfully. Loading user profile.");
                                 alertTitle = "Modificar perfil.";
+                                
                                 alertContentText = "Los datos del perfil han sido modificados correctamente..";
                             } catch (InternalServerErrorException e) {
                                 LOGGER.warning(e.getMessage());
@@ -353,18 +358,18 @@ public class SignUpController {
                         alert.setTitle(alertTitle);
                         alert.setContentText(alertContentText);
                         Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
-                        okButton.setId("okbutton");
+                        okButton.setId("okButtonModify");
                         alert.showAndWait();
                     }
                 }
             } else {
-                alert.alertWarning("Error", "Las contraseñas no coinciden.","");
+                alert.alertWarning("Error", "Las contraseñas no coinciden.","okButtonNoMatch");
             }
 
         }
     }
 
-    private boolean dataValidator(User user) {
+  private boolean dataValidator(User user) {
         boolean ret = true;
         String stringErrorData = "";
         if (textLogin.getText().trim().length() > 40 || textLogin.getText().trim().length() < 1) {
@@ -387,7 +392,7 @@ public class SignUpController {
             stringErrorData = stringErrorData + "\n-Debe seleccionar una fecha de nacimiento.";
             ret = false;
         }
-        if (!Validator.passwordChecker(textPassword.getText())) {
+        if (textPassword.getText().trim().length() != 0 && !Validator.passwordChecker(textPassword.getText())) {
             stringErrorData = stringErrorData + "\n-La contraseña debe tener al menos minusculas, mayusculas, números y entre 8 y 40 caracteres.";
             ret = false;
         }

@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.ws.rs.core.GenericType;
@@ -32,6 +33,8 @@ import servicesRestfull.DocumentClientService;
  */
 public class NewAreaController {
 
+    @FXML
+    private BorderPane paneNewArea;
     @FXML
     private Label lblNewArea;
     @FXML
@@ -89,6 +92,8 @@ public class NewAreaController {
             AreaClientService areaService = new AreaClientService();
             areaService.create(createArea);
         });
+              
+                 
         }
 
         this.usuario = usuario;

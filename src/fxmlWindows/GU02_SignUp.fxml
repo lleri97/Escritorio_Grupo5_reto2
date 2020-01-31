@@ -58,7 +58,7 @@
       <Label fx:id="lblEmail1212" alignment="CENTER" layoutX="478.0" layoutY="238.0" prefHeight="32.0" prefWidth="102.0" text="Foto perfil:" textAlignment="RIGHT" textFill="WHITE" />
       <VBox layoutX="144.0" layoutY="86.0" prefHeight="355.0" prefWidth="284.0">
          <children>
-            <TextField id="textEmail" fx:id="textFullName" prefHeight="32.0" prefWidth="375.0">
+            <TextField fx:id="textFullName" prefHeight="32.0" prefWidth="375.0">
                <VBox.margin>
                   <Insets top="15.0" />
                </VBox.margin>

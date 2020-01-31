@@ -47,6 +47,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.imageio.ImageIO;
 import servicesRestfull.UserClientService;
+import utils.UtilsWindows;
 
 /**
  * LogOutController Class
@@ -108,6 +109,8 @@ public class LogOutController {
     @FXML
     private Button btnRefreshProfile;
 
+    private UtilsWindows util;
+
     ContextMenu cm;
 
     User usuario;
@@ -143,6 +146,7 @@ public class LogOutController {
      * @param user User that contains the profile data
      */
     public void initStage(Parent root, User usu) throws IOException {
+        util = new UtilsWindows();
         dataItemUsers = new MenuItem("Usuario");
         dataItemUsers.setId("dataItemUsers");
         dataItemUsers.setOnAction((event) -> {
@@ -180,6 +184,7 @@ public class LogOutController {
         btnDepartments.setOnAction(this::handleButtonAction);
         btnDocuments.setOnAction(this::handleButtonAction);
         btnModify.setOnAction(this::handleButtonAction);
+        btnRefreshProfile.setOnAction(this::handleButtonAction);
         cm = new ContextMenu();
         cm.setId("cm");
 
@@ -233,11 +238,15 @@ public class LogOutController {
         //Menu events
         closeSessionItem.setOnAction((event) -> {
             LOGGER.info("Closing user profile.");
+            util.alertConfirmation("Confirmacion", "Realmente desea cerrar sesion?");
+            lanzarLoginWindow();
             stage.close();
+
         });
 
         exitItem.setOnAction((event) -> {
             LOGGER.info("Closing application");
+            util.alertConfirmation("Confirmacion", "Realmente desea salir de la aplicacion?");
             Platform.exit();
         });
 
@@ -332,7 +341,7 @@ public class LogOutController {
      * pane
      */
     private void createTabDocuments() {
-         try {
+        try {
             tabDocumentsController tabDocuments = new tabDocumentsController();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmlWindows/tabDocuments.fxml"));
             AnchorPane pane = loader.load();
@@ -376,7 +385,7 @@ public class LogOutController {
         }
     }
 
-        private void loadData(User usu) {
+    private void loadData(User usu) {
         txtNombreUsu.setText("Nombre completo: " + usu.getFullname());
         txtLogin.setText("Usuario: " + usu.getLogin());
         if (usu.getCompany() != null) {
@@ -390,7 +399,7 @@ public class LogOutController {
             InputStream myInputStream = new ByteArrayInputStream(usu.getPhoto());
             photoProfileImg.setImage(new Image(myInputStream));
         }
-        }
+    }
 
     private void refreshProfile() {
         UserClientService client = new UserClientService();
@@ -414,6 +423,4 @@ public class LogOutController {
         }
     }
 
-    }
-
-
+}
