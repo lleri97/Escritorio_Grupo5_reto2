@@ -289,7 +289,7 @@ public class SignUpController {
     /**
      * Metodo que relaciona botones con acciones
      *
-     * @param event
+     * @param event objeto del tipo event
      */
     public void handleButtonAction(ActionEvent event) {
         UserClientService client = new UserClientService();

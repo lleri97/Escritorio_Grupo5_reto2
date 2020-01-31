@@ -25,7 +25,7 @@ public class LoginHelpController {
     /**
      * Metodo de inicializacion de ventana
      * 
-     * @param root
+     * @param root Elemento raiz de la ventana
      */
     public void initStage(Parent root) {
         LOGGER.info("Cargando la ventana de ayuda");

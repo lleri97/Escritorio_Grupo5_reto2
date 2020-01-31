@@ -72,7 +72,7 @@ public class tabAreasController {
      * *
      * Metodo de inicializacion de ventanas fxml
      *
-     * @param usuario
+     * @param usuario objeto del tipo User
      */
     public void initStage(User usuario) {
         LOGGER.info("Inicializando panel de administracion de areas");
@@ -111,8 +111,8 @@ public class tabAreasController {
     
     /**
      * Metodo para lanzar la ventana de nuevo area
-     * @param area
-     * @param mod 
+     * @param area objeto del tipo Area
+     * @param mod tipo String
      */
     public void lanzarNewAreaWindow(Area area, String mod) {
         
@@ -143,9 +143,9 @@ public class tabAreasController {
     }
     /***
      * Metodo que relaciona la tabla con acciones
-     * @param observable
-     * @param olsValue
-     * @param newValue 
+     * @param observable objeto del tipo ObservableValue
+     * @param olsValue tipo Object
+     * @param newValue tipo Objct
      */
     public void handleAreasTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
         btnDeleteArea.setVisible(true);

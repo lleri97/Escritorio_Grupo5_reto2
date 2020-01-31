@@ -72,7 +72,7 @@ public class tabDepartmentController {
     /**
      * Metodo de inicializacion de ventanas fxml
      *
-     * @param usuario
+     * @param usuario objeto del tipo User
      */
     public void initStage(User usuario) {
         LOGGER.info("Inicializando panel de administracion de departamentos");
@@ -111,9 +111,9 @@ public class tabDepartmentController {
     }
     /**
      * metodo que relaciona la tabla con botones
-     * @param observable
-     * @param olsValue
-     * @param newValue 
+     * @param observable tipo ObservableValue
+     * @param olsValue tipo Object
+     * @param newValue tipo Object
      */
     public void handleDepartmentTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
         btnDeleteDepartment.setVisible(true);
@@ -122,8 +122,8 @@ public class tabDepartmentController {
     }
     /**
      * Metodo para lanzar la ventana de nuevo departamento
-     * @param depart
-     * @param mod 
+     * @param depart objeto del tipo Department
+     * @param mod tipo String
      */
     public void lanzarNewDepartmentWindow(Department depart, String mod) {
         

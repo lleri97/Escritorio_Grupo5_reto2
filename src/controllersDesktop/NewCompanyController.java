@@ -58,8 +58,8 @@ public class NewCompanyController {
     /**
      * Inicializacion de la ventana de nueva compañia
      *
-     * @param root
-     * @param company
+     * @param root elemento raiz
+     * @param company objeto del tipo Company
      */
     public void initStage(Parent root, Company company) {
         LOGGER.info("Cargando ventana de nueva compañia");

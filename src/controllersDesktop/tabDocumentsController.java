@@ -87,8 +87,8 @@ public class tabDocumentsController {
     /**
      * Metodo de inicializacion de de ventanas fxml
      *
-     * @param usuario
-     * @param stage
+     * @param usuario objeto del tipo User
+     * @param stage objeto que nos devuelve la escena
      */
     public void initStage(User usuario, Stage stage) {
         LOGGER.info("Inicializando panel de administracion de documentos");
@@ -164,9 +164,9 @@ public class tabDocumentsController {
     }
     /**
      * metodo que relacion la tabla con acciones
-     * @param observable
-     * @param olsValue
-     * @param newValue 
+     * @param observable tipo ObservableValue
+     * @param olsValue tipo Object
+     * @param newValue tipo Object
      */
     public void handleUsersTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
         btnDeleteDocument.setVisible(true);
@@ -174,8 +174,8 @@ public class tabDocumentsController {
         btnDownloadDocument.setVisible(true);
     }
     /**
-     * Metodo que relaciona botones con aaciones
-     * @param event 
+     * Metodo que relaciona botones con acciones
+     * @param event tipo Event
      */
     public void handleButtonAction(ActionEvent event) {
         if ((Button) event.getSource() == btnModifyDocument) {

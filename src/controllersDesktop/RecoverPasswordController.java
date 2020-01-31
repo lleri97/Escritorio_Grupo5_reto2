@@ -37,7 +37,7 @@ public class RecoverPasswordController {
 
     /**
      * inicializando la ventana de recuperacion de contraseña
-     * @param root 
+     * @param root elementto raiz
      */
     public void initStage(Parent root) {
         LOGGER.info("Cargando ventana de recuperacion de contraseña");
@@ -54,7 +54,7 @@ public class RecoverPasswordController {
     }
     /**
      * Metodo que ralciona botones con acciones
-     * @param event 
+     * @param event objeto del tipo Event 
      */
     public void handleButtonAction(ActionEvent event) {
         if ((Button) event.getSource() == btnBack) {

@@ -16,8 +16,8 @@ public class DesktopClient extends Application {
     /**
      * Method to create the window and start the JavaFX applicaction
      *
-     * @param stage
-     * @throws Exception
+     * @param stage escena necesaria para cargar la ventana
+     * @throws Exception excepcion generica
      */
     public void start(Stage stage) throws Exception {
         //Load node graph from fxml file

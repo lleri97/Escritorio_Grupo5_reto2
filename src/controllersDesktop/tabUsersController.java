@@ -89,7 +89,7 @@ public class tabUsersController {
     /**
      * Metodo de inicializacion de panel de usuarios
      *
-     * @param usuario
+     * @param usuario objeto del tipo User
      */
     public void initStage(User usuario) {
         LOGGER.info("Inicializando panel de administracion de usuarios");
@@ -115,7 +115,7 @@ public class tabUsersController {
     /**
      * Metodo que inserta los datos en la tabla
      *
-     * @param usuario
+     * @param usuario objeto del tipo User
      */
     public void insertData(User usuario) {
         LOGGER.info("Insertando datos en la tabla");

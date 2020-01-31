@@ -141,9 +141,9 @@ public class LogOutController {
     /**
      * Metodo de inicializacion de la ventana principal
      *
-     * @param root 
-     * @param client 
-     * @param user 
+     * @param root Elemento raiz de la ventana 
+     * @param usu del tipo User
+     * @throws IOException excepcion en la carga de la ventana
      */
     public void initStage(Parent root, User usu) throws IOException {
         LOGGER.info("inicializando vetnta principal");
@@ -258,7 +258,7 @@ public class LogOutController {
     }
     /**
      * Metodo para relacionar los botones del menu con acciones
-     * @param event 
+     * @param event objeto del tipo Event
      */
     public void menuButtonAction(ActionEvent event) {
         if (event.getSource() == dataItemArea) {
@@ -275,7 +275,7 @@ public class LogOutController {
     }
     /**
      * Metodo para relacionar botones de la interfaz con acciones
-     * @param event 
+     * @param event Objeto del tipo Event
      */
     public void handleButtonAction(ActionEvent event) {
 

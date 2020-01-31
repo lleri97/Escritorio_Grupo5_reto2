@@ -74,7 +74,11 @@ public class NewDocumentController {
     private static final Logger LOGGER = Logger.getLogger(LogOutController.class.getPackage() + "." + LogOutController.class.getName());
 
     /**
-     * Inicializa la clase controladora
+     * Metodo que inicializa la ventana de NewDocument
+     * @param root elemento raiz
+     * @param doc objeto del tipo Document
+     * @param user objeto del tipo User
+     * @param mod tipo String
      */
     public void initStage(Parent root, Document doc, User user, String mod) {
         LOGGER.info("Inicializando la clase controladora");

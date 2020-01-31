@@ -64,7 +64,11 @@ public class NewAreaController {
     Stage stage;
 
     /**
-     * Inicializa la clase controladora.
+     * Metodo que inicia la ventana de areas
+     * @param root elemento raiz
+     * @param usuario objeto del tipo User
+     * @param area objeto del tipo Area
+     * @param mod tipo String
      */
     public void initStage(Parent root, User usuario, Area area, String mod) {
         LOGGER.info("Iniciando ventana de areas");

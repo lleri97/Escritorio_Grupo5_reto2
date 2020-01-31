@@ -72,7 +72,11 @@ public class NewDepartmentController {
     private static final Logger LOGGER = Logger.getLogger(LogOutController.class.getPackage() + "." + LogOutController.class.getName());
 
     /**
-     * Inicializa la clase controladora
+     * Metodo que inicializa la ventana de nuevo departamento
+     * @param root elemento raiz
+     * @param usuario objeto del tipo User
+     * @param department objeto del tipo Department
+     * @param mod tipo String
      */
     public void initStage(Parent root, User usuario, Department department, String mod) {
         LOGGER.info("inicializando la ventana de nuevo departamento");

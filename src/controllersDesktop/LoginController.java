@@ -77,7 +77,7 @@ public class LoginController {
 
     /**
      * inicializa la ventana 
-     * @param root 
+     * @param root elemento raiz de la ventana
      */
     public void initStage(Parent root) {
         LOGGER.info("Cargando ventana de inicio");

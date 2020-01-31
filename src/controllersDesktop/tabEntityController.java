@@ -77,7 +77,7 @@ public class tabEntityController {
     /**
      * Metodo para inicializar ventanas de fxml
      *
-     * @param usuario
+     * @param usuario objeto del tipo User
      */
     public void initStage(User usuario) {
         LOGGER.info("Inicializando panel de administracion de entidades");
@@ -118,9 +118,9 @@ public class tabEntityController {
     }
     /**
      * Metodo que relaciona la tabla con acciones
-     * @param observable
-     * @param olsValue
-     * @param newValue 
+     * @param observable tipo ObservableValue
+     * @param olsValue tipo Object
+     * @param newValue tipo Object
      */
     public void handleEntityTabSelectionChanged(ObservableValue observable, Object olsValue, Object newValue) {
         btnDeleteEntity.setVisible(true);
@@ -129,7 +129,7 @@ public class tabEntityController {
     }
     /**
      * Metodo ue lanza la ventana de nueva entidad
-     * @param entity 
+     * @param entity objeto del tipo Company
      */
     public void lanzarNewEntityWindow(Company entity) {
         LOGGER.info("Lanzando vetana de nueva entidad");

@@ -4,6 +4,6 @@
  * and open the template in the editor.
  */
 /**
- * Este paquete contiene los diferentes controladores de las ventanas
+ * Paquete que contiene las ventanas de ayuda de la aplicacion
  */
-package controllersDesktop;
+package help_files;
