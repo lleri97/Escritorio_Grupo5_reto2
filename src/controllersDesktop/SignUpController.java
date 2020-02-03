@@ -63,13 +63,9 @@ import utils.Validator;
 public class SignUpController {
     
     @FXML
-    private Pane signUpPane;
-    @FXML
     private Button btnCancel;
     @FXML
     private Button btnCreateUser;
-    @FXML
-    private Button btnHelpSignUp;
     @FXML
     private Button btnAddPic;
     @FXML
@@ -179,9 +175,7 @@ public class SignUpController {
         
         Mnemonic createUser = new Mnemonic(btnCreateUser, CreateUser);
         Mnemonic cancel = new Mnemonic(btnCancel, Cancel);
-        Mnemonic help = new Mnemonic(btnHelpSignUp, Help);
         
-        scene.addMnemonic(help);
         scene.addMnemonic(cancel);
         scene.addMnemonic(createUser);
 
@@ -203,7 +197,6 @@ public class SignUpController {
 
         // Actions
         btnCancel.setOnAction(this::handleButtonAction);
-        btnHelpSignUp.setOnAction(this::handleButtonAction);
         btnCreateUser.setOnAction(this::handleButtonAction);
         btnAddPic.setOnAction(this::addPicAction);
         

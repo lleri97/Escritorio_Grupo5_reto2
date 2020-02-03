@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="tabEntity" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.tabEntityController">
+<AnchorPane fx:id="tabEntity" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllersDesktop.tabEntityController">
     <children>
-        <Label fx:id="lblSearchEntity" layoutX="30.0" layoutY="27.0" prefHeight="17.0" prefWidth="74.0" text="Busqueda:" />
-        <Button fx:id="btnNewCompany" layoutX="861.0" layoutY="8.0" mnemonicParsing="false" text="Nueva Entidad" />
-        <TableView fx:id="tableEntity" layoutX="33.0" layoutY="109.0" prefHeight="400.0" prefWidth="870.0">
+        <Label fx:id="lblSearchEntity" layoutX="33.0" layoutY="36.0" prefHeight="17.0" prefWidth="74.0" text="Busqueda:" />
+        <Button fx:id="btnNewCompany" layoutX="98.0" layoutY="81.0" mnemonicParsing="false" text="Nueva Entidad" />
+        <TableView fx:id="tableEntity" layoutX="219.0" layoutY="81.0" prefHeight="400.0" prefWidth="588.0">
             <columns>
-                <TableColumn fx:id="columnName" prefWidth="363.0" text="Nombre" />
-                <TableColumn fx:id="columnCIF" prefWidth="251.0" text="CIF" />
-                <TableColumn fx:id="columnDepartment" prefWidth="253.0" text="Departamentos" />
+                <TableColumn fx:id="columnName" prefWidth="193.0" text="Nombre" />
+                <TableColumn fx:id="columnCIF" prefWidth="149.0" text="CIF" />
+                <TableColumn fx:id="columnDepartment" prefWidth="245.0" text="Departamentos" />
             </columns>
         </TableView>
-        <Button fx:id="btnSearchEntity" layoutX="104.0" layoutY="23.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="84.0" text="Buscar:" />
-      <Button fx:id="btnModifyEntity" layoutX="862.0" layoutY="77.0" mnemonicParsing="false" text="Modificar" />
-      <Button fx:id="btnDeleteEntity" layoutX="861.0" layoutY="46.0" mnemonicParsing="false" text="Eliminar" />
+        <Button fx:id="btnSearchEntity" layoutX="98.0" layoutY="34.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="94.0" text="Buscar:" />
+      <Button fx:id="btnModifyEntity" layoutX="98.0" layoutY="165.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="94.0" text="Modificar" />
+      <Button fx:id="btnDeleteEntity" layoutX="98.0" layoutY="122.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="94.0" text="Eliminar" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="351.0" layoutY="32.0" prefHeight="17.0" prefWidth="324.0" style="-fx-border-color: black;" text="Compañias" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </Label>
     </children>
 </AnchorPane>

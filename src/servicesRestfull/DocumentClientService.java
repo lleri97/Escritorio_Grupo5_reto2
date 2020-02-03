@@ -30,7 +30,7 @@ public class DocumentClientService {
     private Client client;
      private static final String BASE_URI = "http://"
             + ResourceBundle.getBundle("files.connectionHTTP").getString("http")
-            + "/grupo5_reto2_server-development_SERVER_Fran/webresources";
+            + "/servidorFinalizado/webresources";
 
     
     public DocumentClientService() {
