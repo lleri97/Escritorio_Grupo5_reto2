@@ -17,6 +17,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import servicesRestfull.CompanyClientService;
+import utils.UtilsWindows;
+import utils.Validator;
 
 /**
  * FXML Controller class
@@ -42,7 +44,7 @@ public class NewCompanyController {
 
     private static final Logger LOGGER = Logger.getLogger(LogOutController.class.getPackage() + "." + LogOutController.class.getName());
 
-    private CompanyClientService companyService;
+    private CompanyClientService companyService = new CompanyClientService();
 
     Stage stage;
 
@@ -53,15 +55,16 @@ public class NewCompanyController {
      * @param company objeto del tipo Company
      */
     public void initStage(Parent root, Company company, String mod) {
-        
+
         Scene sceneNewEntity = new Scene(root);
         stage = new Stage();
         stage.setScene(sceneNewEntity);
         stage.setResizable(false);
-        
+
         stage.initModality(Modality.APPLICATION_MODAL);
         lblError.setVisible(false);
-        if (company.getName() == "modify") {
+        UtilsWindows alert = new UtilsWindows();
+        if (mod == "modify") {
             LOGGER.info("Cargando ventana de modificar compañia");
             textFieldNameCompany.setText(company.getName());
             textFieldCif.setText(company.getCif());
@@ -69,17 +72,24 @@ public class NewCompanyController {
             btnAddCompany.setText("Confirmar");
 
             btnAddCompany.setOnAction((event) -> {
-                LOGGER.info("Preparando para editar compañia en la base de datos");
-                Company comp = new Company();
-                comp = company;
-                comp.setCif(textFieldCif.getText());
-                comp.setName(textFieldNameCompany.getText());
-                companyService.edit(company);
-                LOGGER.info("Compañia editada con exito");
+                if (Validator.cifChecker(textFieldCif.getText())) {
+                    LOGGER.info("Preparando para editar compañia en la base de datos");
+                    Company comp = new Company();
+                    comp.setId(company.getId());
+                    comp.setCif(textFieldCif.getText());
+                    comp.setName(textFieldNameCompany.getText());
+                    companyService.edit(comp);
+                    LOGGER.info("Compañia editada con exito");
+                }else{
+                    LOGGER.info("El CIF no tiene el formato correcto.");
+                    alert.alertWarning("Aviso", "El CIF tiene que tener un formato correcto.", "");
+                }
+
             });
         } else {
             LOGGER.info("Cargando ventana de nueva compañia");
             stage.setTitle("Nueva compañía");
+            
             btnAddCompany.setOnAction((event) -> {
                 LOGGER.info("Preparando para añadir compañia a la base de datos");
                 addCompany();

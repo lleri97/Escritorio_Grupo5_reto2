@@ -12,17 +12,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 
 /**
- * Jersey REST client generated for REST resource:DocumentFacadeREST
- * [document]<br>
- * USAGE:
- * <pre>
- *        DocumentClientService client = new DocumentClientService();
- *        Object response = client.XXX(...);
- *        // do whatever with response
- *        client.close();
- * </pre>
  *
- * @author Jon Gonzalez
+ * @author fran
  */
 public class DocumentClientService {
 
@@ -60,7 +51,7 @@ public class DocumentClientService {
     public void remove(int id) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
     }
-
+    
     public void close() {
         client.close();
     }

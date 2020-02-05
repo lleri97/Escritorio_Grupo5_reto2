@@ -14,9 +14,8 @@
         <Button fx:id="btnNewCompany" layoutX="98.0" layoutY="81.0" mnemonicParsing="false" text="Nueva Entidad" />
         <TableView fx:id="tableEntity" layoutX="219.0" layoutY="81.0" prefHeight="400.0" prefWidth="588.0">
             <columns>
-                <TableColumn fx:id="columnName" prefWidth="193.0" text="Nombre" />
-                <TableColumn fx:id="columnCIF" prefWidth="149.0" text="CIF" />
-                <TableColumn fx:id="columnDepartment" prefWidth="245.0" text="Departamentos" />
+                <TableColumn fx:id="columnName" prefWidth="299.0" text="Nombre" />
+                <TableColumn fx:id="columnCIF" prefWidth="288.0" text="CIF" />
             </columns>
         </TableView>
         <Button fx:id="btnSearchEntity" layoutX="98.0" layoutY="34.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="94.0" text="Buscar:" />

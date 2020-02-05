@@ -12,15 +12,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -28,6 +32,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javax.ws.rs.core.GenericType;
 import servicesRestfull.CompanyClientService;
+import utils.UtilsWindows;
 
 /**
  * FXML Controller class
@@ -88,23 +93,31 @@ public class tabEntityController {
             String mod = "";
             lanzarNewEntityWindow(company, mod);
         });
-        
+
         btnModifyEntity.setOnAction((event) -> {
             Company company = new Company();
             company = (Company) tableEntity.getSelectionModel().getSelectedItem();
             String mod = "modify";
             lanzarNewEntityWindow(company, mod);
         });
-        
+
         btnSearchEntity.setOnAction((event) -> {
             insertData();
         });
-        
+
         btnDeleteEntity.setOnAction((event) -> {
             Company companyDelete = new Company();
             companyDelete = (Company) tableEntity.getSelectionModel().getSelectedItem();
-            companyClient.remove(companyDelete.getId());
-            insertData();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmación");
+            alert.setHeaderText("¿Está seguro que desea borrar la empresa seleccionada?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                companyClient.remove(companyDelete.getId());
+                insertData();
+                LOGGER.info("Empresa borrada con exito.");
+            }
+
         });
 
         tableEntity.getSelectionModel().selectedItemProperty().addListener(this::handleEntityTabSelectionChanged);
@@ -150,8 +163,6 @@ public class tabEntityController {
                 new PropertyValueFactory<>("cif"));
         columnName.setCellValueFactory(
                 new PropertyValueFactory<>("name"));
-        columnDepartment.setCellValueFactory(
-                new PropertyValueFactory<>("department"));
         ObservableList<Company> entityList;
         LOGGER.info("Insertando datos en la tabla");
         if (usuario.getPrivilege() == UserPrivilege.USER || usuario.getPrivilege() == UserPrivilege.COMPANYADMIN) {

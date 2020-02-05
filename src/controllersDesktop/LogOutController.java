@@ -280,14 +280,24 @@ public class LogOutController {
     public void handleButtonAction(ActionEvent event) {
 
         if ((Button) event.getSource() == btnAreas) {
+            cleanClickedTab();
+            btnAreas.setStyle("-fx-background-color: #58ACFA");
             createTabAreas();
         } else if ((Button) event.getSource() == btnUsers) {
+            cleanClickedTab();
+            btnUsers.setStyle("-fx-background-color: #58ACFA");
             createTabUsers();
         } else if ((Button) event.getSource() == btnDepartments) {
+            cleanClickedTab();
+            btnDepartments.setStyle("-fx-background-color: #58ACFA");
             createTabDepartments();
         } else if ((Button) event.getSource() == btnDocuments) {
+            cleanClickedTab();
+            btnDocuments.setStyle("-fx-background-color: #58ACFA");
             createTabDocuments();
         } else if ((Button) event.getSource() == btnEntity) {
+            cleanClickedTab();
+            btnEntity.setStyle("-fx-background-color: #58ACFA");
             createTabEntity();
         } else if ((Button) event.getSource() == btnModify) {
             openModifyUserWindow();
@@ -447,6 +457,14 @@ public class LogOutController {
         } catch (IOException ex) {
             LOGGER.warning(ex.getMessage());
         }
+    }
+
+    private void cleanClickedTab() {
+        btnAreas.setStyle("-fx-background-color: transparent");
+        btnDepartments.setStyle("-fx-background-color: transparent");
+        btnEntity.setStyle("-fx-background-color: transparent");
+        btnUsers.setStyle("-fx-background-color: transparent");
+        btnDocuments.setStyle("-fx-background-color: transparent");
     }
 
 }

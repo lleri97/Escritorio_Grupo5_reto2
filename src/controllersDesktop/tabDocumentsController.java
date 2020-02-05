@@ -151,6 +151,7 @@ public class tabDocumentsController {
         documentList = new HashSet<Document>();
         documentList = documentService.findAll(new GenericType<Set<Document>>() {
         });
+ 
         if (chkBoxDisabled.isSelected() && chkBoxEnabled.isSelected()) {
             chargeAllDocs();
         } else if (chkBoxDisabled.isSelected()) {
