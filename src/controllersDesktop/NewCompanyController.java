@@ -73,14 +73,19 @@ public class NewCompanyController {
 
             btnAddCompany.setOnAction((event) -> {
                 if (Validator.cifChecker(textFieldCif.getText())) {
-                    LOGGER.info("Preparando para editar compañia en la base de datos");
-                    Company comp = new Company();
-                    comp.setId(company.getId());
-                    comp.setCif(textFieldCif.getText());
-                    comp.setName(textFieldNameCompany.getText());
-                    companyService.edit(comp);
-                    LOGGER.info("Compañia editada con exito");
-                }else{
+                    try {
+                        LOGGER.info("Preparando para editar compañia en la base de datos");
+                        Company comp = new Company();
+                        comp.setId(company.getId());
+                        comp.setCif(textFieldCif.getText());
+                        comp.setName(textFieldNameCompany.getText());
+                        companyService.edit(comp);
+                        LOGGER.info("Compañia editada con exito");
+                        alert.alertInformation("Información", "Compañía editada con éxito.", "");
+                    } catch (Exception e) {
+                        alert.alertWarning("Alerta", "Error al editar la compañía.", "");
+                    }
+                } else {
                     LOGGER.info("El CIF no tiene el formato correcto.");
                     alert.alertWarning("Aviso", "El CIF tiene que tener un formato correcto.", "");
                 }
@@ -89,11 +94,28 @@ public class NewCompanyController {
         } else {
             LOGGER.info("Cargando ventana de nueva compañia");
             stage.setTitle("Nueva compañía");
-            
+
             btnAddCompany.setOnAction((event) -> {
-                LOGGER.info("Preparando para añadir compañia a la base de datos");
-                addCompany();
-                LOGGER.info("Compañia añadida con exito a la base de datos");
+                if (Validator.cifChecker(textFieldCif.getText())) {
+                    try {
+                        LOGGER.info("Preparando para añadir compañia a la base de datos");
+                        Company comp = new Company();
+                        comp.setId(company.getId());
+                        comp.setCif(textFieldCif.getText());
+                        comp.setName(textFieldNameCompany.getText());
+                        addCompany();
+                        LOGGER.info("Compañia añadida con exito a la base de datos");
+                        alert.alertInformation("Información", "Compañía añadida con éxito.", "");
+                        textFieldCif.clear();
+                        textFieldNameCompany.clear();
+                    } catch (Exception e) {
+                        alert.alertWarning("Alerta", "Error al añadir la compañía.", "");
+                    }
+                } else {
+                    LOGGER.info("El CIF no tiene el formato correcto.");
+                    alert.alertWarning("Aviso", "El CIF tiene que tener un formato correcto.", "");
+                }
+
             });
         }
 
